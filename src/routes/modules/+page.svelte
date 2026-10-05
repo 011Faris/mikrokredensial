@@ -13,7 +13,7 @@
 
 	const mobileLinks = [
 		{ href: '/', label: 'Beranda' },
-		{ href: '/modules', label: 'Modul' },
+		{ href: '/modules', label: 'Pelatihan' },
 		{ href: '/#peringkat', label: 'Peringkat' },
 		{ href: '/#tentang', label: 'Tentang' },
 		{ href: '/#verifikasi', label: 'Verifikasi' }
@@ -51,10 +51,10 @@
 </script>
 
 <svelte:head>
-	<title>Semua Modul — Aretê Platform</title>
+	<title>Semua Pelatihan — Aretê Platform</title>
 	<meta
 		name="description"
-		content="Katalog lengkap modul mikrokredensial Aretê: info, rating, periode, dan kurikulum."
+		content="Katalog lengkap pelatihan mikrokredensial Aretê: info, rating, periode, dan kurikulum."
 	/>
 </svelte:head>
 
@@ -66,7 +66,7 @@
 		</a>
 		<nav aria-label="Navigasi utama" class="hidden min-w-0 flex-1 items-center justify-center gap-5 font-semibold text-[13px] text-slate-700 lg:flex xl:gap-7">
 			<a href="/#beranda" class="whitespace-nowrap transition hover:text-blue-600">BERANDA</a>
-			<a href="/modules" aria-current="page" class="whitespace-nowrap text-blue-600 transition hover:text-blue-700">MODUL</a>
+			<a href="/modules" aria-current="page" class="whitespace-nowrap text-blue-600 transition hover:text-blue-700">PELATIHAN</a>
 			<a href="/#peringkat" class="whitespace-nowrap transition hover:text-blue-600">PERINGKAT</a>
 			<a href="/#tentang" class="whitespace-nowrap transition hover:text-blue-600">TENTANG</a>
 			<a href="/#verifikasi" class="whitespace-nowrap transition hover:text-blue-600">VERIFIKASI</a>
@@ -146,18 +146,16 @@
 			<nav aria-label="Breadcrumb" class="mb-3 flex items-center gap-2 text-xs text-slate-500">
 				<a href="/" class="rounded font-semibold text-blue-600 hover:text-blue-700">Beranda</a>
 				<i class="fa-solid fa-chevron-right text-[10px] text-slate-300" aria-hidden="true"></i>
-				<span aria-current="page" class="font-medium text-slate-700">Semua Modul</span>
+				<span aria-current="page" class="font-medium text-slate-700">Semua Pelatihan</span>
 			</nav>
 			<span class="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 uppercase">
-				<i class="fa-solid fa-book-bookmark" aria-hidden="true"></i> Katalog Modul
+				<i class="fa-solid fa-book-bookmark" aria-hidden="true"></i> Katalog Pelatihan
 			</span>
 			<h1 class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-				Semua Modul Mikrokredensial
+				Semua Pelatihan Mikrokredensial
 			</h1>
 			<p class="mt-2 max-w-2xl text-sm text-slate-600 sm:text-base">
-				Jelajahi seluruh program: rating, periode batch, jumlah modul dan materi. Masuk untuk melihat
-				pratinjau lengkap dan mulai belajar.
-			</p>
+				Jelajahi seluruh program: rating, periode batch, jumlah modul dan materi.</p>
 		</div>
 	</section>
 
@@ -169,12 +167,12 @@
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
 						<i class="fa-solid fa-magnifying-glass text-sm" aria-hidden="true"></i>
 					</div>
-					<label for="modules-search" class="sr-only">Cari modul</label>
+					<label for="modules-search" class="sr-only">Cari pelatihan</label>
 					<input
 						id="modules-search"
 						type="search"
 						bind:value={search}
-						placeholder="Cari judul modul atau instruktur..."
+						placeholder="Cari judul pelatihan atau instruktur..."
 						class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
 					/>
 				</div>
@@ -216,24 +214,24 @@
 			</div>
 
 			<p class="mb-4 text-xs font-medium text-slate-500" role="status">
-				Menampilkan {filtered.length} dari {courses.length} modul
+				Menampilkan {filtered.length} dari {courses.length} pelatihan
 			</p>
 
 			{#if filtered.length === 0}
 				<div class="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
 					<i class="fa-solid fa-magnifying-glass mb-3 text-3xl text-slate-300" aria-hidden="true"></i>
-					<p class="text-sm font-semibold text-slate-700">Modul tidak ditemukan.</p>
+					<p class="text-sm font-semibold text-slate-700">Pelatihan tidak ditemukan.</p>
 					<p class="mt-1 text-xs text-slate-500">Coba kata kunci, kategori, atau periode lain.</p>
 				</div>
 			{:else}
 				<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 					{#each filtered as course (course.id)}
 						{@const meta = getCourseMeta(course.id)}
-						<article class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
-							<div class="relative overflow-hidden">
+						<article class="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
+							<div class="relative overflow-hidden" aria-hidden="true">
 								<img
 									src={course.image}
-									alt={`Sampul modul ${course.title}`}
+									alt=""
 									class="h-44 w-full object-cover transition duration-500 group-hover:scale-105"
 									loading="lazy"
 								/>
@@ -261,7 +259,7 @@
 										{course.category} · {course.level}
 									</p>
 									<h2 class="mt-1 line-clamp-2 text-base leading-snug font-extrabold text-slate-900">
-										{course.title}
+										<a href={`/modules/${course.id}`} class="rounded transition group-hover:text-blue-600 focus-visible:outline-2 focus-visible:outline-blue-600 after:absolute after:inset-0" aria-label={`Lihat info singkat: ${course.title}`}>{course.title}</a>
 									</h2>
 									<p class="mt-1 line-clamp-2 text-xs text-slate-500">
 										{course.modules.length} modul · oleh {course.instructor}
@@ -271,13 +269,6 @@
 									<span class="text-sm font-extrabold text-blue-600">{meta.price}</span>
 									<span class="text-[11px] font-semibold text-slate-500">{meta.students.toLocaleString('id-ID')} peserta</span>
 								</div>
-								<a
-									href="/login"
-									class="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-slate-900"
-									aria-label={`Masuk untuk melihat detail: ${course.title}`}
-								>
-									<i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i> Lihat Detail
-								</a>
 							</div>
 						</article>
 					{/each}

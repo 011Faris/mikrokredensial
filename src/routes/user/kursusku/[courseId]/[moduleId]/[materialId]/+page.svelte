@@ -64,11 +64,43 @@
 	/** Sidebar modul diciutkan (layar besar) agar materi tampil penuh */
 	let modulesCollapsed = $state(false);
 
-	function closeModuleNav() {
+	/** Lacak breakpoint desktop agar satu ikon panah bisa adaptif */
+	let isDesktop = $state(false);
+
+	$effect(() => {
+		const mq = window.matchMedia('(min-width: 1024px)');
+		const update = () => (isDesktop = mq.matches);
+		update();
+		mq.addEventListener('change', update);
+		return () => mq.removeEventListener('change', update);
+	});
+
+	/** Satu ikon panah: bawah (mobile) / kanan-kiri (desktop) */
+	const toggleIcon = $derived(
+		isDesktop
+			? modulesCollapsed
+				? 'fa-angles-right'
+				: 'fa-angles-left'
+			: showModules
+				? 'fa-chevron-up'
+				: 'fa-chevron-down'
+	);
+
+	const toggleLabel = $derived(
+		isDesktop
+			? modulesCollapsed
+				? 'Tampilkan daftar modul'
+				: 'Sembunyikan daftar modul'
+			: showModules
+				? 'Tutup daftar modul'
+				: 'Buka daftar modul'
+	);
+
+	function toggleModuleNav() {
 		if (typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches) {
-			modulesCollapsed = true;
+			modulesCollapsed = !modulesCollapsed;
 		} else {
-			showModules = false;
+			showModules = !showModules;
 		}
 	}
 
@@ -137,12 +169,12 @@
 			<div class="flex h-14 items-center gap-3 px-4 sm:px-6">
 				<a
 					href={`/user/kursusku/${course.id}`}
-					class="flex min-h-10 min-w-10 items-center justify-center rounded-xl p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-blue-600"
+					class="hidden min-h-10 min-w-10 items-center justify-center rounded-xl p-2 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-blue-600 sm:flex"
 					aria-label={`Kembali ke modul ${course.title}`}
 				>
 					<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
 				</a>
-				<span class="h-6 w-px bg-slate-200" aria-hidden="true"></span>
+				<span class="hidden h-6 w-px bg-slate-200 sm:block" aria-hidden="true"></span>
 				<div class="min-w-0 flex-1">
 					<p class="truncate text-sm font-bold text-slate-900">{course.title}</p>
 					<p class="truncate text-[11px] text-slate-500">
@@ -181,20 +213,6 @@
 			<span aria-current="page" class="max-w-48 truncate font-medium text-slate-700">{material.title}</span>
 		</nav>
 
-		<button
-			type="button"
-			onclick={() => (showModules = !showModules)}
-			aria-expanded={showModules}
-			aria-controls="modul-nav"
-			class="mt-4 flex min-h-11 w-full items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-800 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-blue-600 lg:hidden"
-		>
-			<span class="flex items-center gap-2.5">
-				<i class="fa-solid fa-list-ul text-blue-600" aria-hidden="true"></i>
-				Daftar Modul ({course.modules.length})
-			</span>
-			<i class={`fa-solid fa-chevron-down text-xs text-slate-400 transition-transform ${showModules ? 'rotate-180' : ''}`} aria-hidden="true"></i>
-		</button>
-
 		<div
 			class="mt-4 grid grid-cols-1 items-start gap-6 transition-[grid-template-columns] duration-300 ease-in-out motion-reduce:transition-none lg:grid-cols-[var(--nav-w)_minmax(0,1fr)]"
 			style:--nav-w={modulesCollapsed ? '3.5rem' : '20rem'}
@@ -202,7 +220,7 @@
 			<aside
 				id="modul-nav"
 				aria-label="Daftar modul kursus"
-				class={`${showModules ? 'block' : 'hidden'} relative overflow-hidden rounded-2xl ${modulesCollapsed ? 'border-transparent bg-transparent' : 'border border-slate-200/70 bg-white'} lg:sticky lg:top-[72px] lg:block lg:max-h-[calc(100vh-6rem)]`}
+				class={`relative overflow-hidden rounded-2xl ${modulesCollapsed ? 'border-transparent bg-transparent' : 'border border-slate-200/70 bg-white'} lg:sticky lg:top-[72px] lg:block lg:max-h-[calc(100vh-6rem)]`}
 			>
 				<!-- Satu kotak panah saat sidebar diciutkan -->
 				<div
@@ -225,7 +243,7 @@
 				<div
 					class={`w-80 max-lg:max-w-full transition-all duration-300 ease-in-out motion-reduce:transition-none ${modulesCollapsed ? 'pointer-events-none invisible -translate-x-4 opacity-0' : 'visible translate-x-0 opacity-100'} lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto`}
 				>
-				<div class="flex items-center justify-between gap-2 border-b border-slate-100 p-4">
+				<div class="flex items-center justify-between gap-6 border-b border-slate-100 py-4 pr-0 pl-4 lg:gap-4 lg:p-4">
 					<div class="min-w-0">
 						<p class="mt-1 line-clamp-2 text-sm font-bold text-slate-900">{course.title}</p>
 						<p class="mt-0.5 text-[11px] text-slate-500">
@@ -234,15 +252,17 @@
 					</div>
 					<button
 						type="button"
-						onclick={closeModuleNav}
+						onclick={toggleModuleNav}
+						aria-expanded={isDesktop ? !modulesCollapsed : showModules}
 						aria-controls="modul-nav"
-						aria-label="Sembunyikan daftar modul"
-						title="Sembunyikan daftar modul"
+						aria-label={toggleLabel}
+						title={toggleLabel}
 						class="flex min-h-10 min-w-10 shrink-0 items-center justify-center rounded-xl p-2 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 					>
-						<i class="fa-solid fa-angles-left text-base" aria-hidden="true"></i>
+						<i class={`fa-solid ${toggleIcon} text-base`} aria-hidden="true"></i>
 					</button>
 				</div>
+				<div class={`${showModules ? 'block' : 'hidden'} lg:block`}>
 				<nav aria-label="Modul dan materi" class="max-h-[60vh] overflow-y-auto p-2 lg:max-h-none lg:overflow-visible">
 					{#each course.modules as mod, mi (mod.id)}
 						{@const isCurrentModule = mod.id === module.id}
@@ -306,6 +326,7 @@
 						</section>
 					{/each}
 				</nav>
+				</div>
 				</div>
 			</aside>
 

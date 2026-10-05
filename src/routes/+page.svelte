@@ -1,12 +1,14 @@
 <script lang="ts">
 	import '../app.css';
 	import Logo from '$lib/components/Logo.svelte';
+	import { courses } from '$lib/data/courses';
+	import { getCourseMeta } from '$lib/data/course-meta';
 
 	let menuOpen = $state(false);
 
 	const mobileLinks = [
 		{ href: '#beranda', label: 'Beranda' },
-		{ href: '#modul', label: 'Modul' },
+		{ href: '#modul', label: 'Pelatihan' },
 		{ href: '#peringkat', label: 'Peringkat' },
 		{ href: '#tentang', label: 'Tentang' },
 		{ href: '#verifikasi', label: 'Verifikasi' }
@@ -26,7 +28,7 @@
 			<!-- Desktop Navigation -->
 			<nav aria-label="Navigasi utama" class="hidden lg:flex min-w-0 flex-1 items-center justify-center gap-5 xl:gap-7 font-semibold text-[13px] text-slate-700">
 				<a href="#beranda" class="whitespace-nowrap text-blue-600 transition hover:text-blue-700">BERANDA</a>
-				<a href="#modul" class="whitespace-nowrap hover:text-blue-600 transition">MODUL</a>
+				<a href="#modul" class="whitespace-nowrap hover:text-blue-600 transition">PELATIHAN</a>
 				<a href="#peringkat" class="whitespace-nowrap hover:text-blue-600 transition">PERINGKAT</a>
 				<a href="#tentang" class="whitespace-nowrap hover:text-blue-600 transition">TENTANG</a>
 				<a href="#verifikasi" class="whitespace-nowrap hover:text-blue-600 transition">VERIFIKASI</a>
@@ -124,7 +126,7 @@
 					</h1>
 
 					<p class="text-slate-600 text-base sm:text-lg max-w-xl">
-						Sertifikasi kompetensi berbasis modul singkat industri. Dapatkan keahlian spesifik yang langsung diakui perusahaan mitra tanpa harus menempuh pendidikan bertahun-tahun.
+						Sertifikasi kompetensi berbasis pelatihan singkat industri. Dapatkan keahlian spesifik yang langsung diakui perusahaan mitra tanpa harus menempuh pendidikan bertahun-tahun.
 					</p>
 
 					<!-- Bullet badges -->
@@ -181,8 +183,8 @@
 								<i class="fa-solid fa-video text-lg"></i>
 							</div>
 							<div>
-								<h4 class="text-xs text-slate-500 font-semibold">Modul Interaktif</h4>
-								<p class="text-base font-extrabold text-slate-900">7.500+ Modul</p>
+								<h4 class="text-xs text-slate-500 font-semibold">Pelatihan Interaktif</h4>
+								<p class="text-base font-extrabold text-slate-900">7.500+ Pelatihan</p>
 							</div>
 						</div>
 					</div>
@@ -197,7 +199,7 @@
 			<div class="grid grid-cols-2 md:grid-cols-5 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
 				<div class="flex items-center justify-center gap-3 p-2">
 					<div class="bg-blue-50 text-blue-600 p-3 rounded-full"><i class="fa-solid fa-book-open text-xl"></i></div>
-					<div class="text-left"><h5 class="font-extrabold text-slate-900 text-sm">20rb+ Modul</h5><p class="text-xs text-slate-500">Mikrokredensial</p></div>
+					<div class="text-left"><h5 class="font-extrabold text-slate-900 text-sm">20rb+ Pelatihan</h5><p class="text-xs text-slate-500">Mikrokredensial</p></div>
 				</div>
 				<div class="flex items-center justify-center gap-3 p-2">
 					<div class="bg-blue-50 text-blue-600 p-3 rounded-full"><i class="fa-solid fa-infinity text-xl"></i></div>
@@ -223,8 +225,8 @@
 	<section id="modul" class="py-20 bg-white">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
-				<span class="text-blue-600 font-bold text-xs uppercase tracking-widest bg-blue-100 px-3 py-1 rounded-full"><i class="fa-solid fa-book-bookmark"></i> MODUL POPULER</span>
-				<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Modul Online Populer Kami</h2>
+				<span class="text-blue-600 font-bold text-xs uppercase tracking-widest bg-blue-100 px-3 py-1 rounded-full"><i class="fa-solid fa-book-bookmark"></i> PELATIHAN POPULER</span>
+				<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Pelatihan Online Populer Kami</h2>
 				<p class="text-slate-500 text-sm">Pilih program mikrokredensial pilihan yang dirancang spesifik untuk karier profesional Anda di masa depan.</p>
 			</div>
 
@@ -238,107 +240,37 @@
 
 			<!-- Course Cards Grid -->
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-				<!-- Card 1 -->
-				<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition group flex flex-col">
-					<div class="relative overflow-hidden">
-						<img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80" alt="Modul" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" />
-						<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-md uppercase">03 MINGGU</span>
-					</div>
-					<div class="p-6 flex-1 flex flex-col justify-between space-y-4">
-						<div>
-							<div class="flex items-center justify-between text-xs text-slate-500 mb-2">
-								<span class="flex items-center gap-1"><i class="fa-regular fa-star text-amber-400"></i> 4.8 (47)</span>
-								<span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> 12 Pelajaran</span>
-							</div>
-							<h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-blue-600 transition">Belajar Figma – Pelatihan Desain UI/UX Esensial</h3>
+				{#each courses.slice(0, 4) as course (course.id)}
+					{@const meta = getCourseMeta(course.id)}
+					<article class="relative bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition group flex flex-col">
+						<div class="relative overflow-hidden" aria-hidden="true">
+							<img src={course.image} alt="" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" loading="lazy" />
+							<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-md uppercase">{course.duration}</span>
 						</div>
-						<div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-							<div class="flex items-center gap-2">
-								<img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="Instruktur" class="w-8 h-8 rounded-full object-cover" />
-								<span class="text-xs font-semibold text-slate-700">Kevin Perry</span>
+						<div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+							<div>
+								<div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+									<span class="flex items-center gap-1"><i class="fa-regular fa-star text-amber-400"></i> {meta.rating} ({meta.reviews})</span>
+									<span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> {course.totalMaterials} Materi</span>
+								</div>
+								<h3 class="font-extrabold text-slate-900 text-base leading-snug">
+									<a href={`/modules/${course.id}`} class="rounded transition group-hover:text-blue-600 focus-visible:outline-2 focus-visible:outline-blue-600 after:absolute after:inset-0" aria-label={`Lihat info singkat: ${course.title}`}>{course.title}</a>
+								</h3>
+								<p class="mt-1 text-xs text-slate-500">{course.modules.length} modul · {course.category}</p>
 							</div>
-							<span class="text-blue-600 font-extrabold text-sm">GRATIS</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Card 2 -->
-				<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition group flex flex-col">
-					<div class="relative overflow-hidden">
-						<img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" alt="Modul" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" />
-						<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-md uppercase">02 MINGGU</span>
-					</div>
-					<div class="p-6 flex-1 flex flex-col justify-between space-y-4">
-						<div>
-							<div class="flex items-center justify-between text-xs text-slate-500 mb-2">
-								<span class="flex items-center gap-1"><i class="fa-regular fa-star text-amber-400"></i> 4.7 (47)</span>
-								<span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> 8 Pelajaran</span>
+							<div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+								<span class="text-xs font-semibold text-slate-700">{course.instructor}</span>
+								<span class="text-blue-600 font-extrabold text-sm">{meta.price}</span>
 							</div>
-							<h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-blue-600 transition">Perangkat Lunak Pendidikan dan Sistem PHP & JS</h3>
 						</div>
-						<div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-							<div class="flex items-center gap-2">
-								<img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=100&q=80" alt="Instruktur" class="w-8 h-8 rounded-full object-cover" />
-								<span class="text-xs font-semibold text-slate-700">Max Alexix</span>
-							</div>
-							<span class="text-blue-600 font-extrabold text-sm">GRATIS</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Card 3 -->
-				<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition group flex flex-col">
-					<div class="relative overflow-hidden">
-						<img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80" alt="Modul" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" />
-						<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-md uppercase">04 MINGGU</span>
-					</div>
-					<div class="p-6 flex-1 flex flex-col justify-between space-y-4">
-						<div>
-							<div class="flex items-center justify-between text-xs text-slate-500 mb-2">
-								<span class="flex items-center gap-1"><i class="fa-regular fa-star text-amber-400"></i> 4.7 (47)</span>
-								<span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> 16 Pelajaran</span>
-							</div>
-							<h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-blue-600 transition">Statistik TI, Sains Data, dan Analisis Bisnis</h3>
-						</div>
-						<div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-							<div class="flex items-center gap-2">
-								<img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="Instruktur" class="w-8 h-8 rounded-full object-cover" />
-								<span class="text-xs font-semibold text-slate-700">Kevin Perry</span>
-							</div>
-							<span class="text-blue-600 font-extrabold text-sm">GRATIS</span>
-						</div>
-					</div>
-				</div>
-
-				<!-- Card 4 -->
-				<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition group flex flex-col">
-					<div class="relative overflow-hidden">
-						<img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80" alt="Modul" class="w-full h-48 object-cover group-hover:scale-105 transition duration-500" />
-						<span class="absolute top-3 left-3 bg-red-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-md uppercase">02 MINGGU</span>
-					</div>
-					<div class="p-6 flex-1 flex flex-col justify-between space-y-4">
-						<div>
-							<div class="flex items-center justify-between text-xs text-slate-500 mb-2">
-								<span class="flex items-center gap-1"><i class="fa-regular fa-star text-amber-400"></i> 4.7 (47)</span>
-								<span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> 10 Pelajaran</span>
-							</div>
-							<h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-blue-600 transition">Kursus Pengembangan Android 12 & Kotlin Lanjutan</h3>
-						</div>
-						<div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-							<div class="flex items-center gap-2">
-								<img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=100&q=80" alt="Instruktur" class="w-8 h-8 rounded-full object-cover" />
-								<span class="text-xs font-semibold text-slate-700">Max Alexix</span>
-							</div>
-							<span class="text-blue-600 font-extrabold text-sm">GRATIS</span>
-						</div>
-					</div>
-				</div>
+					</article>
+				{/each}
 			</div>
 
 			<!-- View All Courses Button -->
 			<div class="text-center mt-12">
 				<a href="/modules" class="inline-flex items-center gap-3 bg-blue-600 text-white font-bold text-xs uppercase px-8 py-4 rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/30">
-					LIHAT SEMUA MODUL <i class="fa-solid fa-arrow-right"></i>
+					LIHAT SEMUA PELATIHAN <i class="fa-solid fa-arrow-right"></i>
 				</a>
 			</div>
 		</div>
@@ -349,8 +281,8 @@
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 			<div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
 				<span class="text-blue-600 font-bold text-xs uppercase tracking-widest bg-blue-100 px-3 py-1 rounded-full"><i class="fa-solid fa-trophy"></i> PERINGKAT</span>
-				<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Peringkat Modul Terbaik</h2>
-				<p class="text-slate-500 text-sm">Modul dengan peringkat tertinggi berdasarkan penilaian peserta dan popularitas.</p>
+				<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Peringkat Pelatihan Terbaik</h2>
+				<p class="text-slate-500 text-sm">Pelatihan dengan peringkat tertinggi berdasarkan penilaian peserta dan popularitas.</p>
 			</div>
 
 			<!-- Rankings Table -->
@@ -360,7 +292,7 @@
 						<thead class="bg-slate-900 text-white">
 							<tr>
 								<th class="px-6 py-4 text-left font-bold text-xs uppercase tracking-wider">Peringkat</th>
-								<th class="px-6 py-4 text-left font-bold text-xs uppercase tracking-wider">Nama Modul</th>
+								<th class="px-6 py-4 text-left font-bold text-xs uppercase tracking-wider">Nama Pelatihan</th>
 								<th class="px-6 py-4 text-left font-bold text-xs uppercase tracking-wider hidden sm:table-cell">Kategori</th>
 								<th class="px-6 py-4 text-left font-bold text-xs uppercase tracking-wider hidden md:table-cell">Instruktur</th>
 								<th class="px-6 py-4 text-center font-bold text-xs uppercase tracking-wider">Rating</th>
@@ -546,7 +478,7 @@
 									<span class="font-semibold text-slate-800">Rian Pratama</span>
 								</div>
 								<div class="flex justify-between">
-									<span class="text-slate-500">Nama Modul:</span>
+									<span class="text-slate-500">Nama Pelatihan:</span>
 									<span class="font-semibold text-slate-800">Full-Stack Cloud Engineer</span>
 								</div>
 								<div class="flex justify-between">
@@ -592,8 +524,8 @@
 			<h4 class="text-white font-bold text-base mb-4">Navigasi Utama</h4>
 			<ul class="space-y-2 text-xs">
 				<li><a href="#tentang" class="hover:text-white transition">Tentang Kami</a></li>
-				<li><a href="#modul" class="hover:text-white transition">Modul Kursus</a></li>
-				<li><a href="#peringkat" class="hover:text-white transition">Peringkat Modul</a></li>
+				<li><a href="#modul" class="hover:text-white transition">Pelatihan</a></li>
+				<li><a href="#peringkat" class="hover:text-white transition">Peringkat Pelatihan</a></li>
 				<li><a href="#" class="hover:text-white transition">Kebijakan Privasi</a></li>
 			</ul>
 		</div>
@@ -608,7 +540,7 @@
 		</div>
 		<div>
 			<h4 class="text-white font-bold text-base mb-4">Buletin & Info</h4>
-			<p class="text-xs text-slate-400 mb-4">Dapatkan info modul terbaru langsung ke email Anda.</p>
+			<p class="text-xs text-slate-400 mb-4">Dapatkan info pelatihan terbaru langsung ke email Anda.</p>
 			<div class="flex">
 				<input type="email" placeholder="Email Anda..." class="bg-slate-800 text-xs px-3 py-2 rounded-l-lg focus:outline-none text-white w-full border border-slate-700" />
 				<button class="bg-blue-600 text-white px-4 rounded-r-lg text-xs font-bold hover:bg-blue-700 transition"><i class="fa-solid fa-paper-plane"></i></button>
