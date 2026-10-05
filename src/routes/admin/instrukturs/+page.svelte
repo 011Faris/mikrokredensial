@@ -13,12 +13,12 @@
 	let query = $state('');
 
 	const instructors: Instructor[] = [
-		{ id: 1, name: 'Kevin Perry', email: 'kevin@arete.ac.id', expertise: 'Desain UI/UX', courses: 8, students: 5420, rating: 4.8, status: 'Aktif' },
-		{ id: 2, name: 'Max Alexix', email: 'max@arete.ac.id', expertise: 'Pengembangan Web', courses: 5, students: 3890, rating: 4.7, status: 'Aktif' },
-		{ id: 3, name: 'Sarah Johnson', email: 'sarah@arete.ac.id', expertise: 'Pemasaran Digital', courses: 6, students: 2740, rating: 4.6, status: 'Aktif' },
-		{ id: 4, name: 'Rian Pratama', email: 'rian@arete.ac.id', expertise: 'Sains Data & AI', courses: 4, students: 1980, rating: 4.9, status: 'Aktif' },
-		{ id: 5, name: 'Dewi Anggraini', email: 'dewi@arete.ac.id', expertise: 'Keamanan Siber', courses: 3, students: 940, rating: 4.5, status: 'Nonaktif' },
-		{ id: 6, name: 'Budi Santoso', email: 'budi@arete.ac.id', expertise: 'Jaringan Komputer', courses: 2, students: 620, rating: 4.4, status: 'Aktif' }
+		{ id: 1, name: 'Kevin Perry', email: 'kevin@aristoteles.ac.id', expertise: 'Desain UI/UX', courses: 8, students: 5420, rating: 4.8, status: 'Aktif' },
+		{ id: 2, name: 'Max Alexix', email: 'max@aristoteles.ac.id', expertise: 'Pengembangan Web', courses: 5, students: 3890, rating: 4.7, status: 'Aktif' },
+		{ id: 3, name: 'Sarah Johnson', email: 'sarah@aristoteles.ac.id', expertise: 'Pemasaran Digital', courses: 6, students: 2740, rating: 4.6, status: 'Aktif' },
+		{ id: 4, name: 'Rian Pratama', email: 'rian@aristoteles.ac.id', expertise: 'Sains Data & AI', courses: 4, students: 1980, rating: 4.9, status: 'Aktif' },
+		{ id: 5, name: 'Dewi Anggraini', email: 'dewi@aristoteles.ac.id', expertise: 'Keamanan Siber', courses: 3, students: 940, rating: 4.5, status: 'Nonaktif' },
+		{ id: 6, name: 'Budi Santoso', email: 'budi@aristoteles.ac.id', expertise: 'Jaringan Komputer', courses: 2, students: 620, rating: 4.4, status: 'Aktif' }
 	];
 
 	const filtered = $derived(
@@ -30,8 +30,8 @@
 </script>
 
 <svelte:head>
-	<title>Instrukturs — Admin Aretê</title>
-	<meta name="description" content="Kelola instruktur platform Aretê." />
+	<title>Instrukturs — Admin Aristoteles</title>
+	<meta name="description" content="Kelola instruktur platform Aristoteles." />
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import logoUrl from '$lib/assets/assets/logo/aretelogo.jpg';
+	import logoUrl from '$lib/assets/assets/logo/aristoteleslogo.jpg';
 
 	let {
 		size = 'md',
@@ -31,13 +31,13 @@
 <div class="flex items-center gap-3">
 	<img
 		src={logoUrl}
-		alt="Arete Logo"
+		alt="Aristoteles Logo"
 		class="{sizeClasses[size]} rounded-full object-cover shadow-lg"
 	/>
 	{#if showText}
 		<div>
 			<h1 class="{textSizeClasses[textSize]} font-bold {dark ? 'text-white' : 'text-slate-900'} tracking-tight">
-				Arete
+				Aristoteles
 			</h1>
 			<p class="text-xs {dark ? 'text-blue-200' : 'text-slate-500'} font-medium -mt-0.5">
 				Platform Mikrokredensial

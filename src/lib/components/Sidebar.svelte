@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import logoUrl from '$lib/assets/assets/logo/aretelogo.jpg';
+	import logoUrl from '$lib/assets/assets/logo/aristoteleslogo.jpg';
 
 	export interface NavItem {
 		label: string;
@@ -15,7 +15,7 @@
 		sidebarOpen = $bindable(false),
 		onClose,
 		brandHref = '/user',
-		brandLabel = 'Aretê Platform - Dashboard pengguna',
+		brandLabel = 'Aristoteles Platform - Dashboard pengguna',
 		navAriaLabel = 'Navigasi pengguna',
 		profileName = 'AHMAD FARIZI',
 		profileRole = 'Mahasiswa',
@@ -36,7 +36,7 @@
 	const currentPath = $derived(page.url.pathname);
 
 	function isActive(href: string): boolean {
-		if (href === '/user' || href === '/admin')
+		if (href === '/user' || href === '/admin' || href === '/instruktur')
 			return currentPath === href || currentPath === href + '/';
 		return currentPath === href || currentPath.startsWith(href + '/');
 	}
@@ -98,13 +98,13 @@
 			>
 				<img
 					src={logoUrl}
-					alt="Logo Aretê"
+					alt="Logo Aristoteles"
 					class="h-11 w-11 shrink-0 rounded-xl border border-blue-200 object-cover shadow-md"
 				/>
 				{#if !isCollapsed}
 					<span class="sidebar-text flex min-w-0 flex-col">
 						<span class="flex items-center gap-1">
-							<span class="text-xl font-bold tracking-tight text-slate-900">Aretê</span>
+							<span class="text-xl font-bold tracking-tight text-slate-900">Aristoteles</span>
 							<span class="h-2 w-2 rounded-full bg-blue-500" aria-hidden="true"></span>
 						</span>
 						<span class="whitespace-nowrap text-[10px] font-semibold tracking-widest text-blue-600"
@@ -226,7 +226,7 @@
 			<div class="flex items-center justify-between px-2 pt-1">
 				<span
 					class="sidebar-text text-[10px] font-medium tracking-widest whitespace-nowrap text-slate-400 uppercase"
-					>ARETÊ · PLATFORM</span
+					>ARISTOTELES · PLATFORM</span
 				>
 				<i class="fa-solid fa-shield-halved text-xs text-slate-300" aria-hidden="true"></i>
 			</div>

@@ -53,7 +53,7 @@
 					loginAt: new Date().toISOString(),
 					rememberMe
 				};
-				(rememberMe ? localStorage : sessionStorage).setItem('arete-session', JSON.stringify(session));
+				(rememberMe ? localStorage : sessionStorage).setItem('aristoteles-session', JSON.stringify(session));
 			} catch {
 				// abaikan bila penyimpanan tidak tersedia
 			}
@@ -326,7 +326,7 @@
 
 			<!-- Footer Links -->
 			<div class="mt-8 text-center text-xs text-slate-400">
-				<p>&copy; 2026 Arete Platform Mikrokredensial. Semua hak dilindungi.</p>
+				<p>&copy; 2026 Aristoteles Platform Mikrokredensial. Semua hak dilindungi.</p>
 				<div class="flex items-center justify-center gap-3 mt-2">
 					<a href="#" class="hover:text-blue-600 transition">Privasi</a>
 					<span>•</span>

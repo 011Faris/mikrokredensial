@@ -341,7 +341,7 @@
 									class="mt-1 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500/20 cursor-pointer"
 								/>
 								<span class="text-sm text-slate-600 leading-snug">
-									Saya menyetujui <a href="#" class="text-blue-600 hover:underline font-medium">Syarat &amp; Ketentuan</a> serta <a href="#" class="text-blue-600 hover:underline font-medium">Kebijakan Privasi</a> Arete.
+									Saya menyetujui <a href="#" class="text-blue-600 hover:underline font-medium">Syarat &amp; Ketentuan</a> serta <a href="#" class="text-blue-600 hover:underline font-medium">Kebijakan Privasi</a> Aristoteles.
 								</span>
 							</label>
 						</div>
@@ -415,7 +415,7 @@
 
 			<!-- Footer Links -->
 			<div class="mt-8 text-center text-xs text-slate-400">
-				<p>&copy; 2026 Arete Platform Mikrokredensial. Semua hak dilindungi.</p>
+				<p>&copy; 2026 Aristoteles Platform Mikrokredensial. Semua hak dilindungi.</p>
 				<div class="flex items-center justify-center gap-3 mt-2">
 					<a href="#" class="hover:text-blue-600 transition">Privasi</a>
 					<span>•</span>

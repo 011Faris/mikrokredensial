@@ -21,7 +21,7 @@
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="flex items-center justify-between gap-3 h-20">
 			<!-- Logo -->
-			<a href="#beranda" class="flex shrink-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-blue-600" aria-label="Aretê - Beranda">
+			<a href="#beranda" class="flex shrink-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-blue-600" aria-label="Aristoteles - Beranda">
 				<Logo size="md" showText={true} textSize="xl" />
 			</a>
 
@@ -433,7 +433,7 @@
 							<i class="fa-solid fa-shield-halved"></i> Portal Validasi Perusahaan &amp; Institusi
 						</span>
 						<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
-							Verifikasi Keaslian Sertifikat Arete
+							Verifikasi Keaslian Sertifikat Aristoteles
 						</h2>
 						<p class="text-slate-600 text-sm sm:text-base mb-8 max-w-xl">
 							Apakah Anda seorang recruiter atau pimpinan akademik? Masukkan ID Kredensial kandidat untuk memeriksa validitas skor, rekaman asesmen, dan keaslian cap digital.
@@ -548,6 +548,6 @@
 		</div>
 	</div>
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
-		&copy; 2026 Arete Platform Mikrokredensial. Semua hak dilindungi.
+		&copy; 2026 Aristoteles Platform Mikrokredensial. Semua hak dilindungi.
 	</div>
 </footer>

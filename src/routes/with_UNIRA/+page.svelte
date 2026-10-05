@@ -139,7 +139,7 @@
 						class="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 py-2.5 px-6 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-[0.98]"
 					>
 						<i class="fa-solid fa-graduation-cap text-blue-600"></i>
-						<span>Masuk dengan Email / Akun Arete</span>
+						<span>Masuk dengan Email / Akun Aristoteles</span>
 					</button>
 				</form>
 			</div>
@@ -170,7 +170,7 @@
 
 		<!-- Footer -->
 		<div class="mt-4 text-center text-xs text-white/50">
-			<p>&copy; 2026 Arete Platform Mikrokredensial. Semua hak dilindungi.</p>
+			<p>&copy; 2026 Aristoteles Platform Mikrokredensial. Semua hak dilindungi.</p>
 		</div>
 	</div>
 </div>

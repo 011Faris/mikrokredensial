@@ -9,7 +9,7 @@
 
 	// Redeem kode voucher (simulasi sisi klien)
 	const VALID_CODES: Record<string, string> = {
-		'ARETE-2026': 'Machine Learning Dasar',
+		'ARISTOTELES-2026': 'Machine Learning Dasar',
 		'BELAJAR-GRATIS': 'Keamanan Siber',
 		'UNIRA-MKM01': 'Jaringan Komputer Dasar'
 	};
@@ -23,7 +23,7 @@
 		const code = voucherCode.trim().toUpperCase().replace(/\s+/g, '');
 		if (!/^[A-Z0-9]{4,}-[A-Z0-9]{4,}$/.test(code)) {
 			voucherStatus = 'error';
-			voucherMessage = 'Format kode salah. Contoh format yang benar: ARETE-2026.';
+			voucherMessage = 'Format kode salah. Contoh format yang benar: ARISTOTELES-2026.';
 			return;
 		}
 		if (redeemedCodes.has(code)) {
@@ -70,8 +70,8 @@
 </script>
 
 <svelte:head>
-	<title>Kursusku — Aretê Platform</title>
-	<meta name="description" content="Daftar kursus yang sedang dan telah diikuti pengguna Aretê." />
+	<title>Kursusku — Aristoteles Platform</title>
+	<meta name="description" content="Daftar kursus yang sedang dan telah diikuti pengguna Aristoteles." />
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
@@ -111,7 +111,7 @@
 							id="voucher-code"
 							type="text"
 							bind:value={voucherCode}
-							placeholder="Contoh: ARETE-2026"
+							placeholder="Contoh: ARISTOTELES-2026"
 							autocomplete="off"
 							spellcheck={false}
 							aria-describedby="voucher-help"
@@ -127,7 +127,7 @@
 					</button>
 				</div>
 				<p id="voucher-help" class="mt-1.5 text-[11px] text-blue-200">
-					Kode demo: ARETE-2026 · BELAJAR-GRATIS · UNIRA-MKM01
+					Kode demo: ARISTOTELES-2026 · BELAJAR-GRATIS · UNIRA-MKM01
 				</p>
 				{#if voucherStatus !== 'idle'}
 					<p

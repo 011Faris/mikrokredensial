@@ -59,7 +59,7 @@
 </script>
 
 <svelte:head>
-	<title>{course ? `${course.title} — Modul` : 'Kursus tidak ditemukan'} — Aretê</title>
+	<title>{course ? `${course.title} — Modul` : 'Kursus tidak ditemukan'} — Aristoteles</title>
 	<meta name="description" content={course ? `Modul pembelajaran ${course.title}` : 'Detail kursus'} />
 </svelte:head>
 

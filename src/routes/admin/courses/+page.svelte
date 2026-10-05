@@ -43,8 +43,8 @@
 </script>
 
 <svelte:head>
-	<title>Courses — Admin Aretê</title>
-	<meta name="description" content="Kelola course mikrokredensial Aretê." />
+	<title>Courses — Admin Aristoteles</title>
+	<meta name="description" content="Kelola course mikrokredensial Aristoteles." />
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
@@ -81,7 +81,7 @@
 	<div class="overflow-hidden rounded-2xl border border-slate-200/70 bg-white">
 		<div class="overflow-x-auto">
 			<table class="w-full min-w-[820px] text-sm">
-				<caption class="sr-only">Daftar course platform Aretê</caption>
+				<caption class="sr-only">Daftar course platform Aristoteles</caption>
 				<thead class="bg-slate-900 text-white">
 					<tr>
 						<th scope="col" class="px-6 py-3.5 text-left text-xs font-bold tracking-wider uppercase">Course</th>

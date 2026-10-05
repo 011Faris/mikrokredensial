@@ -1,6 +1,6 @@
-# Aretê — Platform Mikrokredensial (Frontend)
+# Aristoteles — Platform Mikrokredensial (Frontend)
 
-Aplikasi web pembelajaran mikrokredensial Universitas (UNIRA × Aretê) berbasis
+Aplikasi web pembelajaran mikrokredensial Universitas (UNIRA × Aristoteles) berbasis
 **SvelteKit 2 + Svelte 5 + TypeScript + Tailwind CSS 4**. Mencakup landing page publik,
 portal user (mahasiswa), panel admin, dan sistem pembelajaran berurutan
 (modul → materi → kuis/penugasan → sertifikat).
@@ -20,9 +20,9 @@ npm run preview    # pratinjau hasil build
 | Kebutuhan      | Nilai                                                                 |
 | -------------- | --------------------------------------------------------------------- |
 | Login UNIRA    | `farisi@gmail.com` / `1234567` (ada tombol isi otomatis di halaman login) |
-| Kode voucher   | `ARETE-2026` · `BELAJAR-GRATIS` · `UNIRA-MKM01` (di halaman Kursusku)  |
+| Kode voucher   | `ARISTOTELES-2026` · `BELAJAR-GRATIS` · `UNIRA-MKM01` (di halaman Kursusku)  |
 
-Login dummy tersimpan di `localStorage`/`sessionStorage` (`arete-session`) lalu
+Login dummy tersimpan di `localStorage`/`sessionStorage` (`aristoteles-session`) lalu
 redirect ke `/user`. Sesi dan progres belajar bersifat simulasi sisi klien.
 
 ## Fitur

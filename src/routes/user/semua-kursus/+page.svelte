@@ -37,8 +37,8 @@
 </script>
 
 <svelte:head>
-	<title>Semua Kursus — Aretê Platform</title>
-	<meta name="description" content="Katalog semua kursus mikrokredensial Aretê yang dapat diikuti." />
+	<title>Semua Kursus — Aristoteles Platform</title>
+	<meta name="description" content="Katalog semua kursus mikrokredensial Aristoteles yang dapat diikuti." />
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">

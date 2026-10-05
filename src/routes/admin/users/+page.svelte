@@ -18,8 +18,8 @@
 		{ id: 1, name: 'Ahmad Farizi', email: 'ahmad@student.ac.id', role: 'Mahasiswa', status: 'Aktif', joined: '12 Jan 2026', courses: 6 },
 		{ id: 2, name: 'Sarah Johnson', email: 'sarah@student.ac.id', role: 'Mahasiswa', status: 'Aktif', joined: '28 Feb 2026', courses: 4 },
 		{ id: 3, name: 'Rian Pratama', email: 'rian@student.ac.id', role: 'Mahasiswa', status: 'Pending', joined: '05 Mar 2026', courses: 1 },
-		{ id: 4, name: 'Kevin Perry', email: 'kevin@arete.ac.id', role: 'Instruktur', status: 'Aktif', joined: '10 Jan 2026', courses: 8 },
-		{ id: 5, name: 'Max Alexix', email: 'max@arete.ac.id', role: 'Instruktur', status: 'Aktif', joined: '18 Jan 2026', courses: 5 },
+		{ id: 4, name: 'Kevin Perry', email: 'kevin@aristoteles.ac.id', role: 'Instruktur', status: 'Aktif', joined: '10 Jan 2026', courses: 8 },
+		{ id: 5, name: 'Max Alexix', email: 'max@aristoteles.ac.id', role: 'Instruktur', status: 'Aktif', joined: '18 Jan 2026', courses: 5 },
 		{ id: 6, name: 'Dewi Lestari', email: 'dewi@student.ac.id', role: 'Mahasiswa', status: 'Nonaktif', joined: '02 Feb 2026', courses: 2 }
 	];
 
@@ -40,8 +40,8 @@
 </script>
 
 <svelte:head>
-	<title>Users — Admin Aretê</title>
-	<meta name="description" content="Kelola pengguna platform Aretê." />
+	<title>Users — Admin Aristoteles</title>
+	<meta name="description" content="Kelola pengguna platform Aristoteles." />
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
@@ -78,7 +78,7 @@
 	<div class="overflow-hidden rounded-2xl border border-slate-200/70 bg-white">
 		<div class="overflow-x-auto">
 			<table class="w-full min-w-[720px] text-sm">
-				<caption class="sr-only">Daftar pengguna platform Aretê</caption>
+				<caption class="sr-only">Daftar pengguna platform Aristoteles</caption>
 				<thead class="bg-slate-900 text-white">
 					<tr>
 						<th scope="col" class="px-6 py-3.5 text-left text-xs font-bold tracking-wider uppercase">Pengguna</th>

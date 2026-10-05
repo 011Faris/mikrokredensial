@@ -38,9 +38,9 @@
 	];
 
 	const certificates: Certificate[] = [
-		{ id: 1, title: 'Frontend Developer', issuer: 'Arete Academy', date: '15 Agu 2026' },
-		{ id: 2, title: 'Database Administrator', issuer: 'Arete Academy', date: '28 Jul 2026' },
-		{ id: 3, title: 'Network Specialist', issuer: 'Arete Academy', date: '10 Jul 2026' }
+		{ id: 1, title: 'Frontend Developer', issuer: 'Aristoteles Academy', date: '15 Agu 2026' },
+		{ id: 2, title: 'Database Administrator', issuer: 'Aristoteles Academy', date: '28 Jul 2026' },
+		{ id: 3, title: 'Network Specialist', issuer: 'Aristoteles Academy', date: '10 Jul 2026' }
 	];
 
 	function getStatusBadge(status: Module['status']) {
@@ -63,8 +63,8 @@
 </script>
 
 <svelte:head>
-	<title>Dashboard — Aretê Platform</title>
-	<meta name="description" content="Dashboard pengguna Aretê untuk memantau kursus dan sertifikat." />
+	<title>Dashboard — Aristoteles Platform</title>
+	<meta name="description" content="Dashboard pengguna Aristoteles untuk memantau kursus dan sertifikat." />
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
