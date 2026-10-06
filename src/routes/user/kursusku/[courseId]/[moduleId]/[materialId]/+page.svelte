@@ -391,7 +391,7 @@
 				</div>
 			{:else}
 			{#key material.id}
-				<MaterialRenderer {material} {course} moduleTitle={module.title} onComplete={markDone} />
+				<MaterialRenderer {material} {course} moduleTitle={module.title} moduleId={module.id} onComplete={markDone} />
 			{/key}
 			{/if}
 		</article>

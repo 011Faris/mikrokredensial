@@ -12,11 +12,13 @@
 		material,
 		course,
 		moduleTitle,
+		moduleId = '',
 		onComplete
 	}: {
 		material: Material;
 		course: Course;
 		moduleTitle: string;
+		moduleId?: string;
 		onComplete?: (id: string) => void;
 	} = $props();
 
@@ -48,9 +50,16 @@
 		points={detail.points ?? []}
 	/>
 {:else if material.type === 'kuis' && detail.questions}
-	<QuizMaterial questions={detail.questions} intro={detail.intro} onPass={() => onComplete?.(material.id)} />
+	<QuizMaterial
+		questions={detail.questions}
+		intro={detail.intro}
+		materialId={material.id}
+		courseId={String(course.id)}
+		moduleId={moduleId || moduleTitle}
+		onPass={() => onComplete?.(material.id)}
+	/>
 {:else if material.type === 'tugas' && detail.assignment}
-	<AssignmentMaterial assignment={detail.assignment} onSubmit={() => onComplete?.(material.id)} />
+	<AssignmentMaterial assignment={detail.assignment} materialId={material.id} courseId={String(course.id)} moduleId={moduleId || moduleTitle} moduleTitle={moduleTitle} courseTitle={course.title} onSubmit={() => onComplete?.(material.id)} />
 {:else}
 	<TextMaterial intro={detail.intro} paragraphs={detail.paragraphs ?? []} points={detail.points ?? []} />
 {/if}

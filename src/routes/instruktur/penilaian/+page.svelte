@@ -1,6 +1,8 @@
 <script lang="ts">
+	import type { ApiResult, AssignmentSubmission } from '$lib/types/submission';
+
 	interface ReviewItem {
-		id: number;
+		id: number | string;
 		student: string;
 		nim: string;
 		course: string;
@@ -9,6 +11,9 @@
 		date: string;
 		status: 'Menunggu' | 'Dinilai';
 		score: number | null;
+		driveLink?: string;
+		fileName?: string;
+		submissionId?: string;
 	}
 
 	let reviews = $state<ReviewItem[]>([
@@ -23,8 +28,9 @@
 	type Filter = 'all' | 'Menunggu' | 'Dinilai';
 	let activeFilter = $state<Filter>('all');
 	let search = $state('');
-	let draftScores: Record<number, string> = $state({});
+	let draftScores: Record<string, string> = $state({});
 	let message = $state('');
+	let loadingDrive = $state(true);
 
 	const pendingCount = $derived(reviews.filter((r) => r.status === 'Menunggu').length);
 	const gradedCount = $derived(reviews.filter((r) => r.status === 'Dinilai').length);
@@ -47,16 +53,72 @@
 		})
 	);
 
-	function submitScore(id: number) {
-		const raw = (draftScores[id] ?? '').trim();
+	function toReviewItem(s: AssignmentSubmission): ReviewItem {
+		return {
+			id: s.id,
+			student: s.studentName,
+			nim: s.studentNim || '—',
+			course: s.courseId ? `Kursus ${s.courseId}` : '—',
+			task: s.fileName,
+			type: 'Tugas',
+			date: new Date(s.createdAt).toLocaleString('id-ID'),
+			status: s.status,
+			score: s.score,
+			driveLink: s.driveLink,
+			fileName: s.fileName,
+			submissionId: s.id
+		};
+	}
+
+	// Tarik pengumpulan PDF (Drive) dari aplikasi, gabung ke antrean penilaian.
+	$effect(() => {
+		let cancelled = false;
+		(async () => {
+			try {
+				const res = await fetch('/api/assignments/upload', { headers: { accept: 'application/json' } });
+				if (!res.ok) return;
+				const json = (await res.json()) as ApiResult<AssignmentSubmission[]>;
+				if (!json.status || !Array.isArray(json.data)) return;
+				if (cancelled) return;
+				const mapped = json.data.map(toReviewItem);
+				const known = new Set(reviews.map((r) => String(r.submissionId ?? r.id)));
+				const fresh = mapped.filter((m) => !known.has(String(m.id)));
+				if (fresh.length > 0) reviews = [...fresh, ...reviews];
+			} catch {
+				/* backend offline — tampilkan data contoh saja */
+			} finally {
+				if (!cancelled) loadingDrive = false;
+			}
+		})();
+		return () => {
+			cancelled = true;
+		};
+	});
+
+	async function submitScore(id: number | string) {
+		const key = String(id);
+		const raw = (draftScores[key] ?? '').trim();
 		const val = Number(raw);
 		if (!raw || Number.isNaN(val) || val < 0 || val > 100) {
 			message = 'Masukkan nilai 0–100 terlebih dahulu.';
 			return;
 		}
-		reviews = reviews.map((r) => (r.id === id ? { ...r, score: val, status: 'Dinilai' } : r));
-		delete draftScores[id];
-		message = `Nilai ${val} tersimpan untuk ${reviews.find((r) => r.id === id)?.student ?? 'peserta'}.`;
+		const target = reviews.find((r) => String(r.id) === key);
+		if (target?.submissionId) {
+			try {
+				const res = await fetch(`/api/assignments/grade/${encodeURIComponent(target.submissionId)}`, {
+					method: 'PATCH',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify({ score: val })
+				});
+				if (!res.ok) throw new Error('backend offline');
+			} catch {
+				/* fallback: simpan lokal saja */
+			}
+		}
+		reviews = reviews.map((r) => (String(r.id) === key ? { ...r, score: val, status: 'Dinilai' } : r));
+		delete draftScores[key];
+		message = `Nilai ${val} tersimpan untuk ${target?.student ?? 'peserta'}.`;
 	}
 </script>
 
@@ -140,13 +202,20 @@
 		</div>
 	</div>
 
+	{#if loadingDrive}
+		<p role="status" class="mb-4 flex items-center gap-2 text-xs font-semibold text-slate-500">
+			<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Memuat berkas PDF dari Drive…
+		</p>
+	{/if}
+
 	<div class="overflow-hidden rounded-2xl border border-slate-200/60 bg-white">
 		<div class="overflow-x-auto">
-			<table class="w-full min-w-[760px] text-left text-sm">
+			<table class="w-full min-w-[880px] text-left text-sm">
 				<thead>
 					<tr class="border-b border-slate-100 bg-slate-50/60 text-xs text-slate-500">
 						<th scope="col" class="px-5 py-3 font-bold">Peserta</th>
 						<th scope="col" class="px-5 py-3 font-bold">Tugas / Kuis</th>
+						<th scope="col" class="px-5 py-3 font-bold">Berkas PDF</th>
 						<th scope="col" class="px-5 py-3 font-bold">Status</th>
 						<th scope="col" class="px-5 py-3 font-bold">Nilai</th>
 						<th scope="col" class="px-5 py-3 text-right font-bold">Aksi</th>
@@ -162,6 +231,23 @@
 							<td class="px-5 py-4">
 								<div class="font-semibold text-slate-800">{r.task}</div>
 								<div class="mt-0.5 text-xs text-slate-500">{r.course} · {r.type}</div>
+							</td>
+							<td class="px-5 py-4">
+								{#if r.driveLink}
+									<a
+										href={r.driveLink}
+										target="_blank"
+										rel="noopener noreferrer"
+										title={r.fileName ?? 'Buka PDF di Google Drive'}
+										class="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition-colors hover:bg-violet-100 focus-visible:outline-2 focus-visible:outline-violet-600"
+									>
+										<i class="fa-solid fa-file-pdf text-red-500" aria-hidden="true"></i>
+										<span class="max-w-40 truncate">{r.fileName ?? 'Buka PDF'}</span>
+										<i class="fa-solid fa-arrow-up-right-from-square text-[10px]" aria-hidden="true"></i>
+									</a>
+								{:else}
+									<span class="text-xs font-semibold text-slate-400">—</span>
+								{/if}
 							</td>
 							<td class="px-5 py-4">
 								<span
@@ -181,7 +267,7 @@
 										min="0"
 										max="100"
 										placeholder="0–100"
-										bind:value={draftScores[r.id]}
+										bind:value={draftScores[String(r.id)]}
 										class="w-24 rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
 									/>
 								{/if}
