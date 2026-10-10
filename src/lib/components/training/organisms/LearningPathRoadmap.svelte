@@ -12,8 +12,8 @@
 	/**
 	 * Interactive Learning Roadmap (canvas + SVG ala roadmap.sh):
 	 * alur Modul mengalir dari ATAS KE BAWAH pada sumbu vertikal tengah.
-	 * Sub-modul menumpuk di SATU SISI per modul (kanan semua atau kiri
-	 * semua, bergantian tiap modul). Garis dari Modul ke sub-modulnya
+	 * Sub-modul berderet horizontal SEJAJAR di satu sisi modulnya
+	 * (kanan semua atau kiri semua, bergantian tiap modul). Garis dari Modul ke sub-modulnya
 	 * berupa KURVA PUTUS-PUTUS yang sejajar (berangkat vertikal dari
 	 * modul, tiba horizontal di sub-modul), lalu Modul 1 → Modul 2 →
 	 * seterusnya dengan garis solid.

@@ -263,50 +263,78 @@ export interface RoadmapLayout {
 	h: number;
 }
 
-const ROADMAP_CX = 360;
 const ROADMAP_SIDE_GAP = 40;
-const ROADMAP_Y0 = 80;
-const ROADMAP_SUB_DY = 120;
-const ROADMAP_SUB_STEP = 100;
-const ROADMAP_ROW_PAD = 110;
+const ROADMAP_Y0 = 200;
+const ROADMAP_ROW_STEP = 150;
 const ROADMAP_PAD = 60;
+const ROADMAP_LIFT_BASE = 55;
+const ROADMAP_LIFT_STEP = 40;
+const ROADMAP_LIFT_CAP = 135;
 
 /**
  * Hitung posisi node + garis canvas roadmap dari data modul.
- * Modul mengalir vertikal di sumbu tengah; sub-modul menumpuk di satu
- * sisi per modul (genap kanan, ganjil kiri). Deterministik, tanpa hardcode.
+ * Modul mengalir vertikal di sumbu tengah dengan jarak baris TETAP;
+ * sub-modul berderet horizontal SEJAJAR di satu sisi modulnya
+ * (modul genap di kanan, ganjil di kiri).
+ * Setiap sub-modul dijangkau KURVA LANGSUNG dari modulnya yang
+ * melengkung ke atas melewati sub lain — tidak pernah memotong
+ * node sub-modul lain. Deterministik, tanpa hardcode.
  */
 export function computeRoadmapLayout(modules: CourseModule[]): RoadmapLayout {
 	const subsPerModule = modules.map((m) => resolveSubModules(m));
-	const maxSubs = Math.max(1, ...subsPerModule.map((s) => s.length));
-	const step = ROADMAP_SUB_DY + (maxSubs - 1) * ROADMAP_SUB_STEP + ROADMAP_ROW_PAD;
-	const leftX = ROADMAP_CX - ROADMAP_SIDE_GAP - ROADMAP_NODE_W;
-	const rightX = ROADMAP_CX + ROADMAP_SIDE_GAP;
+	const countOnSide = (left: boolean) =>
+		Math.max(0, ...subsPerModule.map((subs, i) => ((i % 2 === 1) === left ? subs.length : 0)));
+	const leftMax = countOnSide(true);
+	const rightMax = countOnSide(false);
+	const rowW = ROADMAP_NODE_W + ROADMAP_SIDE_GAP;
+	const cx =
+		ROADMAP_PAD +
+		ROADMAP_NODE_W / 2 +
+		ROADMAP_SIDE_GAP +
+		leftMax * rowW -
+		(leftMax > 0 ? ROADMAP_SIDE_GAP : 0);
 	const nodes: RoadmapFlowNode[] = [];
 	const connections: Array<[string, string]> = [];
 	const curves: RoadmapCurve[] = [];
 	modules.forEach((m, i) => {
-		const modCy = ROADMAP_Y0 + i * step;
-		const modBottom = modCy + ROADMAP_NODE_H / 2;
-		nodes.push({ id: m.id, label: m.title, x: ROADMAP_CX - ROADMAP_NODE_W / 2, y: modCy - ROADMAP_NODE_H / 2, kind: 'module' });
+		const modCy = ROADMAP_Y0 + i * ROADMAP_ROW_STEP;
+		nodes.push({ id: m.id, label: m.title, x: cx - ROADMAP_NODE_W / 2, y: modCy - ROADMAP_NODE_H / 2, kind: 'module' });
 		if (i > 0) connections.push([modules[i - 1].id, m.id]);
 		const leftSide = i % 2 === 1;
+		const dir = leftSide ? -1 : 1;
+		const modEdge = cx + dir * (ROADMAP_NODE_W / 2);
 		subsPerModule[i].forEach((s, j) => {
-			const x = leftSide ? leftX : rightX;
-			const cy = modCy + ROADMAP_SUB_DY + j * ROADMAP_SUB_STEP;
-			nodes.push({ id: s.id, label: s.title, x, y: cy - ROADMAP_NODE_H / 2, kind: 'sub' });
-			const innerX = leftSide ? x + ROADMAP_NODE_W : x;
-			curves.push({ key: s.id, d: `M ${ROADMAP_CX} ${modBottom} Q ${ROADMAP_CX} ${cy} ${innerX} ${cy}` });
+			const x = leftSide
+				? modEdge - ROADMAP_SIDE_GAP - ROADMAP_NODE_W - j * rowW
+				: modEdge + ROADMAP_SIDE_GAP + j * rowW;
+			nodes.push({ id: s.id, label: s.title, x, y: modCy - ROADMAP_NODE_H / 2, kind: 'sub' });
+			if (j === 0) {
+				// Sub terdekat: garis lurus sejajar dari tepi modul.
+				const nearX = leftSide ? x + ROADMAP_NODE_W : x;
+				const [x1, x2] = leftSide ? [nearX, modEdge] : [modEdge, nearX];
+				curves.push({ key: s.id, d: `M ${x1} ${modCy} H ${x2}` });
+			} else {
+				// Sub berikutnya: kurva langsung dari modul, melengkung ke atas
+				// melewati sub sebelumnya, tiba vertikal di tengah atas node.
+				const subCx = x + ROADMAP_NODE_W / 2;
+				const lift = Math.min(ROADMAP_LIFT_BASE + (j - 1) * ROADMAP_LIFT_STEP, ROADMAP_LIFT_CAP);
+				curves.push({
+					key: s.id,
+					d: `M ${modEdge} ${modCy} C ${modEdge} ${modCy - lift} ${subCx} ${modCy - lift} ${subCx} ${modCy - ROADMAP_NODE_H / 2}`
+				});
+			}
 		});
 	});
+	const rightEdge =
+		cx + ROADMAP_NODE_W / 2 + (rightMax > 0 ? ROADMAP_SIDE_GAP + rightMax * rowW - ROADMAP_SIDE_GAP : 0);
 	return {
 		nodes,
 		connections,
 		curves,
-		w: ROADMAP_CX + ROADMAP_SIDE_GAP + ROADMAP_NODE_W + ROADMAP_PAD,
+		w: rightEdge + ROADMAP_PAD,
 		h:
 			modules.length > 0
-				? ROADMAP_Y0 + (modules.length - 1) * step + ROADMAP_SUB_DY + (maxSubs - 1) * ROADMAP_SUB_STEP + ROADMAP_NODE_H / 2 + ROADMAP_PAD
+				? ROADMAP_Y0 + (modules.length - 1) * ROADMAP_ROW_STEP + ROADMAP_NODE_H / 2 + ROADMAP_PAD
 				: 200
 	};
 }
