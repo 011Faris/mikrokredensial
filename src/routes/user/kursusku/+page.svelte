@@ -2,6 +2,7 @@
 	import { SvelteSet } from 'svelte/reactivity';
 	import { courses, type Course } from '$lib/data/courses';
 	import { getCourseMeta, periodBadgeClass, periodIcon } from '$lib/data/course-meta';
+	import { getTrainingStats } from '$lib/data/training';
 
 	type Status = 'all' | 'in-progress' | 'completed' | 'not-started';
 
@@ -11,7 +12,8 @@
 	const VALID_CODES: Record<string, string> = {
 		'ARISTOTELES-2026': 'Machine Learning Dasar',
 		'BELAJAR-GRATIS': 'Keamanan Siber',
-		'UNIRA-MKM01': 'Jaringan Komputer Dasar'
+		'UNIRA-MKM01': 'Jaringan Komputer Dasar',
+		'FULLSTACK-2026': 'Full-Stack Web Development Bootcamp'
 	};
 	let voucherCode = $state('');
 	let voucherStatus = $state<'idle' | 'error' | 'success'>('idle');
@@ -127,7 +129,7 @@
 					</button>
 				</div>
 				<p id="voucher-help" class="mt-1.5 text-[11px] text-blue-200">
-					Kode demo: ARISTOTELES-2026 · BELAJAR-GRATIS · UNIRA-MKM01
+					Kode demo: ARISTOTELES-2026 · BELAJAR-GRATIS · UNIRA-MKM01 · FULLSTACK-2026
 				</p>
 				{#if voucherStatus !== 'idle'}
 					<p
@@ -204,6 +206,14 @@
 						</h2>
 						<p class="mt-1 text-xs text-slate-500">
 							{course.instructor} · Terakhir diakses: {course.lastAccessed}
+						</p>
+						<p class="mt-1.5 inline-flex flex-wrap items-center gap-1.5 text-[11px] font-semibold text-slate-500">
+							<span class="rounded-full bg-slate-100 px-2.5 py-0.5">{getTrainingStats(course).moduleCount} modul</span>
+							<span class="rounded-full bg-violet-100 px-2.5 py-0.5 text-violet-700">{getTrainingStats(course).subModuleCount} sub-modul</span>
+							<span class="rounded-full bg-blue-50 px-2.5 py-0.5 text-blue-700">{getTrainingStats(course).materialCount} materi</span>
+							{#if getTrainingStats(course).materialCount >= 100}
+								<span class="rounded-full bg-amber-100 px-2.5 py-0.5 text-amber-800">Kompleks</span>
+							{/if}
 						</p>
 
 						<div class="mt-4">

@@ -117,6 +117,20 @@ const META: Record<number, CourseMeta> = {
 			'Melakukan administrasi server dasar'
 		],
 		requirements: ['Terbiasa memakai terminal/command line', 'VM atau WSL untuk praktik Linux', 'Logika dasar pemrograman']
+	},
+	7: {
+		rating: 4.9,
+		reviews: 2310,
+		students: 5840,
+		price: 'GRATIS',
+		period: 'ongoing',
+		outcomes: [
+			'Menyelesaikan 161 materi dalam 8 modul dan 37 sub-modul kompleks',
+			'Membangun aplikasi full-stack aksesibel dari frontend hingga backend',
+			'Mengelola database, testing, dan deployment CI/CD',
+			'Menyelesaikan capstone dan portofolio siap kerja'
+		],
+		requirements: ['Laptop dan internet stabil', 'Komitmen 8–10 jam/minggu selama 16 minggu', 'Tidak perlu pengalaman sebelumnya']
 	}
 };
 

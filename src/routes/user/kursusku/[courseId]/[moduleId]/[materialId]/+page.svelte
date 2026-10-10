@@ -1,24 +1,40 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { getCourseById, isMaterialLocked, isModuleLocked } from '$lib/data/courses';
+	import { SvelteSet } from 'svelte/reactivity';
+	import {
+		getCourseById,
+		getModuleMaterials,
+		isMaterialLocked,
+		isModuleLocked,
+		isSubModuleLocked
+	} from '$lib/data/courses';
+	import { resolveSubModules } from '$lib/data/training';
 	import { doneMaterials, ensureSeeded, markDone } from '$lib/stores/progress.svelte';
 	import MaterialRenderer from '$lib/components/materials/MaterialRenderer.svelte';
 
 	const courseId = $derived(Number(page.params.courseId));
 	const course = $derived(getCourseById(courseId));
 	const module = $derived(course?.modules.find((m) => m.id === page.params.moduleId));
-	const matIndex = $derived(module?.materials.findIndex((m) => m.id === page.params.materialId) ?? -1);
-	const material = $derived(matIndex >= 0 ? module?.materials[matIndex] : undefined);
-
 	const moduleIndex = $derived(course?.modules.findIndex((m) => m.id === page.params.moduleId) ?? -1);
-	const prev = $derived(
-		module && matIndex > 0 ? module.materials[matIndex - 1] : undefined
-	);
-	const next = $derived(
-		module && matIndex >= 0 && matIndex < module.materials.length - 1
-			? module.materials[matIndex + 1]
-			: undefined
-	);
+
+	// Flatten materi modul (urut antar sub-modul) — sumber kebenaran urutan belajar.
+	const flat = $derived(module ? getModuleMaterials(module) : []);
+	const matIndex = $derived(flat.findIndex((m) => m.id === page.params.materialId));
+	const material = $derived(matIndex >= 0 ? flat[matIndex] : undefined);
+
+	const subs = $derived(module ? resolveSubModules(module) : []);
+	const currentSubInfo = $derived.by(() => {
+		if (!module) return { sub: null as null | (typeof subs)[number], subIndex: -1 };
+		for (let i = 0; i < subs.length; i++) {
+			if (subs[i].materials.some((m) => m.id === page.params.materialId)) {
+				return { sub: subs[i], subIndex: i };
+			}
+		}
+		return { sub: null as null | (typeof subs)[number], subIndex: -1 };
+	});
+
+	const prev = $derived(matIndex > 0 ? flat[matIndex - 1] : undefined);
+	const next = $derived(matIndex >= 0 && matIndex < flat.length - 1 ? flat[matIndex + 1] : undefined);
 
 	/** Modul saat ini terkunci bila ada materi di modul sebelumnya yang belum selesai */
 	const moduleLocked = $derived(
@@ -27,19 +43,22 @@
 			: isModuleLocked(course.modules, moduleIndex, (id) => doneMaterials.has(id))
 	);
 
-	/** Materi saat ini terkunci bila modulnya terkunci atau ada materi sebelumnya yang belum selesai */
-	const locked = $derived(
-		!module || matIndex < 0
+	const subLocked = $derived(
+		!course || !module || currentSubInfo.subIndex < 0
 			? false
-			: moduleLocked ||
-				isMaterialLocked(module.materials, matIndex, (id) => doneMaterials.has(id))
+			: isSubModuleLocked(course.modules, moduleIndex, currentSubInfo.subIndex, (id) =>
+					doneMaterials.has(id)
+				)
+	);
+
+	/** Materi saat ini terkunci bila modul/sub terkunci atau ada materi sebelumnya yang belum selesai */
+	const locked = $derived(
+		matIndex < 0 ? false : moduleLocked || subLocked || isMaterialLocked(flat, matIndex, (id) => doneMaterials.has(id))
 	);
 
 	/** Materi berikutnya terkunci? (untuk tombol navigasi) */
 	const nextLocked = $derived(
-		!module || !next
-			? false
-			: isMaterialLocked(module.materials, matIndex + 1, (id) => doneMaterials.has(id))
+		!next ? false : isMaterialLocked(flat, matIndex + 1, (id) => doneMaterials.has(id))
 	);
 
 	/** Modul setelah modul saat ini (untuk tombol lanjut di akhir modul) */
@@ -48,14 +67,37 @@
 			? course.modules[moduleIndex + 1]
 			: undefined
 	);
-	const nextModuleFirst = $derived(nextModule?.materials[0]);
+	const nextModuleFirst = $derived(nextModule ? getModuleMaterials(nextModule)[0] : undefined);
 
-	/** Materi pertama yang belum selesai (tujuan tombol "Kerjakan sekarang") */
-	const firstUnfinished = $derived(module?.materials.find((m) => !doneMaterials.has(m.id)));
+	/** Materi pertama yang belum selesai dalam modul ini */
+	const firstUnfinished = $derived(flat.find((m) => !doneMaterials.has(m.id)));
 
 	// Sinkron status awal dari data (sekali per kursus)
 	$effect(() => {
 		if (course) ensureSeeded(course);
+	});
+
+	// Sidebar hierarki: modul terbuka + sub terbuka mengikuti posisi saat ini
+	let sidebarOpenModules = new SvelteSet<string>();
+	let sidebarOpenSubs = new SvelteSet<string>();
+	$effect(() => {
+		const mid = page.params.moduleId;
+		const matId = page.params.materialId;
+		if (mid && !sidebarOpenModules.has(mid)) {
+			// Jangan hapus pilihan user lain; pastikan modul aktif terbuka
+			sidebarOpenModules.add(mid);
+		}
+		if (course && mid && matId) {
+			const mod = course.modules.find((m) => m.id === mid);
+			if (mod) {
+				for (const s of resolveSubModules(mod)) {
+					if (s.materials.some((m) => m.id === matId)) {
+						sidebarOpenSubs.add(s.id);
+						break;
+					}
+				}
+			}
+		}
 	});
 
 	/** Panel daftar modul di sidebar (khusus layar kecil) */
@@ -108,7 +150,22 @@
 		modulesCollapsed = false;
 	}
 
-	const totalMats = $derived(course?.modules.reduce((n, m) => n + m.materials.length, 0) ?? 0);
+	function toggleSidebarModule(id: string) {
+		if (sidebarOpenModules.has(id)) sidebarOpenModules.delete(id);
+		else sidebarOpenModules.add(id);
+	}
+
+	function toggleSidebarSub(id: string) {
+		if (sidebarOpenSubs.has(id)) sidebarOpenSubs.delete(id);
+		else sidebarOpenSubs.add(id);
+	}
+
+	const totalMats = $derived(
+		course?.modules.reduce((n, m) => n + getModuleMaterials(m).length, 0) ?? 0
+	);
+	const totalSubs = $derived(
+		course?.modules.reduce((n, m) => n + resolveSubModules(m).length, 0) ?? 0
+	);
 
 	function typeBadge(type: string): string {
 		if (type === 'video') return 'bg-blue-600 text-white';
@@ -157,7 +214,7 @@
 			<p class="mt-1 text-sm text-slate-500">Tautan materi ini tidak valid atau sudah dipindahkan.</p>
 			<a
 				href="/user/kursusku"
-				class="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-blue-700"
+				class="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-blue-700"
 			>
 				<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Kembali ke Kursusku
 			</a>
@@ -178,7 +235,11 @@
 				<div class="min-w-0 flex-1">
 					<p class="truncate text-sm font-bold text-slate-900">{course.title}</p>
 					<p class="truncate text-[11px] text-slate-500">
-						Modul {(moduleIndex ?? 0) + 1} · Materi {matIndex + 1} dari {module.materials.length}
+						Modul {(moduleIndex ?? 0) + 1}
+						{#if currentSubInfo.sub}
+							· Sub-modul {(moduleIndex ?? 0) + 1}.{currentSubInfo.subIndex + 1} {currentSubInfo.sub.title}
+						{/if}
+						· Materi {matIndex + 1} dari {flat.length} (modul ini)
 					</p>
 				</div>
 				<a
@@ -207,8 +268,14 @@
 				href={`/user/kursusku/${course.id}`}
 				class="rounded font-medium text-slate-600 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-blue-600"
 			>
-				Modul {(moduleIndex ?? 0) + 1}
+				Modul {(moduleIndex ?? 0) + 1}: {module.title}
 			</a>
+			{#if currentSubInfo.sub}
+				<i class="fa-solid fa-chevron-right text-[10px] text-slate-300" aria-hidden="true"></i>
+				<span class="max-w-40 truncate rounded font-medium text-slate-600">
+					Sub-modul {(moduleIndex ?? 0) + 1}.{currentSubInfo.subIndex + 1}
+				</span>
+			{/if}
 			<i class="fa-solid fa-chevron-right text-[10px] text-slate-300" aria-hidden="true"></i>
 			<span aria-current="page" class="max-w-48 truncate font-medium text-slate-700">{material.title}</span>
 		</nav>
@@ -219,7 +286,7 @@
 		>
 			<aside
 				id="modul-nav"
-				aria-label="Daftar modul kursus"
+				aria-label="Daftar modul, sub-modul, dan materi kursus"
 				class={`relative overflow-hidden rounded-2xl ${modulesCollapsed ? 'border-transparent bg-transparent' : 'border border-slate-200/70 bg-white'} lg:sticky lg:top-[72px] lg:block lg:max-h-[calc(100vh-6rem)]`}
 			>
 				<!-- Satu kotak panah saat sidebar diciutkan -->
@@ -247,7 +314,7 @@
 					<div class="min-w-0">
 						<p class="mt-1 line-clamp-2 text-sm font-bold text-slate-900">{course.title}</p>
 						<p class="mt-0.5 text-[11px] text-slate-500">
-							{course.modules.length} modul · {totalMats} materi
+							{course.modules.length} modul · {totalSubs} sub-modul · {totalMats} materi
 						</p>
 					</div>
 					<button
@@ -263,66 +330,109 @@
 					</button>
 				</div>
 				<div class={`${showModules ? 'block' : 'hidden'} lg:block`}>
-				<nav aria-label="Modul dan materi" class="max-h-[60vh] overflow-y-auto p-2 lg:max-h-none lg:overflow-visible">
+				<nav aria-label="Modul, sub-modul, dan materi" class="max-h-[60vh] overflow-y-auto p-2 lg:max-h-none lg:overflow-visible">
 					{#each course.modules as mod, mi (mod.id)}
 						{@const isCurrentModule = mod.id === module.id}
 						{@const modLocked = !isCurrentModule && isModuleLocked(course.modules, mi, (id) => doneMaterials.has(id))}
+						{@const modFlat = getModuleMaterials(mod)}
+						{@const modSubs = resolveSubModules(mod)}
+						{@const modOpen = sidebarOpenModules.has(mod.id)}
 						<section aria-label={`Modul ${mi + 1}: ${mod.title}`} class="mb-1">
-							<p class={`flex items-center gap-1.5 px-3 pt-3 pb-1 text-[11px] font-extrabold tracking-wide uppercase ${isCurrentModule ? 'text-blue-700' : 'text-slate-400'}`}>
+							<button
+								type="button"
+								onclick={() => toggleSidebarModule(mod.id)}
+								aria-expanded={modOpen}
+								class={`flex w-full items-center gap-1.5 rounded-xl px-3 pt-3 pb-1 text-left focus-visible:outline-2 focus-visible:outline-blue-600 ${isCurrentModule ? 'text-blue-700' : 'text-slate-400 hover:text-slate-600'}`}
+							>
 								{#if modLocked}<i class="fa-solid fa-lock text-[9px]" aria-hidden="true"></i>{/if}
-								<span class="truncate">Modul {mi + 1}: {mod.title}</span>
-							</p>
-							<ol class="space-y-0.5">
-								{#each mod.materials as mat, mati (mat.id)}
-									{@const isCurrent = mat.id === material.id}
-									{@const matDone = doneMaterials.has(mat.id)}
-									{@const locked = modLocked || (!isCurrent && isMaterialLocked(mod.materials, mati, (id) => doneMaterials.has(id)))}
-									<li>
-										{#if locked}
-											<span
-												class="flex cursor-not-allowed items-center gap-2.5 rounded-xl px-3 py-2 opacity-60"
-												title="Selesaikan materi sebelumnya untuk membuka"
-												aria-label={`Terkunci: ${mat.title}`}
+								<span class="min-w-0 flex-1 truncate text-[11px] font-extrabold tracking-wide uppercase">
+									Modul {mi + 1}: {mod.title} · {modFlat.length} materi
+								</span>
+								<i class={`fa-solid fa-chevron-down text-[9px] transition-transform ${modOpen ? 'rotate-180' : ''}`} aria-hidden="true"></i>
+							</button>
+							{#if modOpen}
+								<div class="space-y-1.5 px-1 pt-1 pb-2">
+									{#each modSubs as sub, si (sub.id)}
+										{@const isCurrentSub = isCurrentModule && sub.id === currentSubInfo.sub?.id}
+										{@const sLocked = isSubModuleLocked(course.modules, mi, si, (id) => doneMaterials.has(id))}
+										{@const sOpen = sidebarOpenSubs.has(sub.id)}
+										<div class={`overflow-hidden rounded-xl border ${isCurrentSub ? 'border-blue-200 bg-blue-50/40' : 'border-slate-100 bg-slate-50/50'}`}>
+											<button
+												type="button"
+												onclick={() => toggleSidebarSub(sub.id)}
+												aria-expanded={sOpen}
+												class="flex w-full items-center gap-2 px-2.5 py-2 text-left focus-visible:outline-2 focus-visible:outline-blue-600"
 											>
-												<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-slate-400" aria-hidden="true">
-													<i class="fa-solid fa-lock text-[8px]"></i>
-												</span>
-												<span class="min-w-0 flex-1 truncate text-[13px] text-slate-400">{mat.title}</span>
-											</span>
-										{:else}
-										<a
-											href={`/user/kursusku/${course.id}/${mod.id}/${mat.id}`}
-											aria-current={isCurrent ? 'page' : undefined}
-											class={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-left transition-colors focus-visible:outline-2 focus-visible:outline-blue-600 ${
-												isCurrent
-													? 'bg-blue-600 font-bold text-white shadow-md shadow-blue-600/25'
-													: 'text-slate-600 hover:bg-blue-50 hover:text-blue-700'
-											}`}
-										>
-											<span
-												class={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[10px] font-extrabold ${
-													isCurrent
-														? 'bg-white/20 text-white'
-														: matDone
-															? 'bg-emerald-100 text-emerald-700'
-															: 'bg-slate-100 text-slate-500'
-												}`}
-												aria-hidden="true"
-											>
-												{#if isCurrent}
-													<i class="fa-solid fa-play text-[8px]"></i>
-												{:else if matDone}
-													<i class="fa-solid fa-check text-[8px]"></i>
+												{#if sLocked && !isCurrentSub}
+													<i class="fa-solid fa-lock text-[9px] text-slate-400" aria-hidden="true"></i>
 												{:else}
-													{mati + 1}
+													<span class={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-extrabold ${isCurrentSub ? 'bg-blue-600 text-white' : 'bg-violet-100 text-violet-700'}`} aria-hidden="true">
+														{si + 1}
+													</span>
 												{/if}
-											</span>
-											<span class="min-w-0 flex-1 truncate text-[13px]">{mat.title}</span>
-										</a>
-										{/if}
-									</li>
-								{/each}
-							</ol>
+												<span class="min-w-0 flex-1 truncate text-[12px] font-bold {isCurrentSub ? 'text-blue-800' : 'text-slate-600'}">
+													{mi + 1}.{si + 1} {sub.title}
+												</span>
+												<span class="shrink-0 text-[10px] font-bold text-slate-400">{sub.materials.length}</span>
+											</button>
+											{#if sOpen}
+												<ol class="space-y-0.5 border-t border-slate-100 bg-white px-1.5 py-1.5">
+													{#each sub.materials as mat (mat.id)}
+														{@const flatIdx = modFlat.findIndex((f) => f.id === mat.id)}
+														{@const isCurrent = mat.id === material.id}
+														{@const matDone = doneMaterials.has(mat.id)}
+														{@const lockedItem = modLocked || sLocked || isMaterialLocked(modFlat, flatIdx, (id) => doneMaterials.has(id))}
+														<li>
+															{#if lockedItem && !isCurrent}
+																<span
+																	class="flex cursor-not-allowed items-center gap-2 rounded-lg px-2 py-1.5 opacity-60"
+																	title="Selesaikan materi sebelumnya untuk membuka"
+																	aria-label={`Terkunci: ${mat.title}`}
+																>
+																	<span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-slate-200 text-slate-400" aria-hidden="true">
+																		<i class="fa-solid fa-lock text-[8px]"></i>
+																	</span>
+																	<span class="min-w-0 flex-1 truncate text-[13px] text-slate-400">{mat.title}</span>
+																</span>
+															{:else}
+															<a
+																href={`/user/kursusku/${course.id}/${mod.id}/${mat.id}`}
+																aria-current={isCurrent ? 'page' : undefined}
+																class={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-blue-600 ${
+																	isCurrent
+																		? 'bg-blue-600 font-bold text-white shadow-md shadow-blue-600/25'
+																		: 'text-slate-600 hover:bg-blue-50 hover:text-blue-700'
+																}`}
+															>
+																<span
+																	class={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[10px] font-extrabold ${
+																		isCurrent
+																			? 'bg-white/20 text-white'
+																			: matDone
+																				? 'bg-emerald-100 text-emerald-700'
+																				: 'bg-slate-100 text-slate-500'
+																	}`}
+																	aria-hidden="true"
+																>
+																	{#if isCurrent}
+																		<i class="fa-solid fa-play text-[8px]"></i>
+																	{:else if matDone}
+																		<i class="fa-solid fa-check text-[8px]"></i>
+																	{:else}
+																		{flatIdx + 1}
+																	{/if}
+																</span>
+																<span class="min-w-0 flex-1 truncate text-[13px]">{mat.title}</span>
+															</a>
+															{/if}
+														</li>
+													{/each}
+												</ol>
+											{/if}
+										</div>
+									{/each}
+								</div>
+							{/if}
 						</section>
 					{/each}
 				</nav>
@@ -342,8 +452,12 @@
 				<span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-600">
 					<i class="fa-regular fa-clock" aria-hidden="true"></i> {material.duration}
 				</span>
-				<span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold text-slate-600">
-					Materi {matIndex + 1} dari {module.materials.length}
+				<span class="inline-flex items-center gap-1.5 rounded-full bg-violet-100 px-3 py-1 text-[11px] font-semibold text-violet-700">
+					Modul {moduleIndex + 1}
+					{#if currentSubInfo.sub}
+						· Sub {moduleIndex + 1}.{currentSubInfo.subIndex + 1}
+					{/if}
+					· Materi {matIndex + 1}/{flat.length}
 				</span>
 			</div>
 			<h1 class="mt-3 text-xl leading-snug font-extrabold text-slate-900 sm:text-2xl">
@@ -351,6 +465,9 @@
 			</h1>
 			<p class="mt-1 text-xs text-slate-500 sm:text-sm">
 				{course.title} · Modul {(moduleIndex ?? 0) + 1}: {module.title}
+				{#if currentSubInfo.sub}
+					· Sub-modul {(moduleIndex ?? 0) + 1}.{currentSubInfo.subIndex + 1}: {currentSubInfo.sub.title}
+				{/if}
 			</p>
 		</header>
 
@@ -368,20 +485,26 @@
 						</p>
 						<a
 							href={`/user/kursusku/${course.id}`}
-							class="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-600/25 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+							class="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-600/25 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 						>
 							<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
 							Kembali ke Daftar Modul
 						</a>
 					{:else}
 					<p class="mx-auto mt-1 max-w-md text-sm text-slate-500">
-						Selesaikan materi sebelumnya dalam modul ini untuk membuka
+						Selesaikan materi sebelumnya dalam
+						{#if currentSubInfo.sub}
+							sub-modul <strong class="text-slate-700">“{currentSubInfo.sub.title}”</strong>
+						{:else}
+							modul ini
+						{/if}
+						untuk membuka
 						<strong class="text-slate-700">“{material.title}”</strong>.
 					</p>
 					{#if firstUnfinished}
 						<a
 							href={`/user/kursusku/${course.id}/${module.id}/${firstUnfinished.id}`}
-							class="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-600/25 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+							class="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg shadow-blue-600/25 transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 						>
 							<i class="fa-solid fa-play" aria-hidden="true"></i>
 							Kerjakan: {firstUnfinished.title}
