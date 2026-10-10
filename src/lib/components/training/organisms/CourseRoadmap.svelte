@@ -195,7 +195,7 @@
 			</div>
 		{:else}
 			<div class="roadmap-viewport">
-				<div class="roadmap-canvas" style="width:{layout.w}px;height:{layout.h}px">
+				<div class="roadmap-canvas mx-auto" style="width:{layout.w}px;height:{layout.h}px">
 					<svg
 						class="connections"
 						width={layout.w}

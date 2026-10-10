@@ -263,82 +263,74 @@ export interface RoadmapLayout {
 	h: number;
 }
 
-const ROADMAP_SIDE_GAP = 40;
-const ROADMAP_Y0 = 200;
-const ROADMAP_ROW_STEP = 150;
+const ROADMAP_Y0 = 70;
 const ROADMAP_PAD = 60;
-const ROADMAP_LIFT_BASE = 55;
-const ROADMAP_LIFT_STEP = 40;
-const ROADMAP_LIFT_CAP = 135;
+const ROADMAP_SIDE_GAP = 40;
+const ROADMAP_SUB_STEP = 68;
+const ROADMAP_MODULE_GAP = 56;
+const ROADMAP_ELBOW_R = 8;
 
 /**
  * Hitung posisi node + garis canvas roadmap dari data modul.
- * Modul mengalir vertikal di sumbu tengah dengan jarak baris TETAP;
- * sub-modul berderet horizontal SEJAJAR di satu sisi modulnya
- * (modul genap di kanan, ganjil di kiri).
- * Setiap sub-modul dijangkau KURVA LANGSUNG dari modulnya yang
- * melengkung ke atas melewati sub lain — tidak pernah memotong
- * node sub-modul lain. Deterministik, tanpa hardcode.
+ * Modul mengalir vertikal di sumbu tengah: Modul 1 → Modul 2 →
+ * seterusnya LANGSUNG tanpa melalui sub-modul.
+ * Sub-modul berada di SISI modulnya (genap kanan, ganjil kiri);
+ * bila lebih dari satu, tersusun vertikal rapat ke bawah.
+ * Tiap sub dijangkau garis putus-putus LANGSUNG dari modulnya
+ * (siku melengkung), bukan dari sub pertama. Deterministik.
  */
 export function computeRoadmapLayout(modules: CourseModule[]): RoadmapLayout {
 	const subsPerModule = modules.map((m) => resolveSubModules(m));
-	const countOnSide = (left: boolean) =>
-		Math.max(0, ...subsPerModule.map((subs, i) => ((i % 2 === 1) === left ? subs.length : 0)));
-	const leftMax = countOnSide(true);
-	const rightMax = countOnSide(false);
-	const rowW = ROADMAP_NODE_W + ROADMAP_SIDE_GAP;
+	const hasLeft = subsPerModule.some((subs, i) => i % 2 === 1 && subs.length > 0);
+	const hasRight = subsPerModule.some((subs, i) => i % 2 === 0 && subs.length > 0);
 	const cx =
-		ROADMAP_PAD +
-		ROADMAP_NODE_W / 2 +
-		ROADMAP_SIDE_GAP +
-		leftMax * rowW -
-		(leftMax > 0 ? ROADMAP_SIDE_GAP : 0);
+		ROADMAP_PAD + ROADMAP_NODE_W / 2 + (hasLeft ? ROADMAP_SIDE_GAP + ROADMAP_NODE_W : 0);
 	const nodes: RoadmapFlowNode[] = [];
 	const connections: Array<[string, string]> = [];
 	const curves: RoadmapCurve[] = [];
+	let cursor = ROADMAP_Y0;
 	modules.forEach((m, i) => {
-		const modCy = ROADMAP_Y0 + i * ROADMAP_ROW_STEP;
+		const modCy = cursor;
 		nodes.push({ id: m.id, label: m.title, x: cx - ROADMAP_NODE_W / 2, y: modCy - ROADMAP_NODE_H / 2, kind: 'module' });
 		if (i > 0) connections.push([modules[i - 1].id, m.id]);
 		const leftSide = i % 2 === 1;
 		const dir = leftSide ? -1 : 1;
 		const modEdge = cx + dir * (ROADMAP_NODE_W / 2);
+		const busX = modEdge + dir * (ROADMAP_SIDE_GAP / 2);
+		const r = ROADMAP_ELBOW_R;
+		let bottom = modCy + ROADMAP_NODE_H / 2;
 		subsPerModule[i].forEach((s, j) => {
+			const scy = modCy + j * ROADMAP_SUB_STEP;
+			// Satu kolom vertikal rapat di sisi modul (tanpa geser horizontal).
 			const x = leftSide
-				? modEdge - ROADMAP_SIDE_GAP - ROADMAP_NODE_W - j * rowW
-				: modEdge + ROADMAP_SIDE_GAP + j * rowW;
-			nodes.push({ id: s.id, label: s.title, x, y: modCy - ROADMAP_NODE_H / 2, kind: 'sub' });
+				? busX - ROADMAP_SIDE_GAP / 2 - ROADMAP_NODE_W
+				: busX + ROADMAP_SIDE_GAP / 2;
+			nodes.push({ id: s.id, label: s.title, x, y: scy - ROADMAP_NODE_H / 2, kind: 'sub' });
 			if (j === 0) {
-				// Sub terdekat: garis lurus sejajar dari tepi modul.
 				const nearX = leftSide ? x + ROADMAP_NODE_W : x;
 				const [x1, x2] = leftSide ? [nearX, modEdge] : [modEdge, nearX];
 				curves.push({ key: s.id, d: `M ${x1} ${modCy} H ${x2}` });
 			} else {
-				// Sub berikutnya: kurva langsung dari modul, melengkung ke atas
-				// melewati sub sebelumnya, tiba vertikal di tengah atas node.
-				const subCx = x + ROADMAP_NODE_W / 2;
-				const lift = Math.min(ROADMAP_LIFT_BASE + (j - 1) * ROADMAP_LIFT_STEP, ROADMAP_LIFT_CAP);
+				const subInner = leftSide ? x + ROADMAP_NODE_W : x;
 				curves.push({
 					key: s.id,
-					d: `M ${modEdge} ${modCy} C ${modEdge} ${modCy - lift} ${subCx} ${modCy - lift} ${subCx} ${modCy - ROADMAP_NODE_H / 2}`
+					d: `M ${modEdge} ${modCy} H ${busX - dir * r} Q ${busX} ${modCy} ${busX} ${modCy + r} V ${scy - r} Q ${busX} ${scy} ${busX + dir * r} ${scy} H ${subInner}`
 				});
 			}
+			bottom = scy + ROADMAP_NODE_H / 2;
 		});
+		cursor = bottom + ROADMAP_MODULE_GAP + ROADMAP_NODE_H / 2;
 	});
 	const rightEdge =
-		cx + ROADMAP_NODE_W / 2 + (rightMax > 0 ? ROADMAP_SIDE_GAP + rightMax * rowW - ROADMAP_SIDE_GAP : 0);
+		cx + ROADMAP_NODE_W / 2 + (hasRight ? ROADMAP_SIDE_GAP + ROADMAP_NODE_W : 0);
 	return {
 		nodes,
 		connections,
 		curves,
 		w: rightEdge + ROADMAP_PAD,
-		h:
-			modules.length > 0
-				? ROADMAP_Y0 + (modules.length - 1) * ROADMAP_ROW_STEP + ROADMAP_NODE_H / 2 + ROADMAP_PAD
-				: 200
+		h: modules.length > 0 ? cursor - ROADMAP_NODE_H / 2 - ROADMAP_MODULE_GAP + ROADMAP_PAD : 200
 	};
 }
-
 /* ---------- Navigasi belajar (materi pertama yang belum selesai) ---------- */
 
 /** Materi pertama yang belum selesai dalam daftar, atau undefined bila tuntas. */

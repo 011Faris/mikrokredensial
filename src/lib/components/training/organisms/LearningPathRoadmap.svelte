@@ -11,9 +11,10 @@
 
 	/**
 	 * Interactive Learning Roadmap (canvas + SVG ala roadmap.sh):
-	 * alur Modul mengalir dari ATAS KE BAWAH pada sumbu vertikal tengah.
-	 * Sub-modul berderet horizontal SEJAJAR di satu sisi modulnya
-	 * (kanan semua atau kiri semua, bergantian tiap modul). Garis dari Modul ke sub-modulnya
+	 * alur Modul mengalir dari ATAS KE BAWAH LANGSUNG antar modul.
+	 * Sub-modul berada di SISI modulnya (kanan/kiri bergantian);
+	 * bila lebih dari satu, tersusun vertikal rapat ke bawah dan
+	 * tiap sub dijangkau garis putus-putus LANGSUNG dari modulnya. Garis dari Modul ke sub-modulnya
 	 * berupa KURVA PUTUS-PUTUS yang sejajar (berangkat vertikal dari
 	 * modul, tiba horizontal di sub-modul), lalu Modul 1 → Modul 2 →
 	 * seterusnya dengan garis solid.
@@ -77,7 +78,7 @@
 			</div>
 		{:else}
 			<div class="roadmap-viewport">
-				<div class="roadmap-canvas" style="width:{layout.w}px;height:{layout.h}px">
+				<div class="roadmap-canvas mx-auto" style="width:{layout.w}px;height:{layout.h}px">
 					<svg
 						class="connections"
 						width={layout.w}
