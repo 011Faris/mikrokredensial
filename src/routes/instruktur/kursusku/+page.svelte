@@ -57,7 +57,7 @@
 		</div>
 		<a
 			href="/instruktur/kursusku/tambah"
-			class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+			class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 		>
 			<i class="fa-solid fa-plus" aria-hidden="true"></i> Buat Kursus Baru
 		</a>
@@ -88,7 +88,7 @@
 					type="button"
 					onclick={() => (activeFilter = f.value)}
 					aria-pressed={activeFilter === f.value}
-					class={`rounded-xl px-4 py-2 text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
+					class={`rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 ease-smooth active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
 						activeFilter === f.value
 							? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
 							: 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -110,13 +110,13 @@
 			{#each filteredWithMeta as { course, meta: kMeta } (course.id)}
 				{@const st = courseStatus(course)}
 				<article
-					class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-shadow hover:shadow-xl"
+					class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-all duration-300 ease-smooth hover:-translate-y-1 hover:shadow-xl"
 				>
 					<div class="relative overflow-hidden">
 						<img
 							src={course.image}
 							alt={`Sampul kursus ${course.title}`}
-							class="h-44 w-full object-cover transition duration-500 group-hover:scale-105"
+							class="h-44 w-full object-cover transition-transform duration-700 ease-smooth group-hover:scale-105"
 							loading="lazy"
 						/>
 						<span
@@ -142,7 +142,7 @@
 						<h2 class="mt-1 line-clamp-2 text-base font-bold text-slate-900">
 							<a
 								href={`/instruktur/kursusku/${course.id}`}
-								class="rounded transition-colors hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+								class="rounded transition-colors duration-200 ease-smooth hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 							>
 								{course.title}
 							</a>
@@ -176,14 +176,14 @@
 						<div class="mt-5 flex gap-2">
 							<a
 								href={`/instruktur/kursusku/${course.id}`}
-								class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+								class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 							>
 								<i class="fa-solid fa-list-check" aria-hidden="true"></i> Kelola Kurikulum
 							</a>
 							<button
 								type="button"
 								aria-label={`Pengaturan cepat ${course.title}`}
-								class="flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-slate-500"
+								class="flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-colors duration-200 ease-smooth hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-slate-500"
 							>
 								<i class="fa-solid fa-gear" aria-hidden="true"></i>
 							</button>

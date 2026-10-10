@@ -1,23 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import type { MaterialType } from '$lib/data/courses';
+	import type { CourseModule } from '$lib/data/courses';
+	import CurriculumEditor from '$lib/components/training/organisms/CurriculumEditor.svelte';
 
 	type Period = 'upcoming' | 'ongoing';
 	type PublishState = 'draft' | 'published';
-
-	interface DraftMaterial {
-		id: string;
-		title: string;
-		type: MaterialType;
-		duration: string;
-	}
-
-	interface DraftModule {
-		id: string;
-		title: string;
-		description: string;
-		materials: DraftMaterial[];
-	}
 
 	const CATEGORIES = [
 		'Pengembangan Web',
@@ -30,7 +17,6 @@
 		'Bisnis'
 	];
 	const LEVELS = ['Pemula', 'Menengah', 'Lanjutan'];
-	const MATERIAL_TYPES: MaterialType[] = ['video', 'bacaan', 'audio', 'foto', 'kuis', 'tugas'];
 
 	const uid = (prefix: string) =>
 		`${prefix}-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e4)}`;
@@ -54,15 +40,23 @@
 	let priceKind = $state<'GRATIS' | 'Berbayar'>('GRATIS');
 	let priceNominal = $state('');
 
-	// ---- Step 2: hasil + kurikulum ----
+	// ---- Step 2: hasil + kurikulum (hierarki Modul → Sub-modul → Materi) ----
 	let outcomes = $state<string[]>(['', '']);
 	let requirements = $state<string[]>(['']);
-	let modules = $state<DraftModule[]>([
+	let modules = $state<CourseModule[]>([
 		{
 			id: uid('mod'),
 			title: '',
 			description: '',
-			materials: [{ id: uid('mat'), title: '', type: 'video', duration: '' }]
+			materials: [],
+			subModules: [
+				{
+					id: uid('sub'),
+					title: '',
+					description: '',
+					materials: [{ id: uid('mat'), title: '', type: 'video', duration: '', completed: false }]
+				}
+			]
 		}
 	]);
 
@@ -77,7 +71,13 @@
 			coverUrl.trim() ||
 			'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80'
 	);
-	const totalMaterials = $derived(modules.reduce((n, m) => n + m.materials.length, 0));
+	const totalMaterials = $derived(
+		modules.reduce(
+			(n, m) => n + (m.subModules ?? []).reduce((k, s) => k + s.materials.length, 0),
+			0
+		)
+	);
+	const totalSubs = $derived(modules.reduce((n, m) => n + (m.subModules ?? []).length, 0));
 	const descCount = $derived(description.trim().length);
 
 	const startMonthLabel = $derived.by(() => {
@@ -119,12 +119,17 @@
 			label: 'Minimal 1 modul + 1 materi valid',
 			done:
 				modules.length > 0 &&
-				modules.every(
-					(m) =>
+				modules.every((m) => {
+					const subs = m.subModules ?? [];
+					const mats = subs.flatMap((s) => s.materials);
+					return (
 						m.title.trim().length >= 5 &&
-						m.materials.length > 0 &&
-						m.materials.every((mat) => mat.title.trim().length >= 3 && mat.duration.trim() !== '')
-				)
+						subs.length > 0 &&
+						subs.every((s) => s.title.trim().length >= 3) &&
+						mats.length > 0 &&
+						mats.every((mat) => mat.title.trim().length >= 3 && mat.duration.trim() !== '')
+					);
+				})
 		}
 	]);
 	const doneCount = $derived(checklist.filter((c) => c.done).length);
@@ -178,18 +183,25 @@
 		modules.forEach((m, i) => {
 			if (m.title.trim().length < 5)
 				next[`mod-${m.id}`] = `Judul Modul ${i + 1} minimal 5 karakter.`;
-			if (m.materials.length < 1)
+			const subs = m.subModules ?? [];
+			const mats = subs.flatMap((s) => s.materials);
+			if (mats.length < 1)
 				next[`mod-${m.id}-mats`] = `Modul ${i + 1} wajib punya minimal 1 materi.`;
-			m.materials.forEach((mat) => {
-				if (mat.title.trim().length < 3) next[`mat-${mat.id}`] = 'Judul materi minimal 3 karakter.';
-				if (!mat.duration.trim())
-					next[`matdur-${mat.id}`] = 'Durasi materi wajib diisi (cth: “15 mnt”).';
+			subs.forEach((s, j) => {
+				if (s.title.trim().length < 3)
+					next[`sub-${s.id}`] = `Judul Sub-modul ${j + 1} pada Modul ${i + 1} minimal 3 karakter.`;
+				s.materials.forEach((mat) => {
+					if (mat.title.trim().length < 3) next[`mat-${mat.id}`] = 'Judul materi minimal 3 karakter.';
+					if (!mat.duration.trim())
+						next[`matdur-${mat.id}`] = 'Durasi materi wajib diisi (cth: “15 mnt”).';
+				});
 			});
 		});
 		// hapus error step2 lama
 		for (const k of Object.keys(errors)) {
 			if (
 				k.startsWith('mod-') ||
+				k.startsWith('sub-') ||
 				k.startsWith('mat') ||
 				k === 'outcomes' ||
 				k === 'requirements' ||
@@ -261,52 +273,6 @@
 		requirements = requirements.filter((_, x) => x !== i);
 	}
 
-	function addModule() {
-		modules = [
-			...modules,
-			{
-				id: uid('mod'),
-				title: '',
-				description: '',
-				materials: [{ id: uid('mat'), title: '', type: 'video', duration: '' }]
-			}
-		];
-	}
-	function removeModule(id: string) {
-		if (modules.length <= 1) {
-			errors['modules'] = 'Pelatihan wajib punya minimal 1 modul.';
-			return;
-		}
-		modules = modules.filter((m) => m.id !== id);
-	}
-	function addMaterial(modId: string) {
-		modules = modules.map((m) =>
-			m.id !== modId
-				? m
-				: {
-						...m,
-						materials: [
-							...m.materials,
-							{ id: uid('mat'), title: '', type: 'video' as MaterialType, duration: '' }
-						]
-					}
-		);
-	}
-	function removeMaterial(modId: string, matId: string) {
-		modules = modules.map((m) =>
-			m.id !== modId ? m : { ...m, materials: m.materials.filter((x) => x.id !== matId) }
-		);
-	}
-
-	function typeIcon(t: string) {
-		if (t === 'video') return 'fa-circle-play text-blue-600';
-		if (t === 'audio') return 'fa-headphones text-cyan-600';
-		if (t === 'foto') return 'fa-image text-slate-500';
-		if (t === 'kuis') return 'fa-circle-question text-amber-600';
-		if (t === 'tugas') return 'fa-pen-to-square text-violet-600';
-		return 'fa-book-open text-emerald-600';
-	}
-
 	function handleSubmit(e: Event) {
 		e.preventDefault();
 		const ok1 = validateStep1();
@@ -337,10 +303,19 @@
 			modules: modules.map((m) => ({
 				title: m.title.trim(),
 				description: m.description.trim(),
-				materials: m.materials.map((x) => ({
+				materials: (m.subModules ?? []).flatMap((s) => s.materials).map((x) => ({
 					title: x.title.trim(),
 					type: x.type,
 					duration: x.duration.trim()
+				})),
+				subModules: (m.subModules ?? []).map((s) => ({
+					title: s.title.trim(),
+					description: s.description.trim(),
+					materials: s.materials.map((x) => ({
+						title: x.title.trim(),
+						type: x.type,
+						duration: x.duration.trim()
+					}))
 				}))
 			})),
 			status: publishState,
@@ -910,19 +885,12 @@
 						<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
 							<div>
 								<h2 id="h-kur" class="text-base font-bold text-slate-900">
-									Kurikulum awal ({modules.length} modul · {totalMaterials} materi)
+									Kurikulum awal ({modules.length} modul · {totalSubs} sub-modul · {totalMaterials} materi)
 								</h2>
 								<p class="mt-0.5 text-xs text-slate-500">
-									Cukup kerangka dulu — detail bisa dilengkapi di halaman Kelola Kurikulum.
+									Susun modul, sub-modul, lalu materi — detail bisa dilengkapi di halaman Kelola Kurikulum.
 								</p>
 							</div>
-							<button
-								type="button"
-								onclick={addModule}
-								class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-blue-300 bg-blue-50/60 px-4 py-2.5 text-xs font-bold text-blue-700 hover:bg-blue-50"
-							>
-								<i class="fa-solid fa-plus" aria-hidden="true"></i> Tambah Modul
-							</button>
 						</div>
 						{#if errors['modules']}<p
 								role="alert"
@@ -930,122 +898,14 @@
 							>
 								{errors['modules']}
 							</p>{/if}
-						<div class="mt-4 space-y-4">
-							{#each modules as mod, mi (mod.id)}
-								<fieldset class="rounded-2xl border border-slate-200 bg-slate-50/50 p-4">
-									<legend class="sr-only">Modul {mi + 1}</legend>
-									<div class="flex items-center gap-3">
-										<span
-											class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-xs font-extrabold text-white"
-											aria-hidden="true">{mi + 1}</span
-										>
-										<label for={`mod-t-${mod.id}`} class="sr-only">Judul modul {mi + 1}</label>
-										<input
-											id={`mod-t-${mod.id}`}
-											type="text"
-											bind:value={mod.title}
-											placeholder={`Judul Modul ${mi + 1}: cth “Dasar HTML & Struktur”`}
-											aria-invalid={!!errors[`mod-${mod.id}`]}
-											class={inputCls(!!errors[`mod-${mod.id}`])}
-										/>
-										<button
-											type="button"
-											onclick={() => removeModule(mod.id)}
-											aria-label={`Hapus modul ${mi + 1}`}
-											class="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-xl border border-red-200 bg-white text-red-500 hover:bg-red-50"
-										>
-											<i class="fa-solid fa-trash text-xs" aria-hidden="true"></i>
-										</button>
-									</div>
-									{#if errors[`mod-${mod.id}`]}<p class="mt-1.5 text-xs font-semibold text-red-600">
-											{errors[`mod-${mod.id}`]}
-										</p>{/if}
-									<label
-										for={`mod-d-${mod.id}`}
-										class="mt-2 mb-1 block text-[11px] font-bold text-slate-600"
-										>Deskripsi modul (opsional)</label
-									>
-									<input
-										id={`mod-d-${mod.id}`}
-										type="text"
-										bind:value={mod.description}
-										placeholder="Satu kalimat tujuan modul…"
-										class={inputCls(false)}
-									/>
-									{#if errors[`mod-${mod.id}-mats`]}<p
-											class="mt-1.5 text-xs font-semibold text-red-600"
-										>
-											{errors[`mod-${mod.id}-mats`]}
-										</p>{/if}
-									<ol class="mt-3 space-y-2">
-										{#each mod.materials as mat, ji (mat.id)}
-											<li
-												class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-3 sm:flex-row sm:items-center"
-											>
-												<span
-													class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100"
-													aria-hidden="true"
-													><i class={`fa-solid ${typeIcon(mat.type)} text-xs`}></i></span
-												>
-												<label for={`matt-${mat.id}`} class="sr-only"
-													>Judul materi {ji + 1} modul {mi + 1}</label
-												>
-												<input
-													id={`matt-${mat.id}`}
-													type="text"
-													bind:value={mat.title}
-													placeholder="Judul materi…"
-													aria-invalid={!!errors[`mat-${mat.id}`]}
-													class={`${inputCls(!!errors[`mat-${mat.id}`])} flex-1`}
-												/>
-												<div class="flex gap-2">
-													<label for={`matty-${mat.id}`} class="sr-only">Tipe materi {ji + 1}</label
-													>
-													<select
-														id={`matty-${mat.id}`}
-														bind:value={mat.type}
-														class="min-h-11 rounded-xl border border-slate-200 bg-white px-2.5 py-2 text-xs font-bold text-slate-700 focus:border-blue-500 focus:outline-none"
-													>
-														{#each MATERIAL_TYPES as t (t)}<option value={t}>{t}</option>{/each}
-													</select>
-													<label for={`matdur-${mat.id}`} class="sr-only"
-														>Durasi materi {ji + 1}</label
-													>
-													<input
-														id={`matdur-${mat.id}`}
-														type="text"
-														bind:value={mat.duration}
-														placeholder="15 mnt"
-														aria-invalid={!!errors[`matdur-${mat.id}`]}
-														class={`${inputCls(!!errors[`matdur-${mat.id}`])} w-24`}
-													/>
-													<button
-														type="button"
-														onclick={() => removeMaterial(mod.id, mat.id)}
-														disabled={mod.materials.length <= 1}
-														aria-label={`Hapus materi ${mat.title || ji + 1}`}
-														class="flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:bg-red-50 hover:text-red-600 disabled:opacity-40"
-													>
-														<i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>
-													</button>
-												</div>
-											</li>
-											{#if errors[`mat-${mat.id}`] || errors[`matdur-${mat.id}`]}
-												<p class="text-xs font-semibold text-red-600">
-													{errors[`mat-${mat.id}`] ?? errors[`matdur-${mat.id}`]}
-												</p>
-											{/if}
-										{/each}
-									</ol>
-									<button
-										type="button"
-										onclick={() => addMaterial(mod.id)}
-										class="mt-2.5 inline-flex min-h-10 items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-2 text-[11px] font-bold text-white hover:bg-blue-700"
-									>
-										<i class="fa-solid fa-plus" aria-hidden="true"></i> Tambah Materi
-									</button>
-								</fieldset>
-							{/each}
+						<div class="mt-4">
+							<!-- ORGANISM: editor kurikulum hierarkis bersama -->
+							<CurriculumEditor
+								bind:modules
+								errors={errors}
+								blankMaterial={{ title: '', duration: '' }}
+								minMaterialsPerModule={1}
+							/>
 						</div>
 					</section>
 				{/if}
@@ -1078,7 +938,7 @@
 									{title.trim() || 'Judul pelatihan…'}
 								</h2>
 								<p class="mt-1 text-xs text-slate-200">
-									{duration || '—'} · {modules.length} modul · {totalMaterials} materi · {period ===
+									{duration || '—'} · {modules.length} modul · {totalSubs} sub-modul · {totalMaterials} materi · {period ===
 									'upcoming'
 										? `Mulai ${startMonthLabel || '…'}`
 										: 'Berjalan'} · {priceKind === 'GRATIS' ? 'GRATIS' : priceNominal || 'Berbayar'}
@@ -1120,20 +980,24 @@
 							</div>
 							<ol class="space-y-2">
 								{#each modules as m, i (m.id)}
-									<li class="flex items-start gap-3 rounded-xl border border-slate-100 p-3">
-										<span
-											class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-[11px] font-extrabold text-white"
-											aria-hidden="true">{i + 1}</span
-										>
-										<span class="min-w-0"
-											><span class="block truncate text-xs font-bold text-slate-800"
+									<li class="rounded-xl border border-slate-100 p-3">
+										<span class="flex items-start gap-3">
+											<span
+												class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-[11px] font-extrabold text-white"
+												aria-hidden="true">{i + 1}</span
+											>
+											<span class="block min-w-0 truncate text-xs font-bold text-slate-800"
 												>{m.title.trim() || `Modul ${i + 1} (belum berjudul)`}</span
-											><span class="block text-[11px] text-slate-500"
-												>{m.materials.length} materi: {m.materials
-													.map((x) => x.title.trim() || 'tanpa judul')
-													.join(' · ')}</span
-											></span
-										>
+											>
+										</span>
+										<ul class="mt-2 space-y-1 pl-11">
+											{#each (m.subModules ?? []) as s, j (s.id)}
+												<li class="truncate text-[11px] text-slate-500">
+													Sub-modul {j + 1}: {s.title.trim() || '(belum berjudul)'} ({s.materials
+														.length} materi)
+												</li>
+											{/each}
+										</ul>
 									</li>
 								{/each}
 							</ol>

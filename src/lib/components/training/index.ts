@@ -8,6 +8,8 @@ export { default as ModuleHeader } from './molecules/ModuleHeader.svelte';
 export { default as RoadmapNode } from './molecules/RoadmapNode.svelte';
 export { default as SubModulePathCard } from './molecules/SubModulePathCard.svelte';
 export { default as SubModuleAccordion } from './organisms/SubModuleAccordion.svelte';
+export { default as CourseRoadmap } from './organisms/CourseRoadmap.svelte';
+export { default as InfoDrawer } from './organisms/InfoDrawer.svelte';
 export { default as ModuleAccordion } from './organisms/ModuleAccordion.svelte';
 export { default as TrainingCurriculum } from './organisms/TrainingCurriculum.svelte';
 export { default as LearningPathRoadmap } from './organisms/LearningPathRoadmap.svelte';

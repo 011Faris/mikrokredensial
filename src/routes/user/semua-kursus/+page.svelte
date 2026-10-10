@@ -60,7 +60,7 @@
 				type="search"
 				bind:value={search}
 				placeholder="Cari judul kursus atau instruktur..."
-				class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+				class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-sm text-slate-800 placeholder:text-slate-400 transition-all duration-200 ease-smooth focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
 			/>
 		</div>
 		<div class="flex flex-wrap gap-2" role="group" aria-label="Filter kategori">
@@ -69,7 +69,7 @@
 					type="button"
 					onclick={() => (activeCategory = cat)}
 					aria-pressed={activeCategory === cat}
-					class={`rounded-xl px-4 py-2 text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-blue-600 ${
+					class={`rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 ease-smooth active:scale-95 focus-visible:outline-2 focus-visible:outline-blue-600 ${
 						activeCategory === cat
 							? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
 							: 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -86,7 +86,7 @@
 				type="button"
 				onclick={() => (activePeriod = pf.value)}
 				aria-pressed={activePeriod === pf.value}
-				class={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-blue-600 ${
+				class={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-bold transition-all duration-200 ease-smooth active:scale-95 focus-visible:outline-2 focus-visible:outline-blue-600 ${
 					activePeriod === pf.value
 						? 'bg-slate-900 text-white shadow-lg'
 						: 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -116,7 +116,7 @@
 				{@const meta = getCourseMeta(course.id)}
 				{@const enrolled = isEnrolled(course.status)}
 				<article
-					class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-xl"
+					class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 ease-smooth hover:-translate-y-1 hover:shadow-xl"
 				>
 					<a
 						href={`/user/semua-kursus/${course.id}`}
@@ -126,7 +126,7 @@
 						<img
 							src={course.image}
 							alt={`Sampul kursus ${course.title}`}
-							class="h-48 w-full object-cover transition duration-500 group-hover:scale-105"
+							class="h-48 w-full object-cover transition-transform duration-700 ease-smooth group-hover:scale-105"
 							loading="lazy"
 						/>
 						<span
@@ -166,7 +166,7 @@
 							<h2 class="mt-1 line-clamp-2 text-base leading-snug font-extrabold text-slate-900">
 								<a
 									href={`/user/semua-kursus/${course.id}`}
-									class="rounded transition group-hover:text-blue-600 focus-visible:outline-2 focus-visible:outline-blue-600"
+									class="rounded transition-colors duration-200 ease-smooth group-hover:text-blue-600 focus-visible:outline-2 focus-visible:outline-blue-600"
 								>
 									{course.title}
 								</a>
@@ -178,7 +178,7 @@
 						</div>
 						<a
 							href={`/user/semua-kursus/${course.id}`}
-							class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+							class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 						>
 							<i class="fa-solid fa-eye" aria-hidden="true"></i>
 							{enrolled ? 'Lihat Detail & Lanjut' : 'Lihat Pratinjau'}

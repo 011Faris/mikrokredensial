@@ -128,7 +128,7 @@
 				<button
 					type="button"
 					onclick={withdraw}
-					class="mt-4 flex w-full min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-blue-700 transition-colors hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-white"
+					class="mt-4 flex w-full min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-blue-700 transition-colors duration-200 ease-smooth hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-white"
 				>
 					<i class="fa-solid fa-money-bill-transfer" aria-hidden="true"></i> Ajukan Penarikan
 				</button>

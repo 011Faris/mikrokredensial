@@ -190,7 +190,7 @@
 					type="button"
 					onclick={() => (activeFilter = f.value as Filter)}
 					aria-pressed={activeFilter === f.value}
-					class={`rounded-xl px-4 py-2 text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
+					class={`rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 ease-smooth active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
 						activeFilter === f.value
 							? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
 							: 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -223,7 +223,7 @@
 				</thead>
 				<tbody class="divide-y divide-slate-100">
 					{#each filtered as r (r.id)}
-						<tr class="transition-colors hover:bg-slate-50/50">
+						<tr class="transition-colors duration-200 ease-smooth hover:bg-slate-50/50">
 							<td class="px-5 py-4">
 								<div class="font-semibold text-slate-900">{r.student}</div>
 								<div class="mt-0.5 text-xs text-slate-500">{r.nim} · {r.date}</div>
@@ -239,7 +239,7 @@
 										target="_blank"
 										rel="noopener noreferrer"
 										title={r.fileName ?? 'Buka PDF di Google Drive'}
-										class="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition-colors hover:bg-violet-100 focus-visible:outline-2 focus-visible:outline-violet-600"
+										class="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition-colors duration-200 ease-smooth hover:bg-violet-100 focus-visible:outline-2 focus-visible:outline-violet-600"
 									>
 										<i class="fa-solid fa-file-pdf text-red-500" aria-hidden="true"></i>
 										<span class="max-w-40 truncate">{r.fileName ?? 'Buka PDF'}</span>
@@ -277,7 +277,7 @@
 									<button
 										type="button"
 										onclick={() => submitScore(r.id)}
-										class="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+										class="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 									>
 										<i class="fa-solid fa-check" aria-hidden="true"></i> Simpan Nilai
 									</button>

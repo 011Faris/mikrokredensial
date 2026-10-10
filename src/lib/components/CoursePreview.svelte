@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { SvelteSet } from 'svelte/reactivity';
 	import { getCourseById } from '$lib/data/courses';
 	import { getCourseMeta } from '$lib/data/course-meta';
-	import { getTrainingStats, resolveSubModules } from '$lib/data/training';
+	import { getTrainingStats } from '$lib/data/training';
 	import TrainingHero from '$lib/components/training/organisms/TrainingHero.svelte';
-	import TrainingCurriculum from '$lib/components/training/organisms/TrainingCurriculum.svelte';
+	import CourseRoadmap from '$lib/components/training/organisms/CourseRoadmap.svelte';
 	import TrainingActionCard from '$lib/components/training/organisms/TrainingActionCard.svelte';
 
 	let {
@@ -22,32 +21,6 @@
 	const course = $derived(getCourseById(courseId));
 	const meta = $derived(course ? getCourseMeta(course.id) : undefined);
 	const stats = $derived(course ? getTrainingStats(course) : undefined);
-	const previewMaterialId = $derived(course?.modules[0]?.materials[0]?.id ?? null);
-
-	let openModules = new SvelteSet<string>();
-	let openSubs = new SvelteSet<string>();
-
-	$effect(() => {
-		if (!course) return;
-		openModules.clear();
-		openSubs.clear();
-		const first = course.modules[0];
-		if (first) {
-			openModules.add(first.id);
-			const firstSub = resolveSubModules(first)[0];
-			if (firstSub) openSubs.add(firstSub.id);
-		}
-	});
-
-	function toggleModule(id: string) {
-		if (openModules.has(id)) openModules.delete(id);
-		else openModules.add(id);
-	}
-
-	function toggleSub(id: string) {
-		if (openSubs.has(id)) openSubs.delete(id);
-		else openSubs.add(id);
-	}
 </script>
 
 {#if !course || !meta || !stats}
@@ -56,7 +29,7 @@
 		<h1 class="text-xl font-bold text-slate-900">Kursus tidak ditemukan</h1>
 		<a
 			href={backHref}
-			class="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-blue-700"
+			class="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98]"
 		>
 			<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Kembali ke {backLabel}
 		</a>
@@ -83,14 +56,8 @@
 				</ul>
 			</section>
 
-			<TrainingCurriculum
-				modules={course.modules}
-				{openModules}
-				{openSubs}
-				ontogglemodule={toggleModule}
-				ontogglesub={toggleSub}
-				{previewMaterialId}
-			/>
+			<!-- ORGANISM: roadmap pratinjau (semua terbuka, tanpa progres) + drawer -->
+			<CourseRoadmap modules={course.modules} courseId={course.id} preview />
 
 			<section aria-labelledby="pv-syarat" class="rounded-2xl border border-slate-200/70 bg-white p-5 sm:p-6">
 				<h2 id="pv-syarat" class="mb-3 text-lg font-bold text-slate-900">Syarat Mengikuti</h2>

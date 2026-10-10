@@ -85,7 +85,7 @@
 	<div class="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
 		{#each stats as stat (stat.label)}
 			<div
-				class="rounded-2xl border border-slate-200/60 bg-white p-5 transition-all duration-200 hover:shadow-lg hover:shadow-slate-200/50"
+				class="rounded-2xl border border-slate-200/60 bg-white p-5 transition-all duration-200 ease-smooth hover:shadow-lg hover:shadow-slate-200/50"
 			>
 				<div class="mb-3 flex items-center justify-between">
 					<div class="flex h-11 w-11 items-center justify-center rounded-xl {stat.bgColor}">
@@ -113,14 +113,14 @@
 					</div>
 					<a
 						href="/user/kursusku"
-						class="rounded-lg text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+						class="rounded-lg text-sm font-semibold text-blue-600 transition-colors duration-200 ease-smooth hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 					>
 						Lihat Semua <i class="fa-solid fa-arrow-right ml-1 text-xs" aria-hidden="true"></i>
 					</a>
 				</div>
 				<div class="divide-y divide-slate-100">
 					{#each modules as module (module.id)}
-						<div class="px-6 py-4 transition-colors hover:bg-slate-50/50">
+						<div class="px-6 py-4 transition-colors duration-200 ease-smooth hover:bg-slate-50/50">
 							<div class="mb-2 flex items-center justify-between">
 								<div class="mr-4 min-w-0 flex-1">
 									<h3 class="truncate text-sm font-semibold text-slate-800">{module.title}</h3>
@@ -144,7 +144,7 @@
 									aria-label={`Progres ${module.title}`}
 								>
 									<div
-										class="h-full {getProgressColor(module.progress)} rounded-full transition-all duration-500"
+										class="h-full {getProgressColor(module.progress)} rounded-full transition-all duration-500 ease-smooth"
 										style="width: {module.progress}%"
 									></div>
 								</div>
@@ -166,10 +166,10 @@
 				<div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
 					<a
 						href="/user/kursusku"
-						class="group flex flex-col items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 p-4 transition-colors hover:bg-blue-100 focus-visible:outline-2 focus-visible:outline-blue-600"
+						class="group flex flex-col items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 p-4 transition-colors duration-200 ease-smooth hover:bg-blue-100 focus-visible:outline-2 focus-visible:outline-blue-600"
 					>
 						<span
-							class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 shadow-md shadow-blue-600/25 transition-transform group-hover:scale-110"
+							class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 shadow-md shadow-blue-600/25 transition-transform duration-300 ease-spring group-hover:scale-110"
 						>
 							<i class="fa-solid fa-book-open text-sm text-white" aria-hidden="true"></i>
 						</span>
@@ -177,10 +177,10 @@
 					</a>
 					<a
 						href="/user/semua-kursus"
-						class="group flex flex-col items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 p-4 transition-colors hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-emerald-600"
+						class="group flex flex-col items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 p-4 transition-colors duration-200 ease-smooth hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-emerald-600"
 					>
 						<span
-							class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 shadow-md shadow-emerald-600/25 transition-transform group-hover:scale-110"
+							class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 shadow-md shadow-emerald-600/25 transition-transform duration-300 ease-spring group-hover:scale-110"
 						>
 							<i class="fa-solid fa-layer-group text-sm text-white" aria-hidden="true"></i>
 						</span>
@@ -188,10 +188,10 @@
 					</a>
 					<a
 						href="/user/sertifikat"
-						class="group flex flex-col items-center gap-2 rounded-xl border border-amber-100 bg-amber-50 p-4 transition-colors hover:bg-amber-100 focus-visible:outline-2 focus-visible:outline-amber-600"
+						class="group flex flex-col items-center gap-2 rounded-xl border border-amber-100 bg-amber-50 p-4 transition-colors duration-200 ease-smooth hover:bg-amber-100 focus-visible:outline-2 focus-visible:outline-amber-600"
 					>
 						<span
-							class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-600 shadow-md shadow-amber-600/25 transition-transform group-hover:scale-110"
+							class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-600 shadow-md shadow-amber-600/25 transition-transform duration-300 ease-spring group-hover:scale-110"
 						>
 							<i class="fa-solid fa-award text-sm text-white" aria-hidden="true"></i>
 						</span>
@@ -212,7 +212,7 @@
 					<h2 id="heading-sertifikat" class="text-lg font-bold text-slate-900">Sertifikat Terbaru</h2>
 					<a
 						href="/user/sertifikat"
-						class="rounded-lg text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+						class="rounded-lg text-sm font-semibold text-blue-600 transition-colors duration-200 ease-smooth hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 					>
 						Lihat Semua
 					</a>
@@ -221,7 +221,7 @@
 					{#each certificates as cert (cert.id)}
 						<a
 							href="/user/sertifikat"
-							class="flex items-center gap-3 px-6 py-4 transition-colors hover:bg-slate-50/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600"
+							class="flex items-center gap-3 px-6 py-4 transition-colors duration-200 ease-smooth hover:bg-slate-50/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600"
 						>
 							<div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-amber-50">
 								<i class="fa-solid fa-award text-amber-600" aria-hidden="true"></i>
@@ -276,7 +276,7 @@
 
 					<a
 						href="/user/semua-kursus"
-						class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-white/15 py-2.5 px-4 text-sm font-semibold text-white transition-colors hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white"
+						class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-white/15 py-2.5 px-4 text-sm font-semibold text-white transition-colors duration-200 ease-smooth hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white"
 					>
 						Jelajahi Kursus Baru
 						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>

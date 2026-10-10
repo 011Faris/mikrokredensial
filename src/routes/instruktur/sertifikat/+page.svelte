@@ -63,7 +63,7 @@
 		</div>
 		<a
 			href="/instruktur/penilaian"
-			class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-bold text-amber-700 transition-colors hover:bg-amber-50 focus-visible:outline-2 focus-visible:outline-white"
+			class="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-bold text-amber-700 transition-colors duration-200 ease-smooth hover:bg-amber-50 focus-visible:outline-2 focus-visible:outline-white"
 		>
 			<i class="fa-solid fa-clipboard-check" aria-hidden="true"></i> Cek Kelulusan Peserta
 		</a>
@@ -72,7 +72,7 @@
 	<div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
 		{#each certificates as cert (cert.id)}
 			<article
-				class="flex flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-shadow hover:shadow-xl"
+				class="flex flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-all duration-300 ease-smooth hover:-translate-y-1 hover:shadow-xl"
 			>
 				<div class="relative bg-slate-900 p-6 text-center">
 					<div
@@ -113,13 +113,13 @@
 						{#if cert.status === 'Terverifikasi'}
 							<button
 								type="button"
-								class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+								class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 							>
 								<i class="fa-solid fa-download" aria-hidden="true"></i> Unduh PDF
 							</button>
 							<button
 								type="button"
-								class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-100 px-4 py-2.5 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-200 focus-visible:outline-2 focus-visible:outline-slate-500"
+								class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-slate-100 px-4 py-2.5 text-xs font-bold text-slate-700 transition-colors duration-200 ease-smooth hover:bg-slate-200 focus-visible:outline-2 focus-visible:outline-slate-500"
 							>
 								<i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Bagikan
 							</button>
@@ -127,7 +127,7 @@
 							<button
 								type="button"
 								onclick={() => publish(cert.id)}
-								class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-emerald-600"
+								class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white transition-all duration-200 ease-smooth hover:bg-emerald-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-emerald-600"
 							>
 								<i class="fa-solid fa-stamp" aria-hidden="true"></i> Terbitkan Sekarang
 							</button>

@@ -68,7 +68,7 @@
 	<div class="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
 		{#each stats as stat (stat.label)}
 			<div
-				class="rounded-2xl border border-slate-200/60 bg-white p-5 transition-all duration-200 hover:shadow-lg hover:shadow-slate-200/50"
+				class="rounded-2xl border border-slate-200/60 bg-white p-5 transition-all duration-200 ease-smooth hover:shadow-lg hover:shadow-slate-200/50"
 			>
 				<div class="mb-3 flex items-center justify-between">
 					<div class="flex h-11 w-11 items-center justify-center rounded-xl {stat.bgColor}">
@@ -95,14 +95,14 @@
 					</div>
 					<a
 						href="/instruktur/kursusku"
-						class="rounded-lg text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+						class="rounded-lg text-sm font-semibold text-blue-600 transition-colors duration-200 ease-smooth hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 					>
 						Kelola Semua <i class="fa-solid fa-arrow-right ml-1 text-xs" aria-hidden="true"></i>
 					</a>
 				</div>
 				<div class="divide-y divide-slate-100">
 					{#each ownedCourses as course (course.id)}
-						<div class="px-6 py-4 transition-colors hover:bg-slate-50/50">
+						<div class="px-6 py-4 transition-colors duration-200 ease-smooth hover:bg-slate-50/50">
 							<div class="mb-2 flex items-center justify-between gap-3">
 								<div class="mr-2 min-w-0 flex-1">
 									<h3 class="truncate text-sm font-semibold text-slate-800">{course.title}</h3>
@@ -126,14 +126,14 @@
 									aria-label={`Rata-rata progres ${course.title}`}
 								>
 									<div
-										class="h-full rounded-full transition-all duration-500 {course.progress === 0 ? 'bg-slate-300' : course.progress >= 50 ? 'bg-blue-500' : 'bg-amber-500'}"
+										class="h-full rounded-full transition-all duration-500 ease-smooth {course.progress === 0 ? 'bg-slate-300' : course.progress >= 50 ? 'bg-blue-500' : 'bg-amber-500'}"
 										style="width: {course.progress}%"
 									></div>
 								</div>
 								<span class="w-10 text-right text-xs font-bold text-slate-600">{course.progress}%</span>
 								<a
 									href={`/instruktur/kursusku/${course.id}`}
-									class="shrink-0 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+									class="shrink-0 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-bold text-white transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 								>
 									Kelola
 								</a>
@@ -151,10 +151,10 @@
 				<div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
 					<a
 						href="/instruktur/kursusku"
-						class="group flex flex-col items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 p-4 transition-colors hover:bg-blue-100 focus-visible:outline-2 focus-visible:outline-blue-600"
+						class="group flex flex-col items-center gap-2 rounded-xl border border-blue-100 bg-blue-50 p-4 transition-colors duration-200 ease-smooth hover:bg-blue-100 focus-visible:outline-2 focus-visible:outline-blue-600"
 					>
 						<span
-							class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 shadow-md shadow-blue-600/25 transition-transform group-hover:scale-110"
+							class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 shadow-md shadow-blue-600/25 transition-transform duration-300 ease-spring group-hover:scale-110"
 						>
 							<i class="fa-solid fa-book-open text-sm text-white" aria-hidden="true"></i>
 						</span>
@@ -162,10 +162,10 @@
 					</a>
 					<a
 						href="/instruktur/penilaian"
-						class="group flex flex-col items-center gap-2 rounded-xl border border-amber-100 bg-amber-50 p-4 transition-colors hover:bg-amber-100 focus-visible:outline-2 focus-visible:outline-amber-600"
+						class="group flex flex-col items-center gap-2 rounded-xl border border-amber-100 bg-amber-50 p-4 transition-colors duration-200 ease-smooth hover:bg-amber-100 focus-visible:outline-2 focus-visible:outline-amber-600"
 					>
 						<span
-							class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-600 shadow-md shadow-amber-600/25 transition-transform group-hover:scale-110"
+							class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-600 shadow-md shadow-amber-600/25 transition-transform duration-300 ease-spring group-hover:scale-110"
 						>
 							<i class="fa-solid fa-clipboard-check text-sm text-white" aria-hidden="true"></i>
 						</span>
@@ -173,10 +173,10 @@
 					</a>
 					<a
 						href="/instruktur/pendapatan"
-						class="group flex flex-col items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 p-4 transition-colors hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-emerald-600"
+						class="group flex flex-col items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 p-4 transition-colors duration-200 ease-smooth hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-emerald-600"
 					>
 						<span
-							class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 shadow-md shadow-emerald-600/25 transition-transform group-hover:scale-110"
+							class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 shadow-md shadow-emerald-600/25 transition-transform duration-300 ease-spring group-hover:scale-110"
 						>
 							<i class="fa-solid fa-wallet text-sm text-white" aria-hidden="true"></i>
 						</span>
@@ -195,7 +195,7 @@
 					<h2 id="heading-review" class="text-lg font-bold text-slate-900">Perlu Dinilai</h2>
 					<a
 						href="/instruktur/penilaian"
-						class="rounded-lg text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+						class="rounded-lg text-sm font-semibold text-blue-600 transition-colors duration-200 ease-smooth hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 					>
 						Lihat Semua
 					</a>
@@ -204,7 +204,7 @@
 					{#each pendingReviews as review (review.id)}
 						<a
 							href="/instruktur/penilaian"
-							class="flex items-center gap-3 px-6 py-4 transition-colors hover:bg-slate-50/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600"
+							class="flex items-center gap-3 px-6 py-4 transition-colors duration-200 ease-smooth hover:bg-slate-50/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600"
 						>
 							<div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-amber-50">
 								<i class="fa-solid fa-pen-to-square text-amber-600" aria-hidden="true"></i>
@@ -258,7 +258,7 @@
 
 					<a
 						href="/instruktur/pendapatan"
-						class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-white/15 py-2.5 px-4 text-sm font-semibold text-white transition-colors hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white"
+						class="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-white/15 py-2.5 px-4 text-sm font-semibold text-white transition-colors duration-200 ease-smooth hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white"
 					>
 						Lihat Rincian Pendapatan
 						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
