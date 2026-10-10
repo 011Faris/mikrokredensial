@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Logo from '$lib/components/Logo.svelte';
+	import logoUrl from '$lib/assets/assets/logo/aristoteleslogo.png';
 	import { courses } from '$lib/data/courses';
 	import { getCourseMeta } from '$lib/data/course-meta';
 
@@ -14,6 +15,14 @@
 		{ href: '#verifikasi', label: 'Verifikasi' }
 	];
 </script>
+
+<svelte:head>
+	<title>Kembangkan Kompetensi &amp; Raih Kredensial Satu Platform — Aristoteles</title>
+	<meta
+		name="description"
+		content="ARISTOTELES — Artificial Intelligence Research, Innovation, Science, Technology, and Engineering Laboratory for Education and Systems. Dari memilih pelatihan hingga memperoleh sertifikat. Terstruktur, terukur, dan berkelanjutan."
+	/>
+</svelte:head>
 
 
 <!-- Main Header Navbar -->
@@ -39,7 +48,7 @@
 				<label for="landing-search" class="sr-only">Cari program mikrokredensial</label>
 				<input id="landing-search" type="search" placeholder="Cari program..." class="bg-transparent text-xs focus:outline-none w-40 text-slate-700" />
 				<span class="flex h-7 w-7 items-center justify-center rounded-full bg-white" aria-hidden="true">
-					<i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
+					<img src={logoUrl} alt="" aria-hidden="true" class="h-5 w-5 rounded-full object-cover" />
 				</span>
 			</div>
 			<div class="hidden shrink-0 items-center gap-2.5 sm:flex">
@@ -118,37 +127,44 @@
 				<!-- Left Column text -->
 				<div class="lg:col-span-7 space-y-6">
 					<div class="inline-flex items-center gap-2 bg-red-100 text-red-600 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase">
-						<i class="fa-solid fa-bolt"></i> PROGRAM MIKROKREDENSIAL RESMI
+						<i class="fa-solid fa-bolt" aria-hidden="true"></i> PROGRAM MIKROKREDENSIAL RESMI
 					</div>
 
 					<h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight">
-						Akselerasi Karier Profesional <span class="text-blue-600 underline decoration-cyan-400 decoration-wavy">Lebih Cepat & Praktis</span>
+						Kembangkan Kompetensi &amp; Raih Kredensial <span class="text-blue-600 underline decoration-cyan-400 decoration-wavy">dalam satu platform.</span>
 					</h1>
 
+					<p class="max-w-xl text-xs leading-relaxed text-slate-500 sm:text-sm">
+						<strong class="font-bold text-slate-700">ARISTOTELES</strong> — Artificial Intelligence
+						Research, Innovation, Science, Technology, and Engineering Laboratory for Education and
+						Systems.
+					</p>
+
 					<p class="text-slate-600 text-base sm:text-lg max-w-xl">
-						Sertifikasi kompetensi berbasis pelatihan singkat industri. Dapatkan keahlian spesifik yang langsung diakui perusahaan mitra tanpa harus menempuh pendidikan bertahun-tahun.
+						Dari memilih pelatihan, mempelajari modul, menyelesaikan tantangan, hingga memperoleh
+						sertifikat. Terstruktur, terukur, dan berkelanjutan.
 					</p>
 
 					<!-- Bullet badges -->
 					<div class="flex flex-wrap gap-4 pt-2">
 						<div class="flex items-center gap-2 text-slate-700 text-sm font-semibold bg-white px-3.5 py-2 rounded-lg shadow-sm border border-slate-100">
-							<i class="fa-solid fa-circle-check text-green-500"></i> Sertifikasi Resmi
+							<i class="fa-solid fa-circle-check text-green-500" aria-hidden="true"></i> Sertifikasi Resmi
 						</div>
 						<div class="flex items-center gap-2 text-slate-700 text-sm font-semibold bg-white px-3.5 py-2 rounded-lg shadow-sm border border-slate-100">
-							<i class="fa-solid fa-circle-check text-green-500"></i> Kurikulum Berbasis Industri
+							<i class="fa-solid fa-circle-check text-green-500" aria-hidden="true"></i> Kurikulum Berbasis Industri
 						</div>
 						<div class="flex items-center gap-2 text-slate-700 text-sm font-semibold bg-white px-3.5 py-2 rounded-lg shadow-sm border border-slate-100">
-							<i class="fa-solid fa-circle-check text-green-500"></i> Mentor Praktisi Ahli
+							<i class="fa-solid fa-circle-check text-green-500" aria-hidden="true"></i> Mentor Praktisi Ahli
 						</div>
 					</div>
 
 					<!-- Action Buttons -->
 					<div class="flex flex-wrap gap-4 pt-4">
 						<a href="#" class="bg-blue-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-blue-700 transition shadow-xl shadow-blue-600/30 flex items-center gap-3">
-							DAFTAR SEKARANG <i class="fa-solid fa-arrow-right"></i>
+							DAFTAR SEKARANG <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
 						</a>
 						<a href="#modul" class="bg-white text-slate-800 font-bold px-8 py-4 rounded-xl hover:bg-slate-100 transition border border-slate-200 shadow-sm flex items-center gap-3">
-							<i class="fa-solid fa-play text-blue-600"></i> LIHAT KURIKULUM
+							<i class="fa-solid fa-play text-blue-600" aria-hidden="true"></i> LIHAT KURIKULUM
 						</a>
 					</div>
 				</div>

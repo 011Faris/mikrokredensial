@@ -9,7 +9,15 @@
 			email: 'farisi@gmail.com',
 			password: '1234567',
 			name: 'Ahmad Farizi',
-			role: 'Mahasiswa UNIRA'
+			role: 'Mahasiswa UNIRA',
+			home: '/user'
+		},
+		{
+			email: 'kevin@aristoteles.ac.id',
+			password: '1234567',
+			name: 'Kevin Perry',
+			role: 'Instruktur',
+			home: '/instruktur'
 		}
 	];
 
@@ -24,9 +32,9 @@
 		showPassword = !showPassword;
 	}
 
-	function fillDemoAccount() {
-		email = DUMMY_ACCOUNTS[0].email;
-		password = DUMMY_ACCOUNTS[0].password;
+	function fillDemoAccount(account: (typeof DUMMY_ACCOUNTS)[number] = DUMMY_ACCOUNTS[0]) {
+		email = account.email;
+		password = account.password;
 		errorMessage = '';
 	}
 
@@ -57,7 +65,7 @@
 			} catch {
 				// abaikan bila penyimpanan tidak tersedia
 			}
-			goto('/user');
+			goto(account.home ?? '/user');
 		}, 900);
 	}
 </script>
@@ -272,19 +280,28 @@
 						<!-- Demo account -->
 						<div class="rounded-xl border border-dashed border-blue-200 bg-blue-50/60 p-4">
 							<p class="flex items-center gap-2 text-xs font-bold text-blue-800">
-								<i class="fa-solid fa-flask" aria-hidden="true"></i> Akun demo UNIRA
+								<i class="fa-solid fa-flask" aria-hidden="true"></i> Akun demo
 							</p>
-							<p class="mt-1 font-mono text-[11px] text-blue-700">
-								farisi@gmail.com · 1234567
-							</p>
-							<button
-								type="button"
-								onclick={fillDemoAccount}
-								class="mt-2.5 inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-2 text-[11px] font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
-							>
-								<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
-								Isi otomatis & masuk
-							</button>
+							<ul class="mt-2 space-y-2.5">
+								{#each DUMMY_ACCOUNTS as account (account.email)}
+									<li class="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-white/70 px-3 py-2">
+										<span>
+											<span class="block text-[11px] font-bold text-slate-800">{account.role} — {account.name}</span>
+											<span class="block font-mono text-[11px] text-blue-700">
+												{account.email} · {account.password}
+											</span>
+										</span>
+										<button
+											type="button"
+											onclick={() => fillDemoAccount(account)}
+											class="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+										>
+											<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+											Isi otomatis
+										</button>
+									</li>
+								{/each}
+							</ul>
 						</div>
 
 						<!-- SSO Button -->

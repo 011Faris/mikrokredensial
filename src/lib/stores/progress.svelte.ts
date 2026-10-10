@@ -1,5 +1,6 @@
 import { SvelteSet } from 'svelte/reactivity';
 import type { Course } from '$lib/data/courses';
+import { getModuleMaterials } from '$lib/data/courses';
 
 /**
  * Status penyelesaian materi yang dipakai bersama oleh halaman modul,
@@ -16,7 +17,7 @@ export function ensureSeeded(course: Course): void {
 	if (seededCourses.has(course.id)) return;
 	seededCourses.add(course.id);
 	for (const m of course.modules) {
-		for (const mat of m.materials) {
+		for (const mat of getModuleMaterials(m)) {
 			if (mat.completed) doneMaterials.add(mat.id);
 		}
 	}

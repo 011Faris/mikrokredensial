@@ -26,17 +26,23 @@
 			const st = courseStatus(c);
 			const matchStatus = activeFilter === 'all' || st === activeFilter;
 			const q = search.trim().toLowerCase();
-			const matchSearch = !q || c.title.toLowerCase().includes(q) || c.category.toLowerCase().includes(q);
+			const matchSearch =
+				!q || c.title.toLowerCase().includes(q) || c.category.toLowerCase().includes(q);
 			return matchStatus && matchSearch;
 		})
 	);
 
-	const filteredWithMeta = $derived(filtered.map((c) => ({ course: c, meta: getCourseMeta(c.id) })));
+	const filteredWithMeta = $derived(
+		filtered.map((c) => ({ course: c, meta: getCourseMeta(c.id) }))
+	);
 </script>
 
 <svelte:head>
 	<title>Kursusku — Instruktur Aristoteles</title>
-	<meta name="description" content="Kelola kursus, kurikulum, modul, dan materi yang diampu instruktur Aristoteles." />
+	<meta
+		name="description"
+		content="Kelola kursus, kurikulum, modul, dan materi yang diampu instruktur Aristoteles."
+	/>
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
@@ -49,19 +55,21 @@
 				{owned.reduce((n, c) => n + c.totalMaterials, 0)} materi.
 			</p>
 		</div>
-		<button
-			type="button"
+		<a
+			href="/instruktur/kursusku/tambah"
 			class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 		>
 			<i class="fa-solid fa-plus" aria-hidden="true"></i> Buat Kursus Baru
-		</button>
+		</a>
 	</div>
 
 	<div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center">
 		<div class="max-w-md flex-1">
 			<label for="search-kursus" class="sr-only">Cari kursus yang kamu ampu</label>
 			<div class="relative">
-				<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+				<div
+					class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"
+				>
 					<i class="fa-solid fa-magnifying-glass text-sm" aria-hidden="true"></i>
 				</div>
 				<input
@@ -120,11 +128,17 @@
 							class={`absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[10px] font-extrabold uppercase ${periodBadgeClass(kMeta.period)}`}
 						>
 							<i class={`fa-solid ${periodIcon(kMeta.period)}`} aria-hidden="true"></i>
-							{kMeta.period === 'upcoming' ? `Mulai ${kMeta.startMonth ?? ''}`.trim() : kMeta.period === 'ongoing' ? 'Berjalan' : 'Lewat'}
+							{kMeta.period === 'upcoming'
+								? `Mulai ${kMeta.startMonth ?? ''}`.trim()
+								: kMeta.period === 'ongoing'
+									? 'Berjalan'
+									: 'Lewat'}
 						</span>
 					</div>
 					<div class="flex flex-1 flex-col p-5">
-						<p class="text-[11px] font-bold tracking-wide text-blue-600 uppercase">{course.category}</p>
+						<p class="text-[11px] font-bold tracking-wide text-blue-600 uppercase">
+							{course.category}
+						</p>
 						<h2 class="mt-1 line-clamp-2 text-base font-bold text-slate-900">
 							<a
 								href={`/instruktur/kursusku/${course.id}`}
@@ -134,7 +148,9 @@
 							</a>
 						</h2>
 						<p class="mt-1 text-xs text-slate-500">
-							{course.modules.length} modul · {course.totalMaterials} materi · {kMeta.students.toLocaleString('id-ID')} peserta
+							{course.modules.length} modul · {course.totalMaterials} materi · {kMeta.students.toLocaleString(
+								'id-ID'
+							)} peserta
 						</p>
 
 						<div class="mt-4">
