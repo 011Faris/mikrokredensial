@@ -3,7 +3,7 @@
 	import { courses, type Course } from '$lib/data/courses';
 	import { getCourseMeta, periodBadgeClass, periodIcon } from '$lib/data/course-meta';
 	import { getTrainingStats } from '$lib/data/training';
-	import { canAccessCourse, isCoursePaid } from '$lib/stores/enrollment.svelte';
+	import { canAccessCourse, isCoursePaid, ownedCourses } from '$lib/stores/enrollment.svelte';
 
 	type Status = 'all' | 'in-progress' | 'completed' | 'not-started';
 
@@ -53,8 +53,17 @@
 		{ value: 'not-started', label: 'Belum Mulai' }
 	];
 
+	// Kursus yang diikuti = semua course KECUALI yang berbayar & belum dibayar.
+	// `ownedCourses.has` dibaca di sini agar daftar reaktif saat pembayaran sukses.
+	const followed = $derived(
+		courses.filter((c) => {
+			void ownedCourses.has(c.id);
+			return canAccessCourse(c.id);
+		})
+	);
+
 	const filtered = $derived(
-		activeFilter === 'all' ? courses : courses.filter((c) => c.status === activeFilter)
+		activeFilter === 'all' ? followed : followed.filter((c) => c.status === activeFilter)
 	);
 
 	const filteredWithMeta = $derived(
@@ -87,8 +96,16 @@
 		<p class="text-xs font-bold tracking-widest text-blue-600 uppercase">Menu Utama · Kursusku</p>
 		<h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Kursusku</h1>
 		<p class="mt-1 text-sm text-slate-500">
-			Lanjutkan pembelajaranmu — {courses.filter((c) => c.status === 'in-progress').length} kursus sedang
-			berjalan, {courses.filter((c) => c.status === 'completed').length} selesai.
+			Lanjutkan pembelajaranmu — {followed.filter((c) => c.status === 'in-progress').length} kursus sedang
+			berjalan, {followed.filter((c) => c.status === 'completed').length} selesai.
+		</p>
+		<p class="mt-1 text-xs text-slate-400">
+			Kursus berbayar yang belum dibayar tidak tampil di sini — lihat di
+			<a
+				href="/user/semua-kursus"
+				class="rounded font-semibold text-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+				>Semua Kursus</a
+			>.
 		</p>
 	</div>
 
@@ -194,6 +211,14 @@
 		<div class="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
 			<i class="fa-solid fa-folder-open mb-3 text-3xl text-slate-300" aria-hidden="true"></i>
 			<p class="text-sm font-semibold text-slate-700">Tidak ada kursus pada filter ini.</p>
+			<p class="mt-1 text-xs text-slate-500">
+				Kursus berbayar yang belum dibayar hanya tampil di
+				<a
+					href="/user/semua-kursus"
+					class="rounded font-semibold text-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+					>Semua Kursus</a
+				>.
+			</p>
 		</div>
 	{:else}
 		<div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -253,8 +278,8 @@
 							>
 							{#if isCoursePaid(course.id)}
 								<span
-									class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-amber-800"
-									><i class="fa-solid fa-lock text-[9px]" aria-hidden="true"></i>{kMeta.price}</span
+									class="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-800"
+									><i class="fa-solid fa-check text-[9px]" aria-hidden="true"></i>Lunas</span
 								>
 							{/if}
 							{#if getTrainingStats(course).materialCount >= 100}
@@ -285,7 +310,21 @@
 						</div>
 
 						<div class="mt-5 flex gap-2">
-							{#if course.status === 'completed'}
+							{#if kMeta.period === 'upcoming'}
+								<div class="flex-1">
+									<span
+										aria-disabled="true"
+										title="Materi terkunci sampai batch {kMeta.startMonth ?? ''} dimulai"
+										class="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-200 px-4 py-2.5 text-xs font-bold text-slate-500"
+									>
+										<i class="fa-solid fa-lock" aria-hidden="true"></i>
+										Mulai {kMeta.startMonth ?? 'segera'}
+									</span>
+									<p class="mt-1.5 text-center text-[11px] text-slate-500">
+										Sudah terdaftar · materi terkunci sampai periode berjalan
+									</p>
+								</div>
+							{:else if course.status === 'completed'}
 								<a
 									href={`/user/kursusku/${course.id}`}
 									class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"

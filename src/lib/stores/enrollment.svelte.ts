@@ -5,9 +5,11 @@ import { getCourseMeta } from '$lib/data/course-meta';
 /**
  * Kepemilikan course berbayar (simulasi sisi klien).
  * Course GRATIS selalu terbuka; course berlabel harga terkunci
- * sampai user menekan Bayar. Daftar milik tersimpan di localStorage.
+ * sampai user menyelesaikan pembayaran di /user/pembayaran/[courseId].
+ * Course berbayar yang belum dibayar TIDAK tampil di Kursusku.
+ * Daftar milik tersimpan di localStorage.
  */
-const KEY = 'aristotle:owned-courses:v1';
+const KEY = 'aristotle:owned-courses:v2';
 
 export const ownedCourses = new SvelteSet<number>();
 
@@ -38,13 +40,39 @@ export function isCoursePaid(courseId: number): boolean {
 	return getCourseMeta(courseId).price.trim().toUpperCase() !== 'GRATIS';
 }
 
+/** True bila batch course belum mulai (periode upcoming). */
+export function isPeriodLocked(courseId: number): boolean {
+	return getCourseMeta(courseId).period === 'upcoming';
+}
+
 /** True bila user boleh membuka materi course ini. */
 export function canAccessCourse(courseId: number): boolean {
 	return !isCoursePaid(courseId) || ownedCourses.has(courseId);
 }
 
+/**
+ * True bila user boleh MEMBUKA MATERI course ini.
+ * Syarat ganda: lunas/terdaftar (canAccessCourse) DAN batch sudah berjalan.
+ * Course upcoming tetap terkunci walau user sudah mengikutinya.
+ */
+export function canOpenMaterials(courseId: number): boolean {
+	return canAccessCourse(courseId) && !isPeriodLocked(courseId);
+}
+
 /** Simulasi pembayaran: langsung membuka akses + menyimpan bukti milik. */
 export function purchaseCourse(courseId: number): void {
 	ownedCourses.add(courseId);
+	persist();
+}
+
+/** Hapus kepemilikan satu course (batal ikut / reset demo). */
+export function releaseCourse(courseId: number): void {
+	ownedCourses.delete(courseId);
+	persist();
+}
+
+/** Hapus semua kepemilikan (reset demo pembayaran). */
+export function resetOwnership(): void {
+	ownedCourses.clear();
 	persist();
 }

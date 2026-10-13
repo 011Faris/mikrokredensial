@@ -20,12 +20,14 @@
 	} from '$lib/data/training';
 	import { doneMaterials, ensureSeeded } from '$lib/stores/progress.svelte';
 	import { getCourseMeta } from '$lib/data/course-meta';
-	import { canAccessCourse, purchaseCourse } from '$lib/stores/enrollment.svelte';
+	import { canAccessCourse, isPeriodLocked } from '$lib/stores/enrollment.svelte';
+	import { resolve } from '$app/paths';
 
 	const courseId = $derived(Number(page.params.courseId));
 	const course = $derived(getCourseById(courseId));
 	const meta = $derived(course ? getCourseMeta(course.id) : null);
 	const paidLocked = $derived(course ? !canAccessCourse(course.id) : false);
+	const periodLocked = $derived(course ? !paidLocked && isPeriodLocked(course.id) : false);
 
 	let openModules = new SvelteSet<string>();
 	let openSubs = new SvelteSet<string>();
@@ -35,8 +37,9 @@
 	let hideDone = $state(false);
 
 	// Seed + buka otomatis modul & sub-modul pertama yang belum selesai.
+	// Dilewati saat materi terkunci (belum bayar / batch belum mulai).
 	$effect(() => {
-		if (!course) return;
+		if (!course || paidLocked || periodLocked) return;
 		ensureSeeded(course);
 		const isDone = (id: string) => untrack(() => doneMaterials.has(id));
 		const first = untrack(() => firstUnfinishedInCourse(course, isDone));
@@ -234,17 +237,71 @@
 					<i class="fa-solid fa-circle-check text-emerald-500" aria-hidden="true"></i> Sertifikat kelulusan
 					+ mentoring
 				</p>
-				<button
-					type="button"
-					onclick={() => purchaseCourse(course.id)}
+				<a
+					href={resolve(`/user/pembayaran/${course.id}`)}
 					class="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 				>
 					<i class="fa-solid fa-credit-card" aria-hidden="true"></i>
-					Bayar {meta.price} (Simulasi)
-				</button>
+					Lanjut ke Pembayaran · {meta.price}
+				</a>
 				<a
 					href="/user/semua-kursus"
 					class="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50"
+				>
+					<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Kembali ke Katalog
+				</a>
+			</div>
+		</div>
+	{:else if periodLocked && meta}
+		<nav aria-label="Breadcrumb" class="mb-4 flex items-center gap-2 text-xs text-slate-500">
+			<a
+				href="/user/kursusku"
+				class="rounded font-semibold text-blue-600 hover:text-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+			>
+				Kursusku
+			</a>
+			<i class="fa-solid fa-chevron-right text-[10px] text-slate-300" aria-hidden="true"></i>
+			<span aria-current="page" class="truncate font-medium text-slate-700">{course.title}</span>
+		</nav>
+		<div
+			class="mx-auto max-w-lg overflow-hidden rounded-2xl border border-slate-200 bg-white text-center shadow-xl"
+		>
+			<div class="bg-slate-900 px-6 py-8 text-white">
+				<span
+					class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10"
+					aria-hidden="true"
+				>
+					<i class="fa-solid fa-calendar-clock text-2xl text-amber-300"></i>
+				</span>
+				<p class="mt-4 text-[11px] font-extrabold tracking-[0.16em] text-blue-200 uppercase">
+					Terdaftar · Batch Belum Mulai
+				</p>
+				<h1 class="mt-1 text-xl font-extrabold">{course.title}</h1>
+				<p class="mt-2 text-2xl font-black">Mulai {meta.startMonth ?? 'segera'}</p>
+				<p class="mt-1 text-xs text-slate-300">
+					Kamu sudah terdaftar. Seluruh materi terkunci sampai periode berjalan.
+				</p>
+			</div>
+			<div class="space-y-2 p-6 text-left text-sm text-slate-600">
+				<p class="flex items-center gap-2.5">
+					<i class="fa-solid fa-circle-check text-emerald-500" aria-hidden="true"></i>
+					{stats?.moduleCount} modul · {stats?.subModuleCount} sub-modul · {stats?.materialCount} materi
+					menunggumu
+				</p>
+				<p class="flex items-center gap-2.5">
+					<i class="fa-solid fa-bell text-amber-500" aria-hidden="true"></i>
+					Kami akan memberi tahu saat batch dibuka.
+				</p>
+				<span
+					aria-disabled="true"
+					class="flex min-h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-200 px-5 py-3 text-sm font-bold text-slate-500"
+				>
+					<i class="fa-solid fa-lock" aria-hidden="true"></i>
+					Materi Terkunci
+				</span>
+				<a
+					href="/user/semua-kursus"
+					class="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-blue-600"
 				>
 					<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Kembali ke Katalog
 				</a>

@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths';
 	import type { Course } from '$lib/data/courses';
 	import type { CourseMeta } from '$lib/data/course-meta';
-	import { canAccessCourse, isCoursePaid, purchaseCourse } from '$lib/stores/enrollment.svelte';
+	import { canAccessCourse, isCoursePaid, isPeriodLocked } from '$lib/stores/enrollment.svelte';
 
 	let {
 		course,
@@ -17,6 +17,7 @@
 	const locked = $derived(
 		mode === 'user' && isCoursePaid(course.id) && !canAccessCourse(course.id)
 	);
+	const periodLocked = $derived(mode === 'user' && isPeriodLocked(course.id));
 </script>
 
 <aside
@@ -63,19 +64,43 @@
 			</p>
 		{:else if locked}
 			<div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center">
-				<p class="text-[11px] font-extrabold tracking-widest text-amber-700 uppercase">
-					Course Berbayar
+				<p class="text-[11px] font-extrabold tracking-widest text-amber-800 uppercase">
+					Pelatihan Berbayar
 				</p>
 				<p class="mt-0.5 text-2xl font-black text-slate-900">{meta.price}</p>
-				<p class="mt-0.5 text-[11px] text-slate-500">Sekali bayar · Akses selamanya</p>
+				<p class="mt-0.5 text-[11px] text-slate-600">Sekali bayar · Akses selamanya</p>
 			</div>
-			<button
-				type="button"
-				onclick={() => purchaseCourse(course.id)}
+			<a
+				href={mode === 'user'
+					? resolve(`/user/pembayaran/${course.id}`)
+					: resolve('/login')}
 				class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 			>
-				<i class="fa-solid fa-credit-card" aria-hidden="true"></i> Beli Sekarang (Simulasi)
-			</button>
+				<i class="fa-solid fa-credit-card" aria-hidden="true"></i> Lanjut ke Pembayaran
+			</a>
+			<p class="text-center text-[11px] text-slate-500">
+				QRIS · VA · E-wallet · Kartu · Gerai retail
+			</p>
+		{:else if periodLocked}
+			<div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center">
+				<p class="text-[11px] font-extrabold tracking-widest text-amber-800 uppercase">
+					Terdaftar · Batch Belum Mulai
+				</p>
+				<p class="mt-0.5 text-lg font-black text-slate-900">
+					Mulai {meta.startMonth ?? 'segera'}
+				</p>
+				<p class="mt-0.5 text-[11px] text-slate-600">Materi terkunci sampai batch berjalan</p>
+			</div>
+			<span
+				aria-disabled="true"
+				title="Materi terkunci sampai batch {meta.startMonth ?? ''} dimulai"
+				class="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-200 px-4 py-3 text-sm font-bold text-slate-500"
+			>
+				<i class="fa-solid fa-lock" aria-hidden="true"></i> Materi Terkunci
+			</span>
+			<p class="text-center text-[11px] text-slate-500">
+				Kamu sudah terdaftar. Materi terbuka otomatis saat periode berjalan.
+			</p>
 		{:else}
 			<a
 				href={resolve(`/user/kursusku/${course.id}`)}

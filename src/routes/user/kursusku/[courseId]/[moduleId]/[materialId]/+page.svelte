@@ -11,13 +11,16 @@
 	import { resolveSubModules } from '$lib/data/training';
 	import { doneMaterials, ensureSeeded, markDone } from '$lib/stores/progress.svelte';
 	import { getCourseMeta } from '$lib/data/course-meta';
-	import { canAccessCourse, purchaseCourse } from '$lib/stores/enrollment.svelte';
+	import { canAccessCourse, isPeriodLocked } from '$lib/stores/enrollment.svelte';
+	import { resolve } from '$app/paths';
 	import MaterialRenderer from '$lib/components/materials/MaterialRenderer.svelte';
 
 	const courseId = $derived(Number(page.params.courseId));
 	const course = $derived(getCourseById(courseId));
 	const paidLocked = $derived(course ? !canAccessCourse(course.id) : false);
+	const periodLocked = $derived(course ? !paidLocked && isPeriodLocked(course.id) : false);
 	const paidPrice = $derived(course ? getCourseMeta(course.id).price : '');
+	const startMonth = $derived(course ? (getCourseMeta(course.id).startMonth ?? '') : '');
 	const module = $derived(course?.modules.find((m) => m.id === page.params.moduleId));
 	const moduleIndex = $derived(
 		course?.modules.findIndex((m) => m.id === page.params.moduleId) ?? -1
@@ -253,19 +256,56 @@
 					<p class="mt-1 text-xs text-slate-300">Bayar untuk membuka seluruh materi course ini.</p>
 				</div>
 				<div class="space-y-2 p-6">
-					<button
-						type="button"
-						onclick={() => purchaseCourse(course.id)}
+					<a
+						href={resolve(`/user/pembayaran/${course.id}`)}
 						class="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
 					>
 						<i class="fa-solid fa-credit-card" aria-hidden="true"></i>
-						Bayar {paidPrice} (Simulasi)
-					</button>
+						Lanjut ke Pembayaran · {paidPrice}
+					</a>
 					<a
 						href={`/user/kursusku/${course.id}`}
 						class="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50"
 					>
 						<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Kembali
+					</a>
+				</div>
+			</div>
+		</div>
+	{:else if periodLocked && course}
+		<div class="mx-auto max-w-lg p-4 sm:p-6">
+			<div
+				class="overflow-hidden rounded-2xl border border-slate-200 bg-white text-center shadow-xl"
+			>
+				<div class="bg-slate-900 px-6 py-8 text-white">
+					<span
+						class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10"
+						aria-hidden="true"
+					>
+						<i class="fa-solid fa-calendar-clock text-2xl text-amber-300"></i>
+					</span>
+					<p class="mt-4 text-[11px] font-extrabold tracking-[0.16em] text-blue-200 uppercase">
+						Batch Belum Mulai
+					</p>
+					<h1 class="mt-1 text-xl font-extrabold">{course.title}</h1>
+					<p class="mt-2 text-2xl font-black">Mulai {startMonth || 'segera'}</p>
+					<p class="mt-1 text-xs text-slate-300">
+						Materi terkunci sampai periode berjalan, walau kamu sudah terdaftar.
+					</p>
+				</div>
+				<div class="space-y-2 p-6">
+					<span
+						aria-disabled="true"
+						class="flex min-h-12 w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl bg-slate-200 px-5 py-3 text-sm font-bold text-slate-500"
+					>
+						<i class="fa-solid fa-lock" aria-hidden="true"></i>
+						Materi Terkunci
+					</span>
+					<a
+						href={`/user/kursusku/${course.id}`}
+						class="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-blue-600"
+					>
+						<i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Kembali ke detail kursus
 					</a>
 				</div>
 			</div>
