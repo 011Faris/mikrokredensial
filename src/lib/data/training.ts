@@ -76,20 +76,29 @@ export function getTrainingStats(course: Course): TrainingStats {
 
 export type ProgressReader = (id: string) => boolean;
 
-export function subModuleProgress(sub: SubModule, isDone: ProgressReader): { done: number; total: number; percent: number } {
+export function subModuleProgress(
+	sub: SubModule,
+	isDone: ProgressReader
+): { done: number; total: number; percent: number } {
 	const done = sub.materials.filter((m) => isDone(m.id)).length;
 	const total = sub.materials.length;
 	return { done, total, percent: total === 0 ? 0 : Math.round((done / total) * 100) };
 }
 
-export function moduleProgress(module: CourseModule, isDone: ProgressReader): { done: number; total: number; percent: number } {
+export function moduleProgress(
+	module: CourseModule,
+	isDone: ProgressReader
+): { done: number; total: number; percent: number } {
 	const mats = getModuleMaterials(module);
 	const done = mats.filter((m) => isDone(m.id)).length;
 	const total = mats.length;
 	return { done, total, percent: total === 0 ? 0 : Math.round((done / total) * 100) };
 }
 
-export function courseProgress(course: Course, isDone: ProgressReader): { done: number; total: number; percent: number } {
+export function courseProgress(
+	course: Course,
+	isDone: ProgressReader
+): { done: number; total: number; percent: number } {
 	const mats = flattenTrainingMaterials(course);
 	const done = mats.filter((m) => isDone(m.id)).length;
 	const total = mats.length;
@@ -161,7 +170,12 @@ export function adjacentSubs(
 	course: Course,
 	moduleId: string,
 	subId: string
-): { prev: SubModule | null; next: SubModule | null; module: CourseModule | null; moduleIndex: number } {
+): {
+	prev: SubModule | null;
+	next: SubModule | null;
+	module: CourseModule | null;
+	moduleIndex: number;
+} {
 	const moduleIndex = course.modules.findIndex((m) => m.id === moduleId);
 	if (moduleIndex < 0) return { prev: null, next: null, module: null, moduleIndex: -1 };
 	const module = course.modules[moduleIndex];
@@ -213,7 +227,8 @@ export function resolveRoadmapSelection(
 		}
 		const subs = resolveSubModules(module);
 		for (let si = 0; si < subs.length; si++) {
-			if (subs[si].id === id) return { kind: 'sub', module, moduleIndex: mi, sub: subs[si], subIndex: si };
+			if (subs[si].id === id)
+				return { kind: 'sub', module, moduleIndex: mi, sub: subs[si], subIndex: si };
 		}
 	}
 	return null;
@@ -222,7 +237,8 @@ export function resolveRoadmapSelection(
 /** Breadcrumb label generik untuk setiap node: Pelatihan › Modul n › Sub-modul m › Materi. */
 export function nodeBreadcrumb(node: TrainingNode): string[] {
 	if (node.level === 'pelatihan') return [node.course.title];
-	if (node.level === 'modul') return [node.course.title, `Modul ${node.moduleIndex + 1}: ${node.module.title}`];
+	if (node.level === 'modul')
+		return [node.course.title, `Modul ${node.moduleIndex + 1}: ${node.module.title}`];
 	if (node.level === 'submodul')
 		return [
 			node.course.title,
@@ -239,8 +255,84 @@ export function nodeBreadcrumb(node: TrainingNode): string[] {
 
 /* ---------- Geometri canvas roadmap (dipakai ulang publik + user) ---------- */
 
-export const ROADMAP_NODE_W = 180;
-export const ROADMAP_NODE_H = 48;
+export const ROADMAP_NODE_W = 200;
+export const ROADMAP_NODE_H = 56;
+
+/** Palet editorial per modul — sub-modul mewarisi hue induknya. */
+export interface RoadmapHue {
+	from: string;
+	to: string;
+	soft: string;
+	ink: string;
+	ring: string;
+	shadow: string;
+}
+
+export const ROADMAP_PALETTE: RoadmapHue[] = [
+	{
+		from: '#2563eb',
+		to: '#1d4ed8',
+		soft: '#eff6ff',
+		ink: '#1d4ed8',
+		ring: 'rgb(37 99 235 / 30%)',
+		shadow: 'rgb(29 78 216 / 40%)'
+	},
+	{
+		from: '#0284c7',
+		to: '#075985',
+		soft: '#f0f9ff',
+		ink: '#0369a1',
+		ring: 'rgb(2 132 199 / 30%)',
+		shadow: 'rgb(7 89 133 / 40%)'
+	},
+	{
+		from: '#1e3a8a',
+		to: '#0f172a',
+		soft: '#eef2f7',
+		ink: '#1e3a8a',
+		ring: 'rgb(30 58 138 / 30%)',
+		shadow: 'rgb(15 23 42 / 42%)'
+	},
+	{
+		from: '#0ea5e9',
+		to: '#0369a1',
+		soft: '#f0f9ff',
+		ink: '#0284c7',
+		ring: 'rgb(14 165 233 / 30%)',
+		shadow: 'rgb(3 105 161 / 40%)'
+	},
+	{
+		from: '#475569',
+		to: '#1e293b',
+		soft: '#f1f5f9',
+		ink: '#334155',
+		ring: 'rgb(71 85 105 / 30%)',
+		shadow: 'rgb(30 41 59 / 42%)'
+	},
+	{
+		from: '#0d9488',
+		to: '#115e59',
+		soft: '#effaf8',
+		ink: '#0f766e',
+		ring: 'rgb(13 148 136 / 30%)',
+		shadow: 'rgb(17 94 89 / 40%)'
+	}
+];
+
+export function roadmapHue(index: number): RoadmapHue {
+	const n = ROADMAP_PALETTE.length;
+	return ROADMAP_PALETTE[((index % n) + n) % n];
+}
+
+/** Hijau status untuk node yang sudah tuntas (konsisten di semua hue). */
+export const ROADMAP_DONE_HUE: RoadmapHue = {
+	from: '#16a34a',
+	to: '#15803d',
+	soft: '#edf7f0',
+	ink: '#15803d',
+	ring: 'rgb(22 163 74 / 30%)',
+	shadow: 'rgb(21 128 61 / 40%)'
+};
 
 export interface RoadmapFlowNode {
 	id: string;
@@ -263,12 +355,12 @@ export interface RoadmapLayout {
 	h: number;
 }
 
-const ROADMAP_Y0 = 70;
-const ROADMAP_PAD = 60;
-const ROADMAP_SIDE_GAP = 40;
-const ROADMAP_SUB_STEP = 68;
-const ROADMAP_MODULE_GAP = 56;
-const ROADMAP_ELBOW_R = 8;
+const ROADMAP_Y0 = 76;
+const ROADMAP_PAD = 64;
+const ROADMAP_SIDE_GAP = 48;
+const ROADMAP_SUB_STEP = 78;
+const ROADMAP_MODULE_GAP = 76;
+const ROADMAP_ELBOW_R = 14;
 
 /**
  * Hitung posisi node + garis canvas roadmap dari data modul.
@@ -283,15 +375,20 @@ export function computeRoadmapLayout(modules: CourseModule[]): RoadmapLayout {
 	const subsPerModule = modules.map((m) => resolveSubModules(m));
 	const hasLeft = subsPerModule.some((subs, i) => i % 2 === 1 && subs.length > 0);
 	const hasRight = subsPerModule.some((subs, i) => i % 2 === 0 && subs.length > 0);
-	const cx =
-		ROADMAP_PAD + ROADMAP_NODE_W / 2 + (hasLeft ? ROADMAP_SIDE_GAP + ROADMAP_NODE_W : 0);
+	const cx = ROADMAP_PAD + ROADMAP_NODE_W / 2 + (hasLeft ? ROADMAP_SIDE_GAP + ROADMAP_NODE_W : 0);
 	const nodes: RoadmapFlowNode[] = [];
 	const connections: Array<[string, string]> = [];
 	const curves: RoadmapCurve[] = [];
 	let cursor = ROADMAP_Y0;
 	modules.forEach((m, i) => {
 		const modCy = cursor;
-		nodes.push({ id: m.id, label: m.title, x: cx - ROADMAP_NODE_W / 2, y: modCy - ROADMAP_NODE_H / 2, kind: 'module' });
+		nodes.push({
+			id: m.id,
+			label: m.title,
+			x: cx - ROADMAP_NODE_W / 2,
+			y: modCy - ROADMAP_NODE_H / 2,
+			kind: 'module'
+		});
 		if (i > 0) connections.push([modules[i - 1].id, m.id]);
 		const leftSide = i % 2 === 1;
 		const dir = leftSide ? -1 : 1;
@@ -321,8 +418,7 @@ export function computeRoadmapLayout(modules: CourseModule[]): RoadmapLayout {
 		});
 		cursor = bottom + ROADMAP_MODULE_GAP + ROADMAP_NODE_H / 2;
 	});
-	const rightEdge =
-		cx + ROADMAP_NODE_W / 2 + (hasRight ? ROADMAP_SIDE_GAP + ROADMAP_NODE_W : 0);
+	const rightEdge = cx + ROADMAP_NODE_W / 2 + (hasRight ? ROADMAP_SIDE_GAP + ROADMAP_NODE_W : 0);
 	return {
 		nodes,
 		connections,

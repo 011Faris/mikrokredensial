@@ -101,40 +101,74 @@ export const courses: Course[] = [
 		status: 'in-progress',
 		lastAccessed: 'Kemarin',
 		modules: [
-			mod(1, 1, 'Dasar HTML & Struktur Web', 'Pahami semantik HTML dan struktur dokumen yang aksesibel.', [
-				{
-					title: 'Struktur & Semantik',
-					description: 'Elemen semantik, form, dan validasi bawaan browser.',
-					materials: [
-						{ title: 'Pengenalan HTML5', type: 'video', duration: '18 mnt', completed: true },
-						{ title: 'Form & Validasi Native', type: 'video', duration: '24 mnt', completed: true }
-					]
-				},
-				{
-					title: 'Praktik Terpandu',
-					description: 'Latihan membangun landing page semantik.',
-					materials: [
-						{ title: 'Latihan: Landing Page Semantik', type: 'tugas', duration: '60 mnt', completed: true }
-					]
-				}
-			]),
-			mod(1, 2, 'CSS Modern & Layout Responsif', 'Flexbox, Grid, dan Tailwind untuk layout profesional.', [
-				{
-					title: 'Layout Inti',
-					description: 'Kapan memakai Flexbox vs Grid dengan contoh nyata.',
-					materials: [
-						{ title: 'Flexbox & Grid Mendalam', type: 'video', duration: '32 mnt', completed: true }
-					]
-				},
-				{
-					title: 'Responsif & Evaluasi',
-					description: 'Pola mobile-first dan kuis pemahaman layout.',
-					materials: [
-						{ title: 'Desain Responsif Mobile-First', type: 'bacaan', duration: '20 mnt', completed: true },
-						{ title: 'Kuis CSS Layout', type: 'kuis', duration: '15 mnt', completed: true }
-					]
-				}
-			]),
+			mod(
+				1,
+				1,
+				'Dasar HTML & Struktur Web',
+				'Modul ini menjadi fondasi seluruh perjalanan frontend. Kamu akan memahami cara kerja dokumen HTML5 — mulai dari elemen semantik seperti header, main, section, dan footer, hingga formulir yang aksesibel dengan validasi bawaan browser. Di akhir modul, kamu mampu menyusun struktur halaman yang rapi, mudah dibaca screen reader, dan siap diberi gaya dengan CSS.',
+				[
+					{
+						title: 'Struktur & Semantik',
+						description:
+							'Sub-modul ini membahas elemen-elemen semantik HTML5 dan kapan menggunakannya: landmark ARIA, hierarki heading yang benar, serta atribut form seperti required, pattern, dan type. Kamu juga akan melihat bagaimana browser memvalidasi input secara bawaan, sehingga form tetap ramah pengguna bahkan tanpa JavaScript.',
+						materials: [
+							{ title: 'Pengenalan HTML5', type: 'video', duration: '18 mnt', completed: true },
+							{
+								title: 'Form & Validasi Native',
+								type: 'video',
+								duration: '24 mnt',
+								completed: true
+							}
+						]
+					},
+					{
+						title: 'Praktik Terpandu',
+						description:
+							'Saatnya mempraktikkan teori lewat latihan terpandu membangun landing page satu layar hanya dengan HTML semantik. Kamu akan menyusun kerangka header–main–footer, menambahkan section dengan heading berurutan, dan membuat form kontak yang aksesibel — lalu memvalidasi hasilnya dengan pemeriksa HTML hingga bebas error.',
+						materials: [
+							{
+								title: 'Latihan: Landing Page Semantik',
+								type: 'tugas',
+								duration: '60 mnt',
+								completed: true
+							}
+						]
+					}
+				]
+			),
+			mod(
+				1,
+				2,
+				'CSS Modern & Layout Responsif',
+				'Flexbox, Grid, dan Tailwind untuk layout profesional.',
+				[
+					{
+						title: 'Layout Inti',
+						description: 'Kapan memakai Flexbox vs Grid dengan contoh nyata.',
+						materials: [
+							{
+								title: 'Flexbox & Grid Mendalam',
+								type: 'video',
+								duration: '32 mnt',
+								completed: true
+							}
+						]
+					},
+					{
+						title: 'Responsif & Evaluasi',
+						description: 'Pola mobile-first dan kuis pemahaman layout.',
+						materials: [
+							{
+								title: 'Desain Responsif Mobile-First',
+								type: 'bacaan',
+								duration: '20 mnt',
+								completed: true
+							},
+							{ title: 'Kuis CSS Layout', type: 'kuis', duration: '15 mnt', completed: true }
+						]
+					}
+				]
+			),
 			mod(1, 3, 'JavaScript Interaktif', 'DOM, event, dan fetch API untuk aplikasi dinamis.', [
 				{
 					title: 'DOM & Data',
@@ -148,7 +182,12 @@ export const courses: Course[] = [
 					title: 'Proyek Mini',
 					description: 'Terapkan konsep dalam galeri interaktif.',
 					materials: [
-						{ title: 'Proyek: Galeri Interaktif', type: 'tugas', duration: '90 mnt', completed: false }
+						{
+							title: 'Proyek: Galeri Interaktif',
+							type: 'tugas',
+							duration: '90 mnt',
+							completed: false
+						}
 					]
 				}
 			]),
@@ -157,8 +196,18 @@ export const courses: Course[] = [
 					title: 'Komponen & Build',
 					description: 'Pola komponen, state, dan alur build.',
 					materials: [
-						{ title: 'Konsep Komponen & State', type: 'video', duration: '26 mnt', completed: false },
-						{ title: 'Build & Deploy ke Hosting', type: 'bacaan', duration: '18 mnt', completed: false }
+						{
+							title: 'Konsep Komponen & State',
+							type: 'video',
+							duration: '26 mnt',
+							completed: false
+						},
+						{
+							title: 'Build & Deploy ke Hosting',
+							type: 'bacaan',
+							duration: '18 mnt',
+							completed: false
+						}
 					]
 				},
 				{
@@ -201,7 +250,12 @@ export const courses: Course[] = [
 					title: 'Praktik ERD',
 					description: 'Merancang skema toko online.',
 					materials: [
-						{ title: 'Latihan: Desain ERD Toko Online', type: 'tugas', duration: '60 mnt', completed: true }
+						{
+							title: 'Latihan: Desain ERD Toko Online',
+							type: 'tugas',
+							duration: '60 mnt',
+							completed: true
+						}
 					]
 				}
 			]),
@@ -235,7 +289,12 @@ export const courses: Course[] = [
 					title: 'Studi Kasus & Ujian',
 					description: 'Optimasi dataset besar dan ujian akhir.',
 					materials: [
-						{ title: 'Studi Kasus: Optimasi 1 Juta Baris', type: 'tugas', duration: '75 mnt', completed: true },
+						{
+							title: 'Studi Kasus: Optimasi 1 Juta Baris',
+							type: 'tugas',
+							duration: '75 mnt',
+							completed: true
+						},
 						{ title: 'Ujian Akhir SQL', type: 'kuis', duration: '40 mnt', completed: true }
 					]
 				}
@@ -271,7 +330,9 @@ export const courses: Course[] = [
 				{
 					title: 'Evaluasi Konsep',
 					description: 'Kuis pemahaman fondasi jaringan.',
-					materials: [{ title: 'Kuis Konsep Dasar', type: 'kuis', duration: '15 mnt', completed: true }]
+					materials: [
+						{ title: 'Kuis Konsep Dasar', type: 'kuis', duration: '15 mnt', completed: true }
+					]
 				}
 			]),
 			mod(3, 2, 'IP Addressing & Subnetting', 'IPv4, CIDR, dan perhitungan subnet praktis.', [
@@ -286,7 +347,12 @@ export const courses: Course[] = [
 					title: 'Praktik & Simulasi',
 					description: 'Latihan VLSM dan simulasi visual.',
 					materials: [
-						{ title: 'Latihan Subnetting VLSM', type: 'tugas', duration: '60 mnt', completed: false },
+						{
+							title: 'Latihan Subnetting VLSM',
+							type: 'tugas',
+							duration: '60 mnt',
+							completed: false
+						},
 						{ title: 'Simulasi Packet Tracer', type: 'foto', duration: '25 mnt', completed: false }
 					]
 				}
@@ -303,7 +369,12 @@ export const courses: Course[] = [
 					title: 'Diagnostik',
 					description: 'Alat uji konektivitas dan analisis paket.',
 					materials: [
-						{ title: 'Ping, Traceroute & Wireshark', type: 'bacaan', duration: '20 mnt', completed: false }
+						{
+							title: 'Ping, Traceroute & Wireshark',
+							type: 'bacaan',
+							duration: '20 mnt',
+							completed: false
+						}
 					]
 				}
 			])
@@ -331,14 +402,24 @@ export const courses: Course[] = [
 					title: 'Konsep Ancaman',
 					description: 'CIA triad dan lanskap ancaman modern.',
 					materials: [
-						{ title: 'CIA Triad & Threat Landscape', type: 'video', duration: '20 mnt', completed: false }
+						{
+							title: 'CIA Triad & Threat Landscape',
+							type: 'video',
+							duration: '20 mnt',
+							completed: false
+						}
 					]
 				},
 				{
 					title: 'Rekayasa Sosial',
 					description: 'Mengenali serangan berbasis manusia.',
 					materials: [
-						{ title: 'Social Engineering Awareness', type: 'audio', duration: '15 mnt', completed: false }
+						{
+							title: 'Social Engineering Awareness',
+							type: 'audio',
+							duration: '15 mnt',
+							completed: false
+						}
 					]
 				}
 			]),
@@ -347,16 +428,36 @@ export const courses: Course[] = [
 					title: 'Proteksi Sistem',
 					description: 'Hardening OS dan konfigurasi firewall.',
 					materials: [
-						{ title: 'Hardening OS & Aplikasi', type: 'video', duration: '28 mnt', completed: false },
-						{ title: 'Lab: Konfigurasi Firewall', type: 'tugas', duration: '60 mnt', completed: false }
+						{
+							title: 'Hardening OS & Aplikasi',
+							type: 'video',
+							duration: '28 mnt',
+							completed: false
+						},
+						{
+							title: 'Lab: Konfigurasi Firewall',
+							type: 'tugas',
+							duration: '60 mnt',
+							completed: false
+						}
 					]
 				},
 				{
 					title: 'Evaluasi & Simulasi',
 					description: 'Kuis fundamental dan simulasi insiden.',
 					materials: [
-						{ title: 'Kuis Fundamental Security', type: 'kuis', duration: '15 mnt', completed: false },
-						{ title: 'Simulasi Respons Insiden', type: 'video', duration: '22 mnt', completed: false }
+						{
+							title: 'Kuis Fundamental Security',
+							type: 'kuis',
+							duration: '15 mnt',
+							completed: false
+						},
+						{
+							title: 'Simulasi Respons Insiden',
+							type: 'video',
+							duration: '22 mnt',
+							completed: false
+						}
 					]
 				}
 			])
@@ -384,8 +485,18 @@ export const courses: Course[] = [
 					title: 'Setup & Pandas',
 					description: 'Alur kerja Jupyter dan pembersihan data.',
 					materials: [
-						{ title: 'Setup & Jupyter Workflow', type: 'video', duration: '18 mnt', completed: true },
-						{ title: 'Pandas: Cleaning Dataset', type: 'video', duration: '32 mnt', completed: true }
+						{
+							title: 'Setup & Jupyter Workflow',
+							type: 'video',
+							duration: '18 mnt',
+							completed: true
+						},
+						{
+							title: 'Pandas: Cleaning Dataset',
+							type: 'video',
+							duration: '32 mnt',
+							completed: true
+						}
 					]
 				},
 				{
@@ -401,8 +512,18 @@ export const courses: Course[] = [
 					title: 'Model Dasar',
 					description: 'Regresi linear/logistik dan tree-based model.',
 					materials: [
-						{ title: 'Linear & Logistic Regression', type: 'video', duration: '30 mnt', completed: true },
-						{ title: 'Decision Tree & Random Forest', type: 'video', duration: '28 mnt', completed: false }
+						{
+							title: 'Linear & Logistic Regression',
+							type: 'video',
+							duration: '30 mnt',
+							completed: true
+						},
+						{
+							title: 'Decision Tree & Random Forest',
+							type: 'video',
+							duration: '28 mnt',
+							completed: false
+						}
 					]
 				},
 				{
@@ -418,8 +539,18 @@ export const courses: Course[] = [
 					title: 'Proyek Inti',
 					description: 'Validasi silang dan prediksi churn.',
 					materials: [
-						{ title: 'Cross-Validation & Tuning', type: 'video', duration: '26 mnt', completed: false },
-						{ title: 'Proyek: Prediksi Churn', type: 'tugas', duration: '120 mnt', completed: false },
+						{
+							title: 'Cross-Validation & Tuning',
+							type: 'video',
+							duration: '26 mnt',
+							completed: false
+						},
+						{
+							title: 'Proyek: Prediksi Churn',
+							type: 'tugas',
+							duration: '120 mnt',
+							completed: false
+						},
 						{ title: 'Presentasi Model', type: 'bacaan', duration: '15 mnt', completed: false }
 					]
 				},
@@ -435,8 +566,18 @@ export const courses: Course[] = [
 					title: 'Penutup & Roadmap',
 					description: 'Langkah lanjut menuju deep learning dan sertifikasi.',
 					materials: [
-						{ title: 'Next Step: Deep Learning', type: 'bacaan', duration: '12 mnt', completed: false },
-						{ title: 'Sertifikasi Siap Kerja', type: 'video', duration: '10 mnt', completed: false },
+						{
+							title: 'Next Step: Deep Learning',
+							type: 'bacaan',
+							duration: '12 mnt',
+							completed: false
+						},
+						{
+							title: 'Sertifikasi Siap Kerja',
+							type: 'video',
+							duration: '10 mnt',
+							completed: false
+						},
 						{ title: 'Refleksi & Roadmap', type: 'bacaan', duration: '10 mnt', completed: false }
 					]
 				}
@@ -466,7 +607,12 @@ export const courses: Course[] = [
 					description: 'Ruang kernel vs user dan monitoring proses.',
 					materials: [
 						{ title: 'Kernel vs User Space', type: 'video', duration: '20 mnt', completed: true },
-						{ title: 'Monitoring Proses Linux', type: 'bacaan', duration: '15 mnt', completed: true }
+						{
+							title: 'Monitoring Proses Linux',
+							type: 'bacaan',
+							duration: '15 mnt',
+							completed: true
+						}
 					]
 				},
 				{
@@ -491,8 +637,18 @@ export const courses: Course[] = [
 					title: 'Administrasi & Ujian',
 					description: 'Server mini dan ujian akhir.',
 					materials: [
-						{ title: 'Administrasi Server Mini', type: 'video', duration: '22 mnt', completed: true },
-						{ title: 'Ujian Akhir Sistem Operasi', type: 'kuis', duration: '40 mnt', completed: true }
+						{
+							title: 'Administrasi Server Mini',
+							type: 'video',
+							duration: '22 mnt',
+							completed: true
+						},
+						{
+							title: 'Ujian Akhir Sistem Operasi',
+							type: 'kuis',
+							duration: '40 mnt',
+							completed: true
+						}
 					]
 				}
 			])
@@ -502,7 +658,7 @@ export const courses: Course[] = [
 		id: 7,
 		title: 'Full-Stack Web Development Bootcamp',
 		category: 'Pengembangan Web',
-		instructor: 'Tim Aristoteles',
+		instructor: 'Tim Aristotle',
 		image:
 			'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=600&q=80',
 		description:
@@ -515,59 +671,165 @@ export const courses: Course[] = [
 		status: 'in-progress',
 		lastAccessed: 'Hari ini',
 		modules: [
-			mod(7, 1, 'Fondasi & Alur Kerja Developer', 'Mindset bootcamp, Git, internet, dan terminal.', [
-				{
-					title: 'Setup & Mindset Bootcamp',
-					description: 'Peta 16 minggu, instalasi, dan cara belajar efektif.',
-					materials: [
-						{ title: 'Selamat Datang & Peta Bootcamp', type: 'video', duration: '12 mnt', completed: true },
-						{ title: 'Setup VS Code, Node & WSL', type: 'video', duration: '25 mnt', completed: true },
-						{ title: 'Panduan Survival Belajar 16 Minggu', type: 'bacaan', duration: '15 mnt', completed: true },
-						{ title: 'Kuis Kesiapan Bootcamp', type: 'kuis', duration: '10 mnt', completed: true },
-						{ title: 'Tugas: Foto Setup Meja Belajarmu', type: 'tugas', duration: '30 mnt', completed: true }
-					]
-				},
-				{
-					title: 'Git & GitHub Kolaboratif',
-					description: 'Version control untuk kerja tim profesional.',
-					materials: [
-						{ title: 'Git Init, Add, Commit', type: 'video', duration: '22 mnt', completed: true },
-						{ title: 'Branching & Merge Conflict', type: 'video', duration: '28 mnt', completed: true },
-						{ title: 'Pull Request & Code Review', type: 'bacaan', duration: '18 mnt', completed: true },
-						{ title: 'Cerita Merge Conflict Horor', type: 'audio', duration: '14 mnt', completed: true },
-						{ title: 'Tugas: Repo Portofolio Pertama', type: 'tugas', duration: '60 mnt', completed: true }
-					]
-				},
-				{
-					title: 'Cara Internet Bekerja',
-					description: 'DNS, HTTP, browser, dan DevTools.',
-					materials: [
-						{ title: 'DNS, HTTP & Browser Rendering', type: 'video', duration: '20 mnt', completed: true },
-						{ title: 'DevTools Network Deep-Dive', type: 'video', duration: '18 mnt', completed: true },
-						{ title: 'Status Code & Caching', type: 'bacaan', duration: '12 mnt', completed: true },
-						{ title: 'Kuis Fondasi Web', type: 'kuis', duration: '15 mnt', completed: true }
-					]
-				},
-				{
-					title: 'Terminal & Produktivitas',
-					description: 'CLI esensial dan automasi harian.',
-					materials: [
-						{ title: 'CLI Esensial & Shortcuts', type: 'video', duration: '19 mnt', completed: true },
-						{ title: 'Package Manager & Environment', type: 'bacaan', duration: '14 mnt', completed: true },
-						{ title: 'Galeri Shortcut Terminal', type: 'foto', duration: '10 mnt', completed: true },
-						{ title: 'Tugas: Automasi Skrip Harian', type: 'tugas', duration: '45 mnt', completed: true }
-					]
-				}
-			]),
+			mod(
+				7,
+				1,
+				'Fondasi & Alur Kerja Developer',
+				'Mindset bootcamp, Git, internet, dan terminal.',
+				[
+					{
+						title: 'Setup & Mindset Bootcamp',
+						description: 'Peta 16 minggu, instalasi, dan cara belajar efektif.',
+						materials: [
+							{
+								title: 'Selamat Datang & Peta Bootcamp',
+								type: 'video',
+								duration: '12 mnt',
+								completed: true
+							},
+							{
+								title: 'Setup VS Code, Node & WSL',
+								type: 'video',
+								duration: '25 mnt',
+								completed: true
+							},
+							{
+								title: 'Panduan Survival Belajar 16 Minggu',
+								type: 'bacaan',
+								duration: '15 mnt',
+								completed: true
+							},
+							{
+								title: 'Kuis Kesiapan Bootcamp',
+								type: 'kuis',
+								duration: '10 mnt',
+								completed: true
+							},
+							{
+								title: 'Tugas: Foto Setup Meja Belajarmu',
+								type: 'tugas',
+								duration: '30 mnt',
+								completed: true
+							}
+						]
+					},
+					{
+						title: 'Git & GitHub Kolaboratif',
+						description: 'Version control untuk kerja tim profesional.',
+						materials: [
+							{
+								title: 'Git Init, Add, Commit',
+								type: 'video',
+								duration: '22 mnt',
+								completed: true
+							},
+							{
+								title: 'Branching & Merge Conflict',
+								type: 'video',
+								duration: '28 mnt',
+								completed: true
+							},
+							{
+								title: 'Pull Request & Code Review',
+								type: 'bacaan',
+								duration: '18 mnt',
+								completed: true
+							},
+							{
+								title: 'Cerita Merge Conflict Horor',
+								type: 'audio',
+								duration: '14 mnt',
+								completed: true
+							},
+							{
+								title: 'Tugas: Repo Portofolio Pertama',
+								type: 'tugas',
+								duration: '60 mnt',
+								completed: true
+							}
+						]
+					},
+					{
+						title: 'Cara Internet Bekerja',
+						description: 'DNS, HTTP, browser, dan DevTools.',
+						materials: [
+							{
+								title: 'DNS, HTTP & Browser Rendering',
+								type: 'video',
+								duration: '20 mnt',
+								completed: true
+							},
+							{
+								title: 'DevTools Network Deep-Dive',
+								type: 'video',
+								duration: '18 mnt',
+								completed: true
+							},
+							{
+								title: 'Status Code & Caching',
+								type: 'bacaan',
+								duration: '12 mnt',
+								completed: true
+							},
+							{ title: 'Kuis Fondasi Web', type: 'kuis', duration: '15 mnt', completed: true }
+						]
+					},
+					{
+						title: 'Terminal & Produktivitas',
+						description: 'CLI esensial dan automasi harian.',
+						materials: [
+							{
+								title: 'CLI Esensial & Shortcuts',
+								type: 'video',
+								duration: '19 mnt',
+								completed: true
+							},
+							{
+								title: 'Package Manager & Environment',
+								type: 'bacaan',
+								duration: '14 mnt',
+								completed: true
+							},
+							{
+								title: 'Galeri Shortcut Terminal',
+								type: 'foto',
+								duration: '10 mnt',
+								completed: true
+							},
+							{
+								title: 'Tugas: Automasi Skrip Harian',
+								type: 'tugas',
+								duration: '45 mnt',
+								completed: true
+							}
+						]
+					}
+				]
+			),
 			mod(7, 2, 'HTML Semantik & Form Aksesibel', 'Struktur dokumen, media, form, SEO dasar.', [
 				{
 					title: 'Struktur Dokumen Modern',
 					description: 'Semantik HTML5 dan landmark ARIA.',
 					materials: [
 						{ title: 'Anatomi HTML5 Modern', type: 'video', duration: '18 mnt', completed: true },
-						{ title: 'Header, Main, Section, Footer', type: 'video', duration: '21 mnt', completed: true },
-						{ title: 'Heading & Landmark ARIA', type: 'bacaan', duration: '16 mnt', completed: true },
-						{ title: 'Pengalaman Screen Reader', type: 'audio', duration: '12 mnt', completed: true },
+						{
+							title: 'Header, Main, Section, Footer',
+							type: 'video',
+							duration: '21 mnt',
+							completed: true
+						},
+						{
+							title: 'Heading & Landmark ARIA',
+							type: 'bacaan',
+							duration: '16 mnt',
+							completed: true
+						},
+						{
+							title: 'Pengalaman Screen Reader',
+							type: 'audio',
+							duration: '12 mnt',
+							completed: true
+						},
 						{ title: 'Kuis Semantik', type: 'kuis', duration: '15 mnt', completed: true }
 					]
 				},
@@ -575,21 +837,51 @@ export const courses: Course[] = [
 					title: 'Multimedia & Tabel Data',
 					description: 'Gambar responsif, video, dan tabel aksesibel.',
 					materials: [
-						{ title: 'Gambar Responsif & Picture', type: 'video', duration: '20 mnt', completed: true },
-						{ title: 'Video, Audio & Caption', type: 'bacaan', duration: '14 mnt', completed: true },
+						{
+							title: 'Gambar Responsif & Picture',
+							type: 'video',
+							duration: '20 mnt',
+							completed: true
+						},
+						{
+							title: 'Video, Audio & Caption',
+							type: 'bacaan',
+							duration: '14 mnt',
+							completed: true
+						},
 						{ title: 'Galeri Pola Media Web', type: 'foto', duration: '12 mnt', completed: true },
-						{ title: 'Tugas: Halaman Galeri Aksesibel', type: 'tugas', duration: '60 mnt', completed: true }
+						{
+							title: 'Tugas: Halaman Galeri Aksesibel',
+							type: 'tugas',
+							duration: '60 mnt',
+							completed: true
+						}
 					]
 				},
 				{
 					title: 'Form Lanjutan & Validasi',
 					description: 'Input modern, error message, multi-step.',
 					materials: [
-						{ title: 'Input Types & Validasi Native', type: 'video', duration: '24 mnt', completed: true },
-						{ title: 'Label, Fieldset & Error Message', type: 'video', duration: '22 mnt', completed: true },
+						{
+							title: 'Input Types & Validasi Native',
+							type: 'video',
+							duration: '24 mnt',
+							completed: true
+						},
+						{
+							title: 'Label, Fieldset & Error Message',
+							type: 'video',
+							duration: '22 mnt',
+							completed: true
+						},
 						{ title: 'UX Form Anti Gagal', type: 'bacaan', duration: '18 mnt', completed: true },
 						{ title: 'Kuis Form Aksesibel', type: 'kuis', duration: '12 mnt', completed: true },
-						{ title: 'Tugas: Form Pendaftaran Multi-Step', type: 'tugas', duration: '90 mnt', completed: true }
+						{
+							title: 'Tugas: Form Pendaftaran Multi-Step',
+							type: 'tugas',
+							duration: '90 mnt',
+							completed: true
+						}
 					]
 				},
 				{
@@ -597,8 +889,18 @@ export const courses: Course[] = [
 					description: 'Meta, Lighthouse, dan checklist go-live.',
 					materials: [
 						{ title: 'Meta, OG & Sitemap', type: 'video', duration: '17 mnt', completed: true },
-						{ title: 'Audit Lighthouse & A11y', type: 'video', duration: '19 mnt', completed: true },
-						{ title: 'Checklist Go-Live Halaman Statis', type: 'bacaan', duration: '10 mnt', completed: true },
+						{
+							title: 'Audit Lighthouse & A11y',
+							type: 'video',
+							duration: '19 mnt',
+							completed: true
+						},
+						{
+							title: 'Checklist Go-Live Halaman Statis',
+							type: 'bacaan',
+							duration: '10 mnt',
+							completed: true
+						},
 						{ title: 'Ujian Modul HTML', type: 'kuis', duration: '30 mnt', completed: true }
 					]
 				}
@@ -608,8 +910,18 @@ export const courses: Course[] = [
 					title: 'Selektor, Cascade & Theming',
 					description: 'Specificity, layers, dan custom properties.',
 					materials: [
-						{ title: 'Specificity & Cascade Layers', type: 'video', duration: '26 mnt', completed: true },
-						{ title: 'Custom Properties & Dark Mode', type: 'video', duration: '23 mnt', completed: true },
+						{
+							title: 'Specificity & Cascade Layers',
+							type: 'video',
+							duration: '26 mnt',
+							completed: true
+						},
+						{
+							title: 'Custom Properties & Dark Mode',
+							type: 'video',
+							duration: '23 mnt',
+							completed: true
+						},
 						{ title: 'BEM & Arsitektur CSS', type: 'bacaan', duration: '16 mnt', completed: true },
 						{ title: 'Kuis Cascade', type: 'kuis', duration: '12 mnt', completed: true }
 					]
@@ -618,21 +930,61 @@ export const courses: Course[] = [
 					title: 'Flexbox & Grid Mendalam',
 					description: 'Pola layout dashboard, galeri, navbar.',
 					materials: [
-						{ title: 'Flexbox: Navbar & Kartu', type: 'video', duration: '28 mnt', completed: true },
-						{ title: 'Grid: Galeri & Dashboard', type: 'video', duration: '30 mnt', completed: true },
-						{ title: 'Pola Holy Grail Modern', type: 'bacaan', duration: '14 mnt', completed: true },
+						{
+							title: 'Flexbox: Navbar & Kartu',
+							type: 'video',
+							duration: '28 mnt',
+							completed: true
+						},
+						{
+							title: 'Grid: Galeri & Dashboard',
+							type: 'video',
+							duration: '30 mnt',
+							completed: true
+						},
+						{
+							title: 'Pola Holy Grail Modern',
+							type: 'bacaan',
+							duration: '14 mnt',
+							completed: true
+						},
 						{ title: 'Galeri Layout Referensi', type: 'foto', duration: '10 mnt', completed: true },
-						{ title: 'Tugas: Klon Layout Dashboard', type: 'tugas', duration: '90 mnt', completed: true }
+						{
+							title: 'Tugas: Klon Layout Dashboard',
+							type: 'tugas',
+							duration: '90 mnt',
+							completed: true
+						}
 					]
 				},
 				{
 					title: 'Responsif Mobile-First',
 					description: 'Breakpoint, container query, fluid type.',
 					materials: [
-						{ title: 'Breakpoint & Mobile-First', type: 'video', duration: '21 mnt', completed: false },
-						{ title: 'Fluid Typography dengan Clamp', type: 'video', duration: '18 mnt', completed: false },
-						{ title: 'Container Query Praktis', type: 'bacaan', duration: '15 mnt', completed: false },
-						{ title: 'Podcast: Desain di Layar Kecil', type: 'audio', duration: '13 mnt', completed: false },
+						{
+							title: 'Breakpoint & Mobile-First',
+							type: 'video',
+							duration: '21 mnt',
+							completed: false
+						},
+						{
+							title: 'Fluid Typography dengan Clamp',
+							type: 'video',
+							duration: '18 mnt',
+							completed: false
+						},
+						{
+							title: 'Container Query Praktis',
+							type: 'bacaan',
+							duration: '15 mnt',
+							completed: false
+						},
+						{
+							title: 'Podcast: Desain di Layar Kecil',
+							type: 'audio',
+							duration: '13 mnt',
+							completed: false
+						},
 						{ title: 'Kuis Responsif', type: 'kuis', duration: '12 mnt', completed: false }
 					]
 				},
@@ -641,9 +993,24 @@ export const courses: Course[] = [
 					description: 'Utility-first untuk kecepatan produksi.',
 					materials: [
 						{ title: 'Setup Tailwind v4', type: 'video', duration: '19 mnt', completed: false },
-						{ title: 'Komponen Reusable & @apply', type: 'video', duration: '22 mnt', completed: false },
-						{ title: 'Dark Mode & Theming Tailwind', type: 'bacaan', duration: '13 mnt', completed: false },
-						{ title: 'Tugas: Redesign dengan Tailwind', type: 'tugas', duration: '75 mnt', completed: false },
+						{
+							title: 'Komponen Reusable & @apply',
+							type: 'video',
+							duration: '22 mnt',
+							completed: false
+						},
+						{
+							title: 'Dark Mode & Theming Tailwind',
+							type: 'bacaan',
+							duration: '13 mnt',
+							completed: false
+						},
+						{
+							title: 'Tugas: Redesign dengan Tailwind',
+							type: 'tugas',
+							duration: '75 mnt',
+							completed: false
+						},
 						{ title: 'Kuis Utility Patterns', type: 'kuis', duration: '10 mnt', completed: false }
 					]
 				},
@@ -651,8 +1018,18 @@ export const courses: Course[] = [
 					title: 'Animasi & Micro-Interaction',
 					description: 'Transisi, keyframes, dan prefers-reduced-motion.',
 					materials: [
-						{ title: 'Transisi & Easing Alami', type: 'video', duration: '20 mnt', completed: false },
-						{ title: 'Keyframe & Choreography', type: 'bacaan', duration: '14 mnt', completed: false },
+						{
+							title: 'Transisi & Easing Alami',
+							type: 'video',
+							duration: '20 mnt',
+							completed: false
+						},
+						{
+							title: 'Keyframe & Choreography',
+							type: 'bacaan',
+							duration: '14 mnt',
+							completed: false
+						},
 						{ title: 'Bank Easing Curve', type: 'foto', duration: '8 mnt', completed: false },
 						{ title: 'Ujian Modul CSS', type: 'kuis', duration: '35 mnt', completed: false }
 					]
@@ -663,21 +1040,56 @@ export const courses: Course[] = [
 					title: 'ES Modern & Struktur Data',
 					description: 'Destructuring, modul, Map/Set.',
 					materials: [
-						{ title: 'Let, Const & Destructuring', type: 'video', duration: '22 mnt', completed: false },
-						{ title: 'Array Methods Masterclass', type: 'video', duration: '30 mnt', completed: false },
-						{ title: 'Modul ES & Import Dinamis', type: 'bacaan', duration: '16 mnt', completed: false },
+						{
+							title: 'Let, Const & Destructuring',
+							type: 'video',
+							duration: '22 mnt',
+							completed: false
+						},
+						{
+							title: 'Array Methods Masterclass',
+							type: 'video',
+							duration: '30 mnt',
+							completed: false
+						},
+						{
+							title: 'Modul ES & Import Dinamis',
+							type: 'bacaan',
+							duration: '16 mnt',
+							completed: false
+						},
 						{ title: 'Kuis ES Modern', type: 'kuis', duration: '12 mnt', completed: false },
-						{ title: 'Tugas: Refactor ke ES Modern', type: 'tugas', duration: '60 mnt', completed: false }
+						{
+							title: 'Tugas: Refactor ke ES Modern',
+							type: 'tugas',
+							duration: '60 mnt',
+							completed: false
+						}
 					]
 				},
 				{
 					title: 'DOM & Event Lanjutan',
 					description: 'Delegation, keyboard, dan aksesibilitas.',
 					materials: [
-						{ title: 'Event Delegation Praktis', type: 'video', duration: '24 mnt', completed: false },
-						{ title: 'Keyboard & Focus Management', type: 'bacaan', duration: '15 mnt', completed: false },
+						{
+							title: 'Event Delegation Praktis',
+							type: 'video',
+							duration: '24 mnt',
+							completed: false
+						},
+						{
+							title: 'Keyboard & Focus Management',
+							type: 'bacaan',
+							duration: '15 mnt',
+							completed: false
+						},
 						{ title: 'Podcast: DOM Gotchas', type: 'audio', duration: '11 mnt', completed: false },
-						{ title: 'Tugas: Komponen Tab Aksesibel', type: 'tugas', duration: '70 mnt', completed: false }
+						{
+							title: 'Tugas: Komponen Tab Aksesibel',
+							type: 'tugas',
+							duration: '70 mnt',
+							completed: false
+						}
 					]
 				},
 				{
@@ -686,7 +1098,12 @@ export const courses: Course[] = [
 					materials: [
 						{ title: 'Promise & Async/Await', type: 'video', duration: '26 mnt', completed: false },
 						{ title: 'Fetch, Retry & Cache', type: 'video', duration: '25 mnt', completed: false },
-						{ title: 'Loading, Empty & Error State', type: 'bacaan', duration: '14 mnt', completed: false },
+						{
+							title: 'Loading, Empty & Error State',
+							type: 'bacaan',
+							duration: '14 mnt',
+							completed: false
+						},
 						{ title: 'Diagram Alur Async', type: 'foto', duration: '9 mnt', completed: false },
 						{ title: 'Kuis Async', type: 'kuis', duration: '15 mnt', completed: false }
 					]
@@ -695,19 +1112,54 @@ export const courses: Course[] = [
 					title: 'Pola Kode & Kualitas',
 					description: 'Clean code, error handling, debugging.',
 					materials: [
-						{ title: 'Clean Function & Naming', type: 'video', duration: '20 mnt', completed: false },
-						{ title: 'Debugging dengan DevTools', type: 'video', duration: '23 mnt', completed: false },
-						{ title: 'Panduan Error Handling', type: 'bacaan', duration: '13 mnt', completed: false },
-						{ title: 'Tugas: Audit Kode Teman', type: 'tugas', duration: '50 mnt', completed: false }
+						{
+							title: 'Clean Function & Naming',
+							type: 'video',
+							duration: '20 mnt',
+							completed: false
+						},
+						{
+							title: 'Debugging dengan DevTools',
+							type: 'video',
+							duration: '23 mnt',
+							completed: false
+						},
+						{
+							title: 'Panduan Error Handling',
+							type: 'bacaan',
+							duration: '13 mnt',
+							completed: false
+						},
+						{
+							title: 'Tugas: Audit Kode Teman',
+							type: 'tugas',
+							duration: '50 mnt',
+							completed: false
+						}
 					]
 				},
 				{
 					title: 'Mini Project & Ujian',
 					description: 'Aplikasi catatan dengan localStorage.',
 					materials: [
-						{ title: 'Brief Proyek Notes App', type: 'bacaan', duration: '10 mnt', completed: false },
-						{ title: 'Live Coding: Arsitektur Notes', type: 'video', duration: '32 mnt', completed: false },
-						{ title: 'Tugas: Notes App + Filter', type: 'tugas', duration: '120 mnt', completed: false },
+						{
+							title: 'Brief Proyek Notes App',
+							type: 'bacaan',
+							duration: '10 mnt',
+							completed: false
+						},
+						{
+							title: 'Live Coding: Arsitektur Notes',
+							type: 'video',
+							duration: '32 mnt',
+							completed: false
+						},
+						{
+							title: 'Tugas: Notes App + Filter',
+							type: 'tugas',
+							duration: '120 mnt',
+							completed: false
+						},
 						{ title: 'Ujian Modul JavaScript', type: 'kuis', duration: '40 mnt', completed: false }
 					]
 				}
@@ -718,21 +1170,56 @@ export const courses: Course[] = [
 					description: 'Type, interface, generic, dan narrowing.',
 					materials: [
 						{ title: 'Type vs Interface', type: 'video', duration: '21 mnt', completed: false },
-						{ title: 'Generic & Utility Types', type: 'video', duration: '26 mnt', completed: false },
-						{ title: 'Strict Mode & Narrowing', type: 'bacaan', duration: '15 mnt', completed: false },
+						{
+							title: 'Generic & Utility Types',
+							type: 'video',
+							duration: '26 mnt',
+							completed: false
+						},
+						{
+							title: 'Strict Mode & Narrowing',
+							type: 'bacaan',
+							duration: '15 mnt',
+							completed: false
+						},
 						{ title: 'Kuis TypeScript', type: 'kuis', duration: '12 mnt', completed: false },
-						{ title: 'Tugas: Migrasi JS ke TS', type: 'tugas', duration: '70 mnt', completed: false }
+						{
+							title: 'Tugas: Migrasi JS ke TS',
+							type: 'tugas',
+							duration: '70 mnt',
+							completed: false
+						}
 					]
 				},
 				{
 					title: 'Berpikir Komponen (Svelte)',
 					description: 'Props, event, runes $state/$derived.',
 					materials: [
-						{ title: 'Runes: State & Derived', type: 'video', duration: '24 mnt', completed: false },
+						{
+							title: 'Runes: State & Derived',
+							type: 'video',
+							duration: '24 mnt',
+							completed: false
+						},
 						{ title: 'Snippet & Slot Modern', type: 'video', duration: '19 mnt', completed: false },
-						{ title: 'Siklus Hidup & $effect', type: 'bacaan', duration: '14 mnt', completed: false },
-						{ title: 'Cerita Migrasi Svelte 4→5', type: 'audio', duration: '13 mnt', completed: false },
-						{ title: 'Tugas: Kartu Kursus Reusable', type: 'tugas', duration: '65 mnt', completed: false }
+						{
+							title: 'Siklus Hidup & $effect',
+							type: 'bacaan',
+							duration: '14 mnt',
+							completed: false
+						},
+						{
+							title: 'Cerita Migrasi Svelte 4→5',
+							type: 'audio',
+							duration: '13 mnt',
+							completed: false
+						},
+						{
+							title: 'Tugas: Kartu Kursus Reusable',
+							type: 'tugas',
+							duration: '65 mnt',
+							completed: false
+						}
 					]
 				},
 				{
@@ -740,8 +1227,18 @@ export const courses: Course[] = [
 					description: 'SvelteKit load, param, dan form action.',
 					materials: [
 						{ title: 'File-Based Routing', type: 'video', duration: '22 mnt', completed: false },
-						{ title: 'Load Function & Streaming', type: 'video', duration: '25 mnt', completed: false },
-						{ title: 'Form Action & Validasi', type: 'bacaan', duration: '16 mnt', completed: false },
+						{
+							title: 'Load Function & Streaming',
+							type: 'video',
+							duration: '25 mnt',
+							completed: false
+						},
+						{
+							title: 'Form Action & Validasi',
+							type: 'bacaan',
+							duration: '16 mnt',
+							completed: false
+						},
 						{ title: 'Kuis Routing', type: 'kuis', duration: '12 mnt', completed: false }
 					]
 				},
@@ -752,7 +1249,12 @@ export const courses: Course[] = [
 						{ title: 'Store vs Konteks', type: 'video', duration: '20 mnt', completed: false },
 						{ title: 'Fokus & Skip Link', type: 'bacaan', duration: '12 mnt', completed: false },
 						{ title: 'Peta Fokus Aplikasi', type: 'foto', duration: '9 mnt', completed: false },
-						{ title: 'Tugas: Sidebar Aksesibel', type: 'tugas', duration: '60 mnt', completed: false }
+						{
+							title: 'Tugas: Sidebar Aksesibel',
+							type: 'tugas',
+							duration: '60 mnt',
+							completed: false
+						}
 					]
 				},
 				{
@@ -762,7 +1264,12 @@ export const courses: Course[] = [
 						{ title: 'Code Splitting & Lazy', type: 'video', duration: '23 mnt', completed: false },
 						{ title: 'Web Vitals untuk SPA', type: 'bacaan', duration: '14 mnt', completed: false },
 						{ title: 'Tugas: Audit Performa', type: 'tugas', duration: '55 mnt', completed: false },
-						{ title: 'Ulasan Sejawat Komponen', type: 'tugas', duration: '30 mnt', completed: false },
+						{
+							title: 'Ulasan Sejawat Komponen',
+							type: 'tugas',
+							duration: '30 mnt',
+							completed: false
+						},
 						{ title: 'Ujian Modul Frontend', type: 'kuis', duration: '40 mnt', completed: false }
 					]
 				}
@@ -773,8 +1280,18 @@ export const courses: Course[] = [
 					description: 'Runtime, npm script, env, dan logging.',
 					materials: [
 						{ title: 'Anatomi Server Node', type: 'video', duration: '22 mnt', completed: false },
-						{ title: 'Env & Konfigurasi Aman', type: 'bacaan', duration: '13 mnt', completed: false },
-						{ title: 'Diagram Request Lifecycle', type: 'foto', duration: '10 mnt', completed: false },
+						{
+							title: 'Env & Konfigurasi Aman',
+							type: 'bacaan',
+							duration: '13 mnt',
+							completed: false
+						},
+						{
+							title: 'Diagram Request Lifecycle',
+							type: 'foto',
+							duration: '10 mnt',
+							completed: false
+						},
 						{ title: 'Kuis Dasar Backend', type: 'kuis', duration: '10 mnt', completed: false }
 					]
 				},
@@ -782,10 +1299,30 @@ export const courses: Course[] = [
 					title: 'REST API Profesional',
 					description: 'Routing, validasi, pagination, versioning.',
 					materials: [
-						{ title: 'Desain Resource & Status Code', type: 'video', duration: '26 mnt', completed: false },
-						{ title: 'Validasi & Error Envelope', type: 'video', duration: '24 mnt', completed: false },
-						{ title: 'Pagination & Filtering', type: 'bacaan', duration: '15 mnt', completed: false },
-						{ title: 'Koleksi Postman Referensi', type: 'foto', duration: '8 mnt', completed: false },
+						{
+							title: 'Desain Resource & Status Code',
+							type: 'video',
+							duration: '26 mnt',
+							completed: false
+						},
+						{
+							title: 'Validasi & Error Envelope',
+							type: 'video',
+							duration: '24 mnt',
+							completed: false
+						},
+						{
+							title: 'Pagination & Filtering',
+							type: 'bacaan',
+							duration: '15 mnt',
+							completed: false
+						},
+						{
+							title: 'Koleksi Postman Referensi',
+							type: 'foto',
+							duration: '8 mnt',
+							completed: false
+						},
 						{ title: 'Tugas: CRUD Kursus API', type: 'tugas', duration: '90 mnt', completed: false }
 					]
 				},
@@ -793,11 +1330,31 @@ export const courses: Course[] = [
 					title: 'Autentikasi & Otorisasi',
 					description: 'JWT, refresh token, RBAC, OAuth.',
 					materials: [
-						{ title: 'Password Hashing & JWT', type: 'video', duration: '27 mnt', completed: false },
-						{ title: 'Refresh Token Rotation', type: 'video', duration: '21 mnt', completed: false },
-						{ title: 'RBAC untuk Admin & Siswa', type: 'bacaan', duration: '14 mnt', completed: false },
+						{
+							title: 'Password Hashing & JWT',
+							type: 'video',
+							duration: '27 mnt',
+							completed: false
+						},
+						{
+							title: 'Refresh Token Rotation',
+							type: 'video',
+							duration: '21 mnt',
+							completed: false
+						},
+						{
+							title: 'RBAC untuk Admin & Siswa',
+							type: 'bacaan',
+							duration: '14 mnt',
+							completed: false
+						},
 						{ title: 'Kuis Auth Aman', type: 'kuis', duration: '15 mnt', completed: false },
-						{ title: 'Tugas: Login + Guard Route', type: 'tugas', duration: '80 mnt', completed: false }
+						{
+							title: 'Tugas: Login + Guard Route',
+							type: 'tugas',
+							duration: '80 mnt',
+							completed: false
+						}
 					]
 				},
 				{
@@ -805,8 +1362,18 @@ export const courses: Course[] = [
 					description: 'Multipart, storage, dan validasi file.',
 					materials: [
 						{ title: 'Upload Multipart Aman', type: 'video', duration: '20 mnt', completed: false },
-						{ title: 'Validasi Tipe & Ukuran', type: 'bacaan', duration: '12 mnt', completed: false },
-						{ title: 'Cerita Horor Upload Tanpa Validasi', type: 'audio', duration: '10 mnt', completed: false },
+						{
+							title: 'Validasi Tipe & Ukuran',
+							type: 'bacaan',
+							duration: '12 mnt',
+							completed: false
+						},
+						{
+							title: 'Cerita Horor Upload Tanpa Validasi',
+							type: 'audio',
+							duration: '10 mnt',
+							completed: false
+						},
 						{ title: 'Tugas: Avatar Upload', type: 'tugas', duration: '60 mnt', completed: false }
 					]
 				},
@@ -815,8 +1382,18 @@ export const courses: Course[] = [
 					description: 'OpenAPI, rate limit, dan caching.',
 					materials: [
 						{ title: 'Menulis OpenAPI Spec', type: 'video', duration: '19 mnt', completed: false },
-						{ title: 'Rate Limit & Cache Header', type: 'bacaan', duration: '13 mnt', completed: false },
-						{ title: 'Tugas: Dokumentasikan API-mu', type: 'tugas', duration: '50 mnt', completed: false },
+						{
+							title: 'Rate Limit & Cache Header',
+							type: 'bacaan',
+							duration: '13 mnt',
+							completed: false
+						},
+						{
+							title: 'Tugas: Dokumentasikan API-mu',
+							type: 'tugas',
+							duration: '50 mnt',
+							completed: false
+						},
 						{ title: 'Ujian Modul Backend', type: 'kuis', duration: '35 mnt', completed: false }
 					]
 				}
@@ -826,9 +1403,24 @@ export const courses: Course[] = [
 					title: 'Data Modeling & SQL Lanjut',
 					description: 'Relasi, index, dan transaksi.',
 					materials: [
-						{ title: 'ERD & Normalisasi Praktis', type: 'video', duration: '24 mnt', completed: false },
-						{ title: 'Join, CTE & Window Function', type: 'video', duration: '28 mnt', completed: false },
-						{ title: 'Index & Explain Analyze', type: 'bacaan', duration: '16 mnt', completed: false },
+						{
+							title: 'ERD & Normalisasi Praktis',
+							type: 'video',
+							duration: '24 mnt',
+							completed: false
+						},
+						{
+							title: 'Join, CTE & Window Function',
+							type: 'video',
+							duration: '28 mnt',
+							completed: false
+						},
+						{
+							title: 'Index & Explain Analyze',
+							type: 'bacaan',
+							duration: '16 mnt',
+							completed: false
+						},
 						{ title: 'Kuis SQL Lanjut', type: 'kuis', duration: '15 mnt', completed: false },
 						{ title: 'Tugas: Skema LMS Mini', type: 'tugas', duration: '75 mnt', completed: false }
 					]
@@ -838,19 +1430,44 @@ export const courses: Course[] = [
 					description: 'Prisma/Drizzle dan strategi migrasi.',
 					materials: [
 						{ title: 'Setup ORM & Seeding', type: 'video', duration: '21 mnt', completed: false },
-						{ title: 'Migrasi Tanpa Downtime', type: 'bacaan', duration: '13 mnt', completed: false },
+						{
+							title: 'Migrasi Tanpa Downtime',
+							type: 'bacaan',
+							duration: '13 mnt',
+							completed: false
+						},
 						{ title: 'Diagram Migrasi', type: 'foto', duration: '9 mnt', completed: false },
-						{ title: 'Tugas: Migrasi Tambah Kolom', type: 'tugas', duration: '55 mnt', completed: false }
+						{
+							title: 'Tugas: Migrasi Tambah Kolom',
+							type: 'tugas',
+							duration: '55 mnt',
+							completed: false
+						}
 					]
 				},
 				{
 					title: 'Testing Berlapis',
 					description: 'Unit, integration, dan E2E.',
 					materials: [
-						{ title: 'Unit Test Fungsi Murni', type: 'video', duration: '23 mnt', completed: false },
+						{
+							title: 'Unit Test Fungsi Murni',
+							type: 'video',
+							duration: '23 mnt',
+							completed: false
+						},
 						{ title: 'Integration Test API', type: 'video', duration: '25 mnt', completed: false },
-						{ title: 'E2E dengan Playwright', type: 'bacaan', duration: '15 mnt', completed: false },
-						{ title: 'Podcast: Budaya Testing', type: 'audio', duration: '12 mnt', completed: false },
+						{
+							title: 'E2E dengan Playwright',
+							type: 'bacaan',
+							duration: '15 mnt',
+							completed: false
+						},
+						{
+							title: 'Podcast: Budaya Testing',
+							type: 'audio',
+							duration: '12 mnt',
+							completed: false
+						},
 						{ title: 'Tugas: Coverage 80%', type: 'tugas', duration: '70 mnt', completed: false }
 					]
 				},
@@ -858,9 +1475,24 @@ export const courses: Course[] = [
 					title: 'Deploy & CI/CD',
 					description: 'Docker dasar, pipeline, observability.',
 					materials: [
-						{ title: 'Build & Deploy Statis + API', type: 'video', duration: '22 mnt', completed: false },
-						{ title: 'Pipeline: Lint, Test, Deploy', type: 'video', duration: '20 mnt', completed: false },
-						{ title: 'Logging & Monitoring Minimal', type: 'bacaan', duration: '12 mnt', completed: false },
+						{
+							title: 'Build & Deploy Statis + API',
+							type: 'video',
+							duration: '22 mnt',
+							completed: false
+						},
+						{
+							title: 'Pipeline: Lint, Test, Deploy',
+							type: 'video',
+							duration: '20 mnt',
+							completed: false
+						},
+						{
+							title: 'Logging & Monitoring Minimal',
+							type: 'bacaan',
+							duration: '12 mnt',
+							completed: false
+						},
 						{ title: 'Ujian Modul DevOps', type: 'kuis', duration: '30 mnt', completed: false }
 					]
 				}
@@ -870,10 +1502,25 @@ export const courses: Course[] = [
 					title: 'Brief & Perencanaan Capstone',
 					description: 'Pilih masalah, scope, dan milestone.',
 					materials: [
-						{ title: 'Memilih Ide Capstone Bernilai', type: 'video', duration: '18 mnt', completed: false },
-						{ title: 'Breakdown Milestone 4 Minggu', type: 'bacaan', duration: '14 mnt', completed: false },
+						{
+							title: 'Memilih Ide Capstone Bernilai',
+							type: 'video',
+							duration: '18 mnt',
+							completed: false
+						},
+						{
+							title: 'Breakdown Milestone 4 Minggu',
+							type: 'bacaan',
+							duration: '14 mnt',
+							completed: false
+						},
 						{ title: 'Contoh Board Kanban', type: 'foto', duration: '8 mnt', completed: false },
-						{ title: 'Tugas: Proposal Capstone', type: 'tugas', duration: '60 mnt', completed: false }
+						{
+							title: 'Tugas: Proposal Capstone',
+							type: 'tugas',
+							duration: '60 mnt',
+							completed: false
+						}
 					]
 				},
 				{
@@ -881,9 +1528,24 @@ export const courses: Course[] = [
 					description: 'Sprint mingguan dan code review.',
 					materials: [
 						{ title: 'Sprint 1: Auth & CRUD', type: 'video', duration: '20 mnt', completed: false },
-						{ title: 'Sprint 2: Polish & A11y', type: 'video', duration: '19 mnt', completed: false },
-						{ title: 'Template Daily Standup', type: 'bacaan', duration: '10 mnt', completed: false },
-						{ title: 'Cerita Demo Day Alumni', type: 'audio', duration: '15 mnt', completed: false },
+						{
+							title: 'Sprint 2: Polish & A11y',
+							type: 'video',
+							duration: '19 mnt',
+							completed: false
+						},
+						{
+							title: 'Template Daily Standup',
+							type: 'bacaan',
+							duration: '10 mnt',
+							completed: false
+						},
+						{
+							title: 'Cerita Demo Day Alumni',
+							type: 'audio',
+							duration: '15 mnt',
+							completed: false
+						},
 						{ title: 'Tugas: Demo Internal', type: 'tugas', duration: '90 mnt', completed: false }
 					]
 				},
@@ -893,8 +1555,18 @@ export const courses: Course[] = [
 					materials: [
 						{ title: 'README yang Merekrut', type: 'video', duration: '17 mnt', completed: false },
 						{ title: 'CV ATS-Friendly', type: 'bacaan', duration: '13 mnt', completed: false },
-						{ title: 'Galeri Portofolio Bagus', type: 'foto', duration: '10 mnt', completed: false },
-						{ title: 'Tugas: Publish Portofolio', type: 'tugas', duration: '60 mnt', completed: false }
+						{
+							title: 'Galeri Portofolio Bagus',
+							type: 'foto',
+							duration: '10 mnt',
+							completed: false
+						},
+						{
+							title: 'Tugas: Publish Portofolio',
+							type: 'tugas',
+							duration: '60 mnt',
+							completed: false
+						}
 					]
 				},
 				{
@@ -902,12 +1574,165 @@ export const courses: Course[] = [
 					description: 'Live coding, take-home, dan refleksi.',
 					materials: [
 						{ title: 'Simulasi Live Coding', type: 'video', duration: '25 mnt', completed: false },
-						{ title: 'Strategi Take-Home Test', type: 'bacaan', duration: '12 mnt', completed: false },
+						{
+							title: 'Strategi Take-Home Test',
+							type: 'bacaan',
+							duration: '12 mnt',
+							completed: false
+						},
 						{ title: 'Ujian Akhir Bootcamp', type: 'kuis', duration: '60 mnt', completed: false },
-						{ title: 'Refleksi & Roadmap Lanjutan', type: 'bacaan', duration: '10 mnt', completed: false }
+						{
+							title: 'Refleksi & Roadmap Lanjutan',
+							type: 'bacaan',
+							duration: '10 mnt',
+							completed: false
+						}
 					]
 				}
 			])
+		]
+	},
+	{
+		id: 8,
+		title: 'Analitik Data & Dashboard Interaktif',
+		category: 'AI & Data',
+		instructor: 'Rian Pratama',
+		image:
+			'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80',
+		description:
+			'Belajar berpikir analitik, mengolah data dengan Python dan Pandas, lalu menyajikannya dalam dashboard interaktif dan cerita data yang meyakinkan.',
+		duration: '6 Minggu',
+		level: 'Pemula–Menengah',
+		progress: 0,
+		totalMaterials: 14,
+		completedMaterials: 0,
+		status: 'not-started',
+		lastAccessed: 'Belum dimulai',
+		modules: [
+			mod(
+				8,
+				1,
+				'Fondasi Analitik Data',
+				'Cara berpikir analitik, metrik bisnis, dan siklus analisis data.',
+				[
+					{
+						title: 'Berpikir Analitik',
+						description: 'Metrik, dimensi, dan pertanyaan bisnis yang tajam.',
+						materials: [
+							{
+								title: 'Apa itu Analitik Data',
+								type: 'video',
+								duration: '18 mnt',
+								completed: false
+							},
+							{ title: 'Metrik vs Dimensi', type: 'bacaan', duration: '12 mnt', completed: false }
+						]
+					},
+					{
+						title: 'Siklus & Studi Kasus',
+						description: 'Alur tanya–olah–saji dan latihan nalar analitik.',
+						materials: [
+							{
+								title: 'Siklus Analisis: Tanya, Olah, Saji',
+								type: 'video',
+								duration: '20 mnt',
+								completed: false
+							},
+							{ title: 'Kuis Nalar Analitik', type: 'kuis', duration: '15 mnt', completed: false },
+							{
+								title: 'Tugas: Rumuskan 3 Pertanyaan Bisnis',
+								type: 'tugas',
+								duration: '45 mnt',
+								completed: false
+							}
+						]
+					}
+				]
+			),
+			mod(
+				8,
+				2,
+				'Python & Pandas untuk Analisis',
+				'Setup, pembersihan data, agregasi, dan visualisasi dengan Python.',
+				[
+					{
+						title: 'Setup & Data Wrangling',
+						description: 'Colab, Pandas, dan pembersihan dataset kotor.',
+						materials: [
+							{
+								title: 'Setup Colab & Pandas',
+								type: 'video',
+								duration: '22 mnt',
+								completed: false
+							},
+							{ title: 'Cleaning Data Kotor', type: 'video', duration: '28 mnt', completed: false }
+						]
+					},
+					{
+						title: 'Agregasi & Visualisasi',
+						description: 'GroupBy, pivot, dan memilih grafik yang tepat.',
+						materials: [
+							{
+								title: 'GroupBy & Pivot Table',
+								type: 'video',
+								duration: '24 mnt',
+								completed: false
+							},
+							{
+								title: 'Memilih Grafik yang Tepat',
+								type: 'bacaan',
+								duration: '14 mnt',
+								completed: false
+							},
+							{ title: 'Kuis Pandas', type: 'kuis', duration: '15 mnt', completed: false }
+						]
+					}
+				]
+			),
+			mod(
+				8,
+				3,
+				'Dashboard & Storytelling Data',
+				'Bangun dashboard Streamlit dan sajikan insight yang meyakinkan.',
+				[
+					{
+						title: 'Dashboard Streamlit',
+						description: 'Dari notebook menjadi aplikasi dashboard interaktif.',
+						materials: [
+							{
+								title: 'Bangun Dashboard Penjualan',
+								type: 'video',
+								duration: '30 mnt',
+								completed: false
+							},
+							{
+								title: 'Tugas: Dashboard Mini',
+								type: 'tugas',
+								duration: '90 mnt',
+								completed: false
+							}
+						]
+					},
+					{
+						title: 'Presentasi & Ujian Akhir',
+						description: 'Storytelling data dan evaluasi menyeluruh.',
+						materials: [
+							{
+								title: 'Storytelling dengan Data',
+								type: 'bacaan',
+								duration: '12 mnt',
+								completed: false
+							},
+							{
+								title: 'Ujian Akhir Analitik Data',
+								type: 'kuis',
+								duration: '40 mnt',
+								completed: false
+							}
+						]
+					}
+				]
+			)
 		]
 	}
 ];

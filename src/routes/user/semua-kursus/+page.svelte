@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { courses } from '$lib/data/courses';
-	import { getCourseMeta, periodBadgeClass, periodIcon, type CoursePeriod } from '$lib/data/course-meta';
+	import {
+		getCourseMeta,
+		periodBadgeClass,
+		periodIcon,
+		type CoursePeriod
+	} from '$lib/data/course-meta';
+	import { isCoursePaid } from '$lib/stores/enrollment.svelte';
 
 	let search = $state('');
 	let activeCategory = $state('Semua');
@@ -20,7 +26,8 @@
 			const matchCat = activeCategory === 'Semua' || c.category === activeCategory;
 			const matchPeriod = activePeriod === 'all' || getCourseMeta(c.id).period === activePeriod;
 			const q = search.trim().toLowerCase();
-			const matchQ = !q || c.title.toLowerCase().includes(q) || c.instructor.toLowerCase().includes(q);
+			const matchQ =
+				!q || c.title.toLowerCase().includes(q) || c.instructor.toLowerCase().includes(q);
 			return matchCat && matchPeriod && matchQ;
 		})
 	);
@@ -37,21 +44,30 @@
 </script>
 
 <svelte:head>
-	<title>Semua Kursus — Aristoteles Platform</title>
-	<meta name="description" content="Katalog semua kursus mikrokredensial Aristoteles yang dapat diikuti." />
+	<title>Semua Kursus — Aristotle Platform</title>
+	<meta
+		name="description"
+		content="Katalog semua kursus mikrokredensial Aristotle yang dapat diikuti."
+	/>
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
 	<div class="mb-6">
-		<p class="text-xs font-bold tracking-widest text-blue-600 uppercase">Menu Utama · Semua Kursus</p>
+		<p class="text-xs font-bold tracking-widest text-blue-600 uppercase">
+			Menu Utama · Semua Kursus
+		</p>
 		<h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Semua Kursus</h1>
-		<p class="mt-1 text-sm text-slate-500">Klik kartu untuk melihat pratinjau: info, modul, dan materi.</p>
+		<p class="mt-1 text-sm text-slate-500">
+			Klik kartu untuk melihat pratinjau: info, modul, dan materi.
+		</p>
 	</div>
 
 	<!-- Search + filter -->
 	<div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center">
 		<div class="relative max-w-md flex-1">
-			<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+			<div
+				class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400"
+			>
 				<i class="fa-solid fa-magnifying-glass text-sm" aria-hidden="true"></i>
 			</div>
 			<label for="catalog-search" class="sr-only">Cari kursus</label>
@@ -146,6 +162,12 @@
 							>
 								<i class="fa-solid fa-check" aria-hidden="true"></i> Diikuti
 							</span>
+						{:else if isCoursePaid(course.id)}
+							<span
+								class="absolute top-3 right-3 inline-flex items-center gap-1 rounded-md bg-amber-400 px-2.5 py-1 text-[10px] font-bold text-slate-900"
+							>
+								<i class="fa-solid fa-lock" aria-hidden="true"></i> Berbayar
+							</span>
 						{/if}
 					</a>
 					<div class="flex flex-1 flex-col justify-between space-y-4 p-6">
@@ -153,7 +175,8 @@
 							<div class="mb-2 flex items-center justify-between text-xs text-slate-500">
 								<span class="flex items-center gap-1">
 									<i class="fa-regular fa-star text-amber-400" aria-hidden="true"></i>
-									<span><strong class="text-slate-700">{meta.rating}</strong> ({meta.reviews})</span>
+									<span><strong class="text-slate-700">{meta.rating}</strong> ({meta.reviews})</span
+									>
 								</span>
 								<span class="flex items-center gap-1">
 									<i class="fa-regular fa-clock" aria-hidden="true"></i>

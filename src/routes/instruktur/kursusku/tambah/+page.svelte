@@ -339,7 +339,7 @@
 </script>
 
 <svelte:head>
-	<title>Tambah Pelatihan — Instruktur Aristoteles</title>
+	<title>Tambah Pelatihan — Instruktur Aristotle</title>
 	<meta
 		name="description"
 		content="Buat pelatihan baru: isi info dasar, susun kurikulum awal, lalu terbitkan atau simpan sebagai draft."

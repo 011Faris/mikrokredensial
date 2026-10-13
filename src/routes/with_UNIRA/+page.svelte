@@ -22,10 +22,10 @@
 </script>
 
 <svelte:head>
-	<title>Masuk Portal UNIRA — Aristoteles</title>
+	<title>Masuk Portal UNIRA — Aristotle</title>
 	<meta
 		name="description"
-		content="Masuk ke Portal UNIRA dengan NIM dan kata sandi akademik untuk mengakses Platform Mikrokredensial Aristoteles."
+		content="Masuk ke Portal UNIRA dengan NIM dan kata sandi akademik untuk mengakses Platform Mikrokredensial Aristotle."
 	/>
 </svelte:head>
 
@@ -152,7 +152,7 @@
 						class="w-full flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 text-slate-700 py-2.5 px-6 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-[0.98]"
 					>
 						<i class="fa-solid fa-graduation-cap text-blue-600" aria-hidden="true"></i>
-						<span>Masuk dengan Email / Akun Aristoteles</span>
+						<span>Masuk dengan Email / Akun Aristotle</span>
 					</a>
 				</form>
 			</div>
@@ -183,7 +183,7 @@
 
 		<!-- Footer -->
 		<div class="mt-4 text-center text-xs text-white/50">
-			<p>&copy; 2026 Aristoteles Platform Mikrokredensial. Semua hak dilindungi.</p>
+			<p>&copy; 2026 Aristotle Platform Mikrokredensial. Semua hak dilindungi.</p>
 		</div>
 	</div>
 </div>

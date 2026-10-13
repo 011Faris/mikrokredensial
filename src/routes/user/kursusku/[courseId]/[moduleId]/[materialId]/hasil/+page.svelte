@@ -44,7 +44,7 @@
 
 <svelte:head>
 	<title>
-		{material && course ? `Hasil Kuis: ${material.title} — ${course.title}` : 'Hasil Kuis'} — Aristoteles
+		{material && course ? `Hasil Kuis: ${material.title} — ${course.title}` : 'Hasil Kuis'} — Aristotle
 	</title>
 	<meta
 		name="description"

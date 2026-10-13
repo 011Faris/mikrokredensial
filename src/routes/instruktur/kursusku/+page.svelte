@@ -38,10 +38,10 @@
 </script>
 
 <svelte:head>
-	<title>Kursusku — Instruktur Aristoteles</title>
+	<title>Kursusku — Instruktur Aristotle</title>
 	<meta
 		name="description"
-		content="Kelola kursus, kurikulum, modul, dan materi yang diampu instruktur Aristoteles."
+		content="Kelola kursus, kurikulum, modul, dan materi yang diampu instruktur Aristotle."
 	/>
 </svelte:head>
 

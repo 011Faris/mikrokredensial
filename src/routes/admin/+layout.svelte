@@ -46,11 +46,11 @@
 		bind:isCollapsed
 		onClose={() => (sidebarOpen = false)}
 		brandHref="/admin"
-		brandLabel="Aristoteles Platform - Dashboard admin"
+		brandLabel="Aristotle Platform - Dashboard admin"
 		navAriaLabel="Navigasi admin"
-		profileName="ADMIN ARISTOTELES"
+		profileName="ADMIN ARISTOTLE"
 		profileRole="Administrator"
-		profileAlt="Foto profil admin Aristoteles"
+		profileAlt="Foto profil admin Aristotle"
 	/>
 
 	<div class="flex min-h-0 min-w-0 flex-1 flex-col">
@@ -133,7 +133,7 @@
 								AD
 							</span>
 							<span class="hidden text-left sm:block">
-								<span class="block text-sm leading-tight font-semibold text-slate-800">Admin Aristoteles</span>
+								<span class="block text-sm leading-tight font-semibold text-slate-800">Admin Aristotle</span>
 								<span class="block text-xs leading-tight text-slate-500">Administrator</span>
 							</span>
 							<i class="fa-solid fa-chevron-down hidden text-xs text-slate-400 sm:block" aria-hidden="true"></i>
@@ -146,8 +146,8 @@
 								class="absolute top-full right-0 z-50 mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200/60 bg-white shadow-xl"
 							>
 								<div class="border-b border-slate-100 px-4 py-3">
-									<div class="text-sm font-semibold text-slate-800">Admin Aristoteles</div>
-									<div class="text-xs text-slate-500">admin@aristoteles.ac.id</div>
+									<div class="text-sm font-semibold text-slate-800">Admin Aristotle</div>
+									<div class="text-xs text-slate-500">admin@aristotle.ac.id</div>
 								</div>
 								<div class="p-1.5" role="none">
 									<a

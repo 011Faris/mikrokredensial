@@ -1,9 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap');
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..800&display=swap');
+@import 'tailwindcss';
 
 @theme {
-	--font-heading: 'Manrope', sans-serif;
-	--font-body: 'Inter', sans-serif;
+	--font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+	--font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+	/* Brand */
+	--color-primary: #2563eb;
+	--color-primary-hover: #1d4ed8;
+	--color-navy: #0f172a;
+
+	/* Accent */
+	--color-accent: #38bdf8;
+	--color-info-bg: #eff6ff;
+
+	/* Surface */
+	--color-background: #ffffff;
+	--color-surface: #f8fafc;
+	--color-border: #e2e8f0;
+
+	/* Text */
+	--color-text: #0f172a;
+	--color-text-muted: #64748b;
+
+	/* Status */
+	--color-success: #16a34a;
+	--color-warning: #d97706;
+	--color-danger: #dc2626;
 
 	/* Sistem motion khas: easing lembut + entrance terorkestrasi */
 	--ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
@@ -35,10 +58,21 @@
 		font-family: var(--font-body);
 		font-size: 16px;
 		line-height: 1.6;
-		color: #1e293b;
+		color: #0f172a;
+		background-color: #ffffff;
 	}
 
-	h1, h2, h3, h4, h5, h6 {
+	::selection {
+		background: #2563eb;
+		color: #ffffff;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
 		font-family: var(--font-heading);
 		line-height: 1.2;
 		letter-spacing: -0.02em;
@@ -81,24 +115,48 @@
 	}
 
 	@media (max-width: 1024px) {
-		h1 { font-size: 2.75rem; }
-		h2 { font-size: 2rem; }
-		h3 { font-size: 1.75rem; }
-		h4 { font-size: 1.25rem; }
+		h1 {
+			font-size: 2.75rem;
+		}
+		h2 {
+			font-size: 2rem;
+		}
+		h3 {
+			font-size: 1.75rem;
+		}
+		h4 {
+			font-size: 1.25rem;
+		}
 	}
 
 	@media (max-width: 768px) {
-		h1 { font-size: 2.25rem; }
-		h2 { font-size: 1.75rem; }
-		h3 { font-size: 1.5rem; }
-		h4 { font-size: 1.125rem; }
-		h5 { font-size: 1rem; }
+		h1 {
+			font-size: 2.25rem;
+		}
+		h2 {
+			font-size: 1.75rem;
+		}
+		h3 {
+			font-size: 1.5rem;
+		}
+		h4 {
+			font-size: 1.125rem;
+		}
+		h5 {
+			font-size: 1rem;
+		}
 	}
 
 	@media (max-width: 640px) {
-		h1 { font-size: 1.875rem; }
-		h2 { font-size: 1.5rem; }
-		h3 { font-size: 1.25rem; }
+		h1 {
+			font-size: 1.875rem;
+		}
+		h2 {
+			font-size: 1.5rem;
+		}
+		h3 {
+			font-size: 1.25rem;
+		}
 	}
 }
 

@@ -123,8 +123,8 @@
 </script>
 
 <svelte:head>
-	<title>Penilaian — Instruktur Aristoteles</title>
-	<meta name="description" content="Antrean penilaian tugas dan kuis peserta untuk instruktur Aristoteles." />
+	<title>Penilaian — Instruktur Aristotle</title>
+	<meta name="description" content="Antrean penilaian tugas dan kuis peserta untuk instruktur Aristotle." />
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">

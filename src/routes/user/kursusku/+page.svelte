@@ -3,6 +3,7 @@
 	import { courses, type Course } from '$lib/data/courses';
 	import { getCourseMeta, periodBadgeClass, periodIcon } from '$lib/data/course-meta';
 	import { getTrainingStats } from '$lib/data/training';
+	import { canAccessCourse, isCoursePaid } from '$lib/stores/enrollment.svelte';
 
 	type Status = 'all' | 'in-progress' | 'completed' | 'not-started';
 
@@ -10,7 +11,7 @@
 
 	// Redeem kode voucher (simulasi sisi klien)
 	const VALID_CODES: Record<string, string> = {
-		'ARISTOTELES-2026': 'Machine Learning Dasar',
+		'ARISTOTLE-2026': 'Machine Learning Dasar',
 		'BELAJAR-GRATIS': 'Keamanan Siber',
 		'UNIRA-MKM01': 'Jaringan Komputer Dasar',
 		'FULLSTACK-2026': 'Full-Stack Web Development Bootcamp'
@@ -25,7 +26,7 @@
 		const code = voucherCode.trim().toUpperCase().replace(/\s+/g, '');
 		if (!/^[A-Z0-9]{4,}-[A-Z0-9]{4,}$/.test(code)) {
 			voucherStatus = 'error';
-			voucherMessage = 'Format kode salah. Contoh format yang benar: ARISTOTELES-2026.';
+			voucherMessage = 'Format kode salah. Contoh format yang benar: ARISTOTLE-2026.';
 			return;
 		}
 		if (redeemedCodes.has(code)) {
@@ -56,7 +57,9 @@
 		activeFilter === 'all' ? courses : courses.filter((c) => c.status === activeFilter)
 	);
 
-	const filteredWithMeta = $derived(filtered.map((c) => ({ course: c, meta: getCourseMeta(c.id) })));
+	const filteredWithMeta = $derived(
+		filtered.map((c) => ({ course: c, meta: getCourseMeta(c.id) }))
+	);
 
 	function badgeClass(status: Course['status']) {
 		if (status === 'completed') return 'bg-emerald-50 text-emerald-700 border-emerald-200';
@@ -72,8 +75,11 @@
 </script>
 
 <svelte:head>
-	<title>Kursusku — Aristoteles Platform</title>
-	<meta name="description" content="Daftar kursus yang sedang dan telah diikuti pengguna Aristoteles." />
+	<title>Kursusku — Aristotle Platform</title>
+	<meta
+		name="description"
+		content="Daftar kursus yang sedang dan telah diikuti pengguna Aristotle."
+	/>
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
@@ -91,21 +97,36 @@
 		aria-labelledby="voucher-heading"
 		class="relative mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-700 to-indigo-800 p-5 text-white sm:p-6"
 	>
-		<div class="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" aria-hidden="true"></div>
-		<div class="pointer-events-none absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-cyan-400/20 blur-2xl" aria-hidden="true"></div>
+		<div
+			class="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full bg-white/10 blur-2xl"
+			aria-hidden="true"
+		></div>
+		<div
+			class="pointer-events-none absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-cyan-400/20 blur-2xl"
+			aria-hidden="true"
+		></div>
 		<div class="relative flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 			<div class="flex items-start gap-3.5">
-				<span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15" aria-hidden="true">
+				<span
+					class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15"
+					aria-hidden="true"
+				>
 					<i class="fa-solid fa-ticket text-xl text-amber-300"></i>
 				</span>
 				<div>
-					<h2 id="voucher-heading" class="text-base font-extrabold sm:text-lg">Punya kode voucher?</h2>
+					<h2 id="voucher-heading" class="text-base font-extrabold sm:text-lg">
+						Punya kode voucher?
+					</h2>
 					<p class="mt-0.5 text-xs text-blue-100 sm:text-sm">
 						Tukarkan kode dari kampus atau event untuk membuka kursus premium gratis.
 					</p>
 				</div>
 			</div>
-			<form onsubmit={redeemVoucher} class="w-full max-w-md" aria-label="Formulir tukar kode voucher">
+			<form
+				onsubmit={redeemVoucher}
+				class="w-full max-w-md"
+				aria-label="Formulir tukar kode voucher"
+			>
 				<div class="flex flex-col gap-2 sm:flex-row">
 					<div class="relative flex-1">
 						<label for="voucher-code" class="sr-only">Kode voucher</label>
@@ -113,7 +134,7 @@
 							id="voucher-code"
 							type="text"
 							bind:value={voucherCode}
-							placeholder="Contoh: ARISTOTELES-2026"
+							placeholder="Contoh: ARISTOTLE-2026"
 							autocomplete="off"
 							spellcheck={false}
 							aria-describedby="voucher-help"
@@ -129,16 +150,21 @@
 					</button>
 				</div>
 				<p id="voucher-help" class="mt-1.5 text-[11px] text-blue-200">
-					Kode demo: ARISTOTELES-2026 · BELAJAR-GRATIS · UNIRA-MKM01 · FULLSTACK-2026
+					Kode demo: ARISTOTLE-2026 · BELAJAR-GRATIS · UNIRA-MKM01 · FULLSTACK-2026
 				</p>
 				{#if voucherStatus !== 'idle'}
 					<p
 						role={voucherStatus === 'error' ? 'alert' : 'status'}
 						class={`mt-2 flex items-start gap-2 rounded-xl px-3.5 py-2.5 text-xs font-semibold ${
-							voucherStatus === 'error' ? 'bg-red-500/20 text-red-100' : 'bg-emerald-400/20 text-emerald-100'
+							voucherStatus === 'error'
+								? 'bg-red-500/20 text-red-100'
+								: 'bg-emerald-400/20 text-emerald-100'
 						}`}
 					>
-						<i class={`fa-solid ${voucherStatus === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'} mt-0.5 shrink-0`} aria-hidden="true"></i>
+						<i
+							class={`fa-solid ${voucherStatus === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'} mt-0.5 shrink-0`}
+							aria-hidden="true"
+						></i>
 						<span>{voucherMessage}</span>
 					</p>
 				{/if}
@@ -191,11 +217,17 @@
 							class={`absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[10px] font-extrabold uppercase ${periodBadgeClass(kMeta.period)}`}
 						>
 							<i class={`fa-solid ${periodIcon(kMeta.period)}`} aria-hidden="true"></i>
-							{kMeta.period === 'upcoming' ? `Mulai ${kMeta.startMonth ?? ''}`.trim() : kMeta.period === 'ongoing' ? 'Berjalan' : 'Lewat'}
+							{kMeta.period === 'upcoming'
+								? `Mulai ${kMeta.startMonth ?? ''}`.trim()
+								: kMeta.period === 'ongoing'
+									? 'Berjalan'
+									: 'Lewat'}
 						</span>
 					</div>
 					<div class="flex flex-1 flex-col p-5">
-						<p class="text-[11px] font-bold tracking-wide text-blue-600 uppercase">{course.category}</p>
+						<p class="text-[11px] font-bold tracking-wide text-blue-600 uppercase">
+							{course.category}
+						</p>
 						<h2 class="mt-1 line-clamp-2 text-base font-bold text-slate-900">
 							<a
 								href={`/user/kursusku/${course.id}`}
@@ -207,10 +239,24 @@
 						<p class="mt-1 text-xs text-slate-500">
 							{course.instructor} · Terakhir diakses: {course.lastAccessed}
 						</p>
-						<p class="mt-1.5 inline-flex flex-wrap items-center gap-1.5 text-[11px] font-semibold text-slate-500">
-							<span class="rounded-full bg-slate-100 px-2.5 py-0.5">{getTrainingStats(course).moduleCount} modul</span>
-							<span class="rounded-full bg-violet-100 px-2.5 py-0.5 text-violet-700">{getTrainingStats(course).subModuleCount} sub-modul</span>
-							<span class="rounded-full bg-blue-50 px-2.5 py-0.5 text-blue-700">{getTrainingStats(course).materialCount} materi</span>
+						<p
+							class="mt-1.5 inline-flex flex-wrap items-center gap-1.5 text-[11px] font-semibold text-slate-500"
+						>
+							<span class="rounded-full bg-slate-100 px-2.5 py-0.5"
+								>{getTrainingStats(course).moduleCount} modul</span
+							>
+							<span class="rounded-full bg-violet-100 px-2.5 py-0.5 text-violet-700"
+								>{getTrainingStats(course).subModuleCount} sub-modul</span
+							>
+							<span class="rounded-full bg-blue-50 px-2.5 py-0.5 text-blue-700"
+								>{getTrainingStats(course).materialCount} materi</span
+							>
+							{#if isCoursePaid(course.id)}
+								<span
+									class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-amber-800"
+									><i class="fa-solid fa-lock text-[9px]" aria-hidden="true"></i>{kMeta.price}</span
+								>
+							{/if}
 							{#if getTrainingStats(course).materialCount >= 100}
 								<span class="rounded-full bg-amber-100 px-2.5 py-0.5 text-amber-800">Kompleks</span>
 							{/if}
@@ -257,7 +303,11 @@
 									href={`/user/kursusku/${course.id}`}
 									class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 								>
-									<i class="fa-solid fa-play" aria-hidden="true"></i> Mulai Belajar
+									{#if isCoursePaid(course.id) && !canAccessCourse(course.id)}
+										<i class="fa-solid fa-lock" aria-hidden="true"></i> Lihat & Beli
+									{:else}
+										<i class="fa-solid fa-play" aria-hidden="true"></i> Mulai Belajar
+									{/if}
 								</a>
 							{:else}
 								<a

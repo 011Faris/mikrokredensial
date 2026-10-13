@@ -44,7 +44,11 @@ const META: Record<number, CourseMeta> = {
 			'Mengembangkan interaksi dinamis dengan JavaScript dan Fetch API',
 			'Men-deploy aplikasi ke hosting production'
 		],
-		requirements: ['Laptop/komputer dengan browser modern', 'Kemauan praktik rutin minimal 30 menit/hari', 'Tidak perlu pengalaman coding sebelumnya']
+		requirements: [
+			'Laptop/komputer dengan browser modern',
+			'Kemauan praktik rutin minimal 30 menit/hari',
+			'Tidak perlu pengalaman coding sebelumnya'
+		]
 	},
 	2: {
 		rating: 4.7,
@@ -58,7 +62,11 @@ const META: Record<number, CourseMeta> = {
 			'Menggunakan subquery, CTE, dan window function',
 			'Menganalisis dan mengoptimasi performa query'
 		],
-		requirements: ['Logika dasar pemrograman', 'Akses ke DB Browser / psql / MySQL', 'Terbiasa membaca dokumentasi teknis']
+		requirements: [
+			'Logika dasar pemrograman',
+			'Akses ke DB Browser / psql / MySQL',
+			'Terbiasa membaca dokumentasi teknis'
+		]
 	},
 	3: {
 		rating: 4.6,
@@ -73,7 +81,11 @@ const META: Record<number, CourseMeta> = {
 			'Mengonfigurasi static routing dan layanan DHCP/DNS',
 			'Melakukan troubleshooting dengan ping, traceroute, dan Wireshark'
 		],
-		requirements: ['Pengetahuan dasar komputer', 'Aplikasi simulasi Packet Tracer (gratis)', 'Tidak perlu perangkat jaringan fisik']
+		requirements: [
+			'Pengetahuan dasar komputer',
+			'Aplikasi simulasi Packet Tracer (gratis)',
+			'Tidak perlu perangkat jaringan fisik'
+		]
 	},
 	4: {
 		rating: 4.7,
@@ -88,7 +100,11 @@ const META: Record<number, CourseMeta> = {
 			'Melakukan hardening OS, MFA, dan firewall dasar',
 			'Menyusun langkah respons insiden keamanan'
 		],
-		requirements: ['Pengguna komputer aktif sehari-hari', 'Rasa ingin tahu tentang keamanan digital', 'Tidak perlu latar belakang IT']
+		requirements: [
+			'Pengguna komputer aktif sehari-hari',
+			'Rasa ingin tahu tentang keamanan digital',
+			'Tidak perlu latar belakang IT'
+		]
 	},
 	5: {
 		rating: 4.9,
@@ -102,7 +118,11 @@ const META: Record<number, CourseMeta> = {
 			'Mengevaluasi model dengan metrik yang tepat',
 			'Menyelesaikan proyek prediksi churn end-to-end'
 		],
-		requirements: ['Python dasar (variabel, fungsi, list)', 'Matematika SMA (aljabar & statistika dasar)', 'Akun Google Colab (gratis)']
+		requirements: [
+			'Python dasar (variabel, fungsi, list)',
+			'Matematika SMA (aljabar & statistika dasar)',
+			'Akun Google Colab (gratis)'
+		]
 	},
 	6: {
 		rating: 4.5,
@@ -116,7 +136,11 @@ const META: Record<number, CourseMeta> = {
 			'Menulis skrip Bash untuk automasi',
 			'Melakukan administrasi server dasar'
 		],
-		requirements: ['Terbiasa memakai terminal/command line', 'VM atau WSL untuk praktik Linux', 'Logika dasar pemrograman']
+		requirements: [
+			'Terbiasa memakai terminal/command line',
+			'VM atau WSL untuk praktik Linux',
+			'Logika dasar pemrograman'
+		]
 	},
 	7: {
 		rating: 4.9,
@@ -130,7 +154,29 @@ const META: Record<number, CourseMeta> = {
 			'Mengelola database, testing, dan deployment CI/CD',
 			'Menyelesaikan capstone dan portofolio siap kerja'
 		],
-		requirements: ['Laptop dan internet stabil', 'Komitmen 8–10 jam/minggu selama 16 minggu', 'Tidak perlu pengalaman sebelumnya']
+		requirements: [
+			'Laptop dan internet stabil',
+			'Komitmen 8–10 jam/minggu selama 16 minggu',
+			'Tidak perlu pengalaman sebelumnya'
+		]
+	},
+	8: {
+		rating: 4.9,
+		reviews: 356,
+		students: 418,
+		price: 'Rp349.000',
+		period: 'ongoing',
+		outcomes: [
+			'Merumuskan pertanyaan bisnis menjadi rencana analisis',
+			'Membersihkan dan mengagregasi data dengan Python dan Pandas',
+			'Memilih visualisasi yang tepat untuk setiap insight',
+			'Membangun dashboard Streamlit dan mempresentasikan cerita data'
+		],
+		requirements: [
+			'Logika dasar dan terbiasa memakai spreadsheet',
+			'Akun Google Colab (gratis)',
+			'Komitmen 5–6 jam/minggu selama 6 minggu'
+		]
 	}
 };
 
@@ -140,7 +186,11 @@ const FALLBACK: CourseMeta = {
 	students: 500,
 	price: 'GRATIS',
 	period: 'ongoing',
-	outcomes: ['Memahami konsep inti kursus', 'Mempraktikkan studi kasus nyata', 'Menyelesaikan proyek akhir'],
+	outcomes: [
+		'Memahami konsep inti kursus',
+		'Mempraktikkan studi kasus nyata',
+		'Menyelesaikan proyek akhir'
+	],
 	requirements: ['Komitmen belajar mandiri', 'Perangkat komputer dan internet']
 };
 

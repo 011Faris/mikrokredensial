@@ -52,7 +52,7 @@
 </script>
 
 <svelte:head>
-	<title>{course ? `Kelola ${course.title}` : 'Kursus tidak ditemukan'} — Instruktur Aristoteles</title>
+	<title>{course ? `Kelola ${course.title}` : 'Kursus tidak ditemukan'} — Instruktur Aristotle</title>
 	<meta name="description" content={course ? `Kelola kurikulum, modul, sub-modul, dan materi ${course.title}` : 'Kelola kurikulum kursus'} />
 </svelte:head>
 

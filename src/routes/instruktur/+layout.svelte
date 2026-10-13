@@ -48,7 +48,7 @@
 		bind:isCollapsed
 		onClose={() => (sidebarOpen = false)}
 		brandHref="/instruktur"
-		brandLabel="Aristoteles Platform - Dashboard instruktur"
+		brandLabel="Aristotle Platform - Dashboard instruktur"
 		navAriaLabel="Navigasi instruktur"
 		profileName="KEVIN PERRY"
 		profileRole="Instruktur"
@@ -161,7 +161,7 @@
 							>
 								<div class="border-b border-slate-100 px-4 py-3">
 									<div class="text-sm font-semibold text-slate-800">Kevin Perry</div>
-									<div class="text-xs text-slate-500">kevin@aristoteles.ac.id</div>
+									<div class="text-xs text-slate-500">kevin@aristotle.ac.id</div>
 								</div>
 								<div class="p-1.5" role="none">
 									<a

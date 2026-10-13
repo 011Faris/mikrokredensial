@@ -52,7 +52,7 @@
 </script>
 
 <svelte:head>
-	<title>Pendapatan — Instruktur Aristoteles</title>
+	<title>Pendapatan — Instruktur Aristotle</title>
 	<meta name="description" content="Ringkasan pendapatan, grafik bulanan, dan riwayat pencairan dana instruktur." />
 </svelte:head>
 

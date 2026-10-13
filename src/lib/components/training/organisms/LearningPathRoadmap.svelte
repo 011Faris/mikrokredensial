@@ -4,35 +4,18 @@
 		ROADMAP_NODE_H,
 		ROADMAP_NODE_W,
 		computeRoadmapLayout,
-		resolveRoadmapSelection
+		resolveRoadmapSelection,
+		resolveSubModules,
+		roadmapHue
 	} from '$lib/data/training';
 	import InfoDrawer from './InfoDrawer.svelte';
 	import '../roadmap.css';
 
 	/**
-	 * Interactive Learning Roadmap (canvas + SVG ala roadmap.sh):
-	 * alur Modul mengalir dari ATAS KE BAWAH LANGSUNG antar modul.
-	 * Sub-modul berada di SISI modulnya (kanan/kiri bergantian);
-	 * bila lebih dari satu, tersusun vertikal rapat ke bawah dan
-	 * tiap sub dijangkau garis putus-putus LANGSUNG dari modulnya. Garis dari Modul ke sub-modulnya
-	 * berupa KURVA PUTUS-PUTUS yang sejajar (berangkat vertikal dari
-	 * modul, tiba horizontal di sub-modul), lalu Modul 1 → Modul 2 →
-	 * seterusnya dengan garis solid.
-	 * Modul memakai SATU warna (biru), sub-modul SATU warna berbeda
-	 * (ungu). Setiap node HANYA berisi nama topik dari data. Posisi dan
-	 * garis dihitung deterministik dari data (bukan hardcode).
-	 * Node berupa toggle statis (tanpa navigasi) sehingga materi
-	 * tidak bisa diakses dari halaman publik.
+	 * Aurora Learning Journey (publik): modul memakai gradien cerah
+	 * per tahap, sub-modul mewarisi hue induknya. Posisi & garis
+	 * dihitung deterministik dari data. Node hanya toggle drawer.
 	 */
-	interface NodeColor {
-		main: string;
-		deep: string;
-		ring: string;
-	}
-
-	/** Satu warna untuk semua modul, satu warna berbeda untuk semua sub-modul. */
-	const MODULE_C: NodeColor = { main: '#2563eb', deep: '#1d4ed8', ring: 'rgb(37 99 235 / 22%)' };
-	const SUB_C: NodeColor = { main: '#7c3aed', deep: '#6d28d9', ring: 'rgb(124 58 237 / 22%)' };
 
 	let { modules }: { modules: CourseModule[] } = $props();
 
@@ -56,25 +39,126 @@
 
 	const geometry = $derived(computeRoadmapLayout(modules));
 
+	/** Petakan setiap node ke nomor tahap + hue induk modulnya. */
 	const layout = $derived.by(() => {
-		const colorOf = (kind: 'module' | 'sub') => (kind === 'module' ? MODULE_C : SUB_C);
-		return {
-			...geometry,
-			nodes: geometry.nodes.map((n) => ({ ...n, c: colorOf(n.kind) }))
-		};
+		const moduleOf = new Map<string, number>();
+		const subMeta = new Map<string, { mi: number; si: number }>();
+		modules.forEach((m, mi) => {
+			moduleOf.set(m.id, mi);
+			resolveSubModules(m).forEach((s, si) => subMeta.set(s.id, { mi, si }));
+		});
+		const nodes = geometry.nodes.map((n) => {
+			const mi = n.kind === 'module' ? (moduleOf.get(n.id) ?? 0) : (subMeta.get(n.id)?.mi ?? 0);
+			const si = subMeta.get(n.id)?.si ?? 0;
+			const hue = roadmapHue(mi);
+			const badge = n.kind === 'module' ? `M${mi + 1}` : `${mi + 1}.${si + 1}`;
+			return { ...n, mi, hue, badge };
+		});
+		const curveColor = new Map<string, string>();
+		for (const c of geometry.curves) {
+			const mi = subMeta.get(c.key)?.mi ?? 0;
+			curveColor.set(c.key, roadmapHue(mi).from);
+		}
+		return { ...geometry, nodes, curveColor };
 	});
 
 	const nodeMap = $derived(new Map(layout.nodes.map((n) => [n.id, n] as const)));
+
+	const totalSubs = $derived(modules.reduce((n, m) => n + resolveSubModules(m).length, 0));
 </script>
 
-<section aria-labelledby="alur-belajar-heading" class="overflow-hidden rounded-2xl border border-slate-200/70 bg-white">
-	<div class="border-b border-slate-100 p-5 sm:px-6">
-		<h2 id="alur-belajar-heading" class="text-lg font-bold text-slate-900">Alur Belajar</h2>
+<section
+	aria-labelledby="alur-belajar-heading"
+	class="overflow-hidden rounded-3xl border border-border bg-white shadow-lg shadow-slate-900/5"
+>
+	<!-- Header navy akademik -->
+	<div class="relative overflow-hidden bg-navy p-5 sm:px-7 sm:py-6">
+		<div
+			class="pointer-events-none absolute -top-16 -right-10 h-48 w-48 rounded-full bg-white/10 blur-2xl"
+			aria-hidden="true"
+		></div>
+		<div
+			class="pointer-events-none absolute -bottom-20 left-1/3 h-48 w-64 rounded-full bg-accent/20 blur-2xl"
+			aria-hidden="true"
+		></div>
+		<div
+			class="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-accent"
+			aria-hidden="true"
+		></div>
+		<div
+			class="pointer-events-none absolute top-4 right-24 hidden gap-1.5 sm:flex"
+			aria-hidden="true"
+		>
+			<span class="h-2 w-2 rounded-full bg-white/50"></span>
+			<span class="h-2 w-2 rounded-full bg-white/35"></span>
+			<span class="h-2 w-2 rounded-full bg-white/20"></span>
+		</div>
+		<div class="relative">
+			<p
+				class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[10px] font-extrabold tracking-[0.16em] text-white uppercase backdrop-blur"
+			>
+				<i class="fa-solid fa-route" aria-hidden="true"></i>
+				Peta perjalanan
+			</p>
+			<div class="mt-2.5 flex flex-wrap items-end justify-between gap-3">
+				<div>
+					<h2 id="alur-belajar-heading" class="text-xl font-extrabold text-white sm:text-2xl">
+						Alur Belajar
+					</h2>
+					<p class="mt-1 max-w-xl text-xs leading-relaxed text-slate-300 sm:text-[13px]">
+						Ikuti jalur berwarna dari atas ke bawah — setiap warna adalah satu tahap modul. Klik
+						node untuk melihat detailnya.
+					</p>
+				</div>
+				<p
+					class="rounded-2xl bg-white/15 px-3.5 py-2 text-center text-[11px] font-bold text-white backdrop-blur"
+				>
+					<span class="text-base font-extrabold">{modules.length}</span> modul
+					<span class="mx-1 text-white/50">·</span>
+					<span class="text-base font-extrabold">{totalSubs}</span> sub
+				</p>
+			</div>
+			<ul
+				class="mt-3.5 flex flex-wrap gap-2 text-[10px] font-bold"
+				aria-label="Legenda alur belajar"
+			>
+				<li
+					class="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-navy shadow"
+				>
+					<span class="h-2.5 w-2.5 rounded-full bg-primary" aria-hidden="true"></span>
+					Modul
+				</li>
+				<li
+					class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-white ring-1 ring-white/40 backdrop-blur"
+				>
+					<span
+						class="h-2.5 w-2.5 rounded-full border-2 border-white bg-transparent"
+						aria-hidden="true"
+					></span>
+					Sub-modul
+				</li>
+				<li
+					class="inline-flex items-center gap-1.5 rounded-full bg-slate-900/35 px-2.5 py-1 text-white backdrop-blur"
+				>
+					<i class="fa-solid fa-arrow-pointer text-[10px]" aria-hidden="true"></i>
+					Klik node = detail
+				</li>
+			</ul>
+		</div>
 	</div>
+
 	<div class="p-4 sm:p-6">
 		{#if modules.length === 0}
-			<div class="rounded-xl border border-dashed border-slate-300 p-8 text-center">
-				<p class="text-sm font-semibold text-slate-700">Belum ada modul pada pelatihan ini.</p>
+			<div class="rounded-2xl border border-dashed border-border bg-surface p-8 text-center">
+				<p
+					class="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-navy text-white shadow-lg shadow-navy/25"
+				>
+					<i class="fa-solid fa-map" aria-hidden="true"></i>
+				</p>
+				<p class="mt-3 text-sm font-bold text-navy">Belum ada modul pada pelatihan ini.</p>
+				<p class="mt-1 text-xs text-text-muted">
+					Kurikulum akan muncul di sini setelah ditambahkan.
+				</p>
 			</div>
 		{:else}
 			<div class="roadmap-viewport">
@@ -86,29 +170,69 @@
 						viewBox="0 0 {layout.w} {layout.h}"
 						aria-hidden="true"
 					>
+						<defs>
+							<linearGradient id="rm-spine-public" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="0%" stop-color="#2563eb" />
+								<stop offset="52%" stop-color="#38bdf8" />
+								<stop offset="100%" stop-color="#0f172a" />
+							</linearGradient>
+						</defs>
 						{#each layout.connections as connection (connection[0] + '>' + connection[1])}
 							{@const from = nodeMap.get(connection[0])}
 							{@const to = nodeMap.get(connection[1])}
 							{#if from && to}
+								{@const x1 = from.x + ROADMAP_NODE_W / 2}
+								{@const y1 = from.y + ROADMAP_NODE_H / 2}
+								{@const x2 = to.x + ROADMAP_NODE_W / 2}
+								{@const y2 = to.y + ROADMAP_NODE_H / 2}
+								{@const mx = (x1 + x2) / 2}
+								{@const my = (y1 + y2) / 2}
+								{@const dot = to.hue?.from ?? '#2563eb'}
+								<!-- Halo putih agar garis tetap terbaca di atas dot-grid -->
 								<line
-									x1={from.x + ROADMAP_NODE_W / 2}
-									y1={from.y + ROADMAP_NODE_H / 2}
-									x2={to.x + ROADMAP_NODE_W / 2}
-									y2={to.y + ROADMAP_NODE_H / 2}
-									stroke="#cbd5e1"
-									stroke-width="2"
+									{x1}
+									{y1}
+									{x2}
+									{y2}
+									stroke="#ffffff"
+									stroke-width="10"
+									stroke-linecap="round"
+									opacity="0.9"
+								/>
+								<!-- Garis utama antar modul: selalu solid, gradien di atas warna dasar -->
+								<line
+									{x1}
+									{y1}
+									{x2}
+									{y2}
+									stroke="#2563eb"
+									stroke-width="4.5"
 									stroke-linecap="round"
 								/>
+								<line
+									class="roadmap-spine"
+									{x1}
+									{y1}
+									{x2}
+									{y2}
+									stroke="url(#rm-spine-public)"
+									stroke-width="4"
+									stroke-linecap="round"
+								/>
+								<circle cx={mx} cy={my} r="7.5" fill="#ffffff" stroke={dot} stroke-width="3" />
+								<circle cx={mx} cy={my} r="2.6" fill={dot} />
 							{/if}
 						{/each}
 						{#each layout.curves as curve (curve.key)}
 							<path
+								class="roadmap-curve"
 								d={curve.d}
 								fill="none"
-								stroke="#94a5b8"
-								stroke-width="2"
+								stroke={layout.curveColor.get(curve.key) ?? '#94a3b8'}
+								stroke-width="3"
 								stroke-linecap="round"
-								stroke-dasharray="7 5"
+								stroke-dasharray="0.5 8"
+								opacity="0.85"
 							/>
 						{/each}
 					</svg>
@@ -116,7 +240,8 @@
 						{#each layout.nodes as node, ni (node.id)}
 							<li
 								class="roadmap-node-enter absolute"
-								style="left:{node.x}px;top:{node.y}px;width:{ROADMAP_NODE_W}px;animation-delay:{ni * 55}ms"
+								style="left:{node.x}px;top:{node.y}px;width:{ROADMAP_NODE_W}px;animation-delay:{ni *
+									60}ms"
 							>
 								<button
 									type="button"
@@ -125,18 +250,28 @@
 									class:module={node.kind === 'module'}
 									class:sub={node.kind === 'sub'}
 									class:selected={selectedNode === node.id}
-									style="--mod:{node.c.main};--deep:{node.c.deep};--ring:{node.c.ring}"
+									style="--g1:{node.hue.from};--g2:{node.hue.to};--soft:{node.hue.soft};--ink:{node
+										.hue.ink};--ring:{node.hue.ring};--shadow:{node.hue.shadow}"
 									onclick={() => openNode(node.id)}
 									aria-pressed={selectedNode === node.id}
+									title={node.label}
 								>
-									{node.label}
+									<span class="rm-badge" aria-hidden="true">{node.badge}</span>
+									<span class="rm-label">{node.label}</span>
+									<i class="fa-solid fa-chevron-right rm-chevron" aria-hidden="true"></i>
 								</button>
 							</li>
 						{/each}
 					</ul>
 				</div>
 			</div>
+			<p
+				class="mt-3 flex items-center justify-center gap-1.5 text-center text-[11px] font-semibold text-slate-400"
+			>
+				<i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
+				Klik setiap kartu berwarna untuk membuka detail modul & sub-modul
+			</p>
 		{/if}
 	</div>
-	<InfoDrawer selection={selection} onclose={closeDrawer} />
+	<InfoDrawer {selection} onclose={closeDrawer} />
 </section>
