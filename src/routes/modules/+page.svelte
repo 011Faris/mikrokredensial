@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../../app.css';
 	import Logo from '$lib/components/Logo.svelte';
-	import logoUrl from '$lib/assets/assets/logo/aristotlelogo.png';
+	import { aristotleLogo as logoUrl } from '$lib/assets/logo';
 	import { courses } from '$lib/data/courses';
 	import {
 		getCourseMeta,

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../../app.css';
 	import Logo from '$lib/components/Logo.svelte';
-	import uniraLogo from '$lib/assets/assets/logo/unira.jpeg';
+	import { uniraLogo } from '$lib/assets/logo';
 
 	let showPassword = $state(false);
 	let nim = $state('');

@@ -1,130 +1,73 @@
 <script lang="ts">
-	import type { ApiResult, AssignmentSubmission } from '$lib/types/submission';
+	import { getCourseById } from '$lib/data/courses';
+	import { COURSE_ORDER, resolveTaskKey } from '$lib/data/grading';
+	import { allReviews, ensureGradingLoaded, gradingLoading } from '$lib/stores/grading.svelte';
 
-	interface ReviewItem {
-		id: number | string;
-		student: string;
-		nim: string;
-		course: string;
-		task: string;
-		type: 'Tugas' | 'Kuis';
-		date: string;
-		status: 'Menunggu' | 'Dinilai';
-		score: number | null;
-		driveLink?: string;
-		fileName?: string;
-		submissionId?: string;
-	}
+	$effect(() => {
+		ensureGradingLoaded();
+	});
 
-	let reviews = $state<ReviewItem[]>([
-		{ id: 1, student: 'Ahmad Farizi', nim: '2101020045', course: 'Pengembangan Web Frontend', task: 'Proyek: Galeri Interaktif', type: 'Tugas', date: '2 jam lalu', status: 'Menunggu', score: null },
-		{ id: 2, student: 'Dewi Anggraini', nim: '2101020031', course: 'Machine Learning Dasar', task: 'Proyek: Prediksi Churn', type: 'Tugas', date: '5 jam lalu', status: 'Menunggu', score: null },
-		{ id: 3, student: 'Rian Pratama', nim: '2101020018', course: 'Jaringan Komputer Dasar', task: 'Latihan Subnetting VLSM', type: 'Tugas', date: 'Kemarin', status: 'Menunggu', score: null },
-		{ id: 4, student: 'Sarah Johnson', nim: '2101020027', course: 'Machine Learning Dasar', task: 'Kuis Evaluasi Model', type: 'Kuis', date: 'Kemarin', status: 'Menunggu', score: null },
-		{ id: 5, student: 'Budi Santoso', nim: '2101020052', course: 'Pengembangan Web Frontend', task: 'Kuis CSS Layout', type: 'Kuis', date: '2 hari lalu', status: 'Dinilai', score: 85 },
-		{ id: 6, student: 'Max Alexix', nim: '2101020009', course: 'Jaringan Komputer Dasar', task: 'Kuis Konsep Dasar', type: 'Kuis', date: '3 hari lalu', status: 'Dinilai', score: 92 }
-	]);
-
-	type Filter = 'all' | 'Menunggu' | 'Dinilai';
-	let activeFilter = $state<Filter>('all');
 	let search = $state('');
-	let draftScores: Record<string, string> = $state({});
-	let message = $state('');
-	let loadingDrive = $state(true);
+
+	const loading = $derived(gradingLoading());
+	const reviews = $derived(allReviews());
 
 	const pendingCount = $derived(reviews.filter((r) => r.status === 'Menunggu').length);
 	const gradedCount = $derived(reviews.filter((r) => r.status === 'Dinilai').length);
-	const avgScore = $derived(() => {
-		const graded = reviews.filter((r) => r.score !== null) as { score: number }[];
+	const avgScore = $derived.by(() => {
+		const graded = reviews.filter((r) => r.score !== null);
 		if (graded.length === 0) return '-';
-		return Math.round(graded.reduce((n, r) => n + (r as unknown as ReviewItem).score!, 0) / graded.length).toString();
+		return Math.round(graded.reduce((n, r) => n + (r.score ?? 0), 0) / graded.length).toString();
 	});
 
-	const filtered = $derived(
-		reviews.filter((r) => {
-			const matchStatus = activeFilter === 'all' || r.status === activeFilter;
-			const q = search.trim().toLowerCase();
-			const matchSearch =
-				!q ||
-				r.student.toLowerCase().includes(q) ||
-				r.task.toLowerCase().includes(q) ||
-				r.course.toLowerCase().includes(q);
-			return matchStatus && matchSearch;
-		})
-	);
-
-	function toReviewItem(s: AssignmentSubmission): ReviewItem {
-		return {
-			id: s.id,
-			student: s.studentName,
-			nim: s.studentNim || '—',
-			course: s.courseId ? `Kursus ${s.courseId}` : '—',
-			task: s.fileName,
-			type: 'Tugas',
-			date: new Date(s.createdAt).toLocaleString('id-ID'),
-			status: s.status,
-			score: s.score,
-			driveLink: s.driveLink,
-			fileName: s.fileName,
-			submissionId: s.id
-		};
+	interface CourseCard {
+		id: number;
+		title: string;
+		category: string;
+		image: string;
+		taskCount: number;
+		pending: number;
+		total: number;
 	}
 
-	// Tarik pengumpulan PDF (Drive) dari aplikasi, gabung ke antrean penilaian.
-	$effect(() => {
-		let cancelled = false;
-		(async () => {
-			try {
-				const res = await fetch('/api/assignments/upload', { headers: { accept: 'application/json' } });
-				if (!res.ok) return;
-				const json = (await res.json()) as ApiResult<AssignmentSubmission[]>;
-				if (!json.status || !Array.isArray(json.data)) return;
-				if (cancelled) return;
-				const mapped = json.data.map(toReviewItem);
-				const known = new Set(reviews.map((r) => String(r.submissionId ?? r.id)));
-				const fresh = mapped.filter((m) => !known.has(String(m.id)));
-				if (fresh.length > 0) reviews = [...fresh, ...reviews];
-			} catch {
-				/* backend offline — tampilkan data contoh saja */
-			} finally {
-				if (!cancelled) loadingDrive = false;
+	const cards = $derived.by((): CourseCard[] => {
+		const q = search.trim().toLowerCase();
+		const list: CourseCard[] = [];
+		for (const courseId of COURSE_ORDER) {
+			const course = getCourseById(courseId);
+			if (!course) continue;
+			if (q && !course.title.toLowerCase().includes(q) && !course.category.toLowerCase().includes(q)) {
+				continue;
 			}
-		})();
-		return () => {
-			cancelled = true;
-		};
+			let taskCount = 0;
+			for (const mod of course.modules) {
+				for (const sub of mod.subModules ?? []) {
+					for (const mat of sub.materials) {
+						if (mat.type === 'tugas') taskCount += 1;
+					}
+				}
+			}
+			const items = reviews.filter((r) => {
+				const key = resolveTaskKey(r);
+				return key !== null && Number(key.split('::')[0]) === courseId;
+			});
+			list.push({
+				id: course.id,
+				title: course.title,
+				category: course.category,
+				image: course.image,
+				taskCount,
+				pending: items.filter((r) => r.status === 'Menunggu').length,
+				total: items.length
+			});
+		}
+		return list;
 	});
-
-	async function submitScore(id: number | string) {
-		const key = String(id);
-		const raw = (draftScores[key] ?? '').trim();
-		const val = Number(raw);
-		if (!raw || Number.isNaN(val) || val < 0 || val > 100) {
-			message = 'Masukkan nilai 0–100 terlebih dahulu.';
-			return;
-		}
-		const target = reviews.find((r) => String(r.id) === key);
-		if (target?.submissionId) {
-			try {
-				const res = await fetch(`/api/assignments/grade/${encodeURIComponent(target.submissionId)}`, {
-					method: 'PATCH',
-					headers: { 'content-type': 'application/json' },
-					body: JSON.stringify({ score: val })
-				});
-				if (!res.ok) throw new Error('backend offline');
-			} catch {
-				/* fallback: simpan lokal saja */
-			}
-		}
-		reviews = reviews.map((r) => (String(r.id) === key ? { ...r, score: val, status: 'Dinilai' } : r));
-		delete draftScores[key];
-		message = `Nilai ${val} tersimpan untuk ${target?.student ?? 'peserta'}.`;
-	}
 </script>
 
 <svelte:head>
 	<title>Penilaian — Instruktur Aristotle</title>
-	<meta name="description" content="Antrean penilaian tugas dan kuis peserta untuk instruktur Aristotle." />
+	<meta name="description" content="Daftar course untuk antrean penilaian tugas dan kuis peserta." />
 </svelte:head>
 
 <div class="p-4 sm:p-6 lg:p-8">
@@ -132,7 +75,8 @@
 		<p class="text-xs font-bold tracking-widest text-blue-600 uppercase">Menu Utama · Penilaian</p>
 		<h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Penilaian</h1>
 		<p class="mt-1 text-sm text-slate-500">
-			{pendingCount} menunggu dinilai · {gradedCount} sudah dinilai · rata-rata nilai {avgScore()}.
+			{pendingCount} menunggu dinilai · {gradedCount} sudah dinilai · rata-rata nilai {avgScore}.
+			Pilih course untuk melihat penugasannya.
 		</p>
 	</div>
 
@@ -155,143 +99,93 @@
 			<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white">
 				<i class="fa-solid fa-star text-sm" aria-hidden="true"></i>
 			</div>
-			<div class="mt-3 text-2xl font-bold text-slate-900">{avgScore()}</div>
+			<div class="mt-3 text-2xl font-bold text-slate-900">{avgScore}</div>
 			<div class="text-xs font-semibold text-slate-600">Rata-rata</div>
 		</div>
 	</div>
 
-	{#if message}
-		<p role="status" class="mb-4 flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-700">
-			<i class="fa-solid fa-circle-check mt-0.5 shrink-0" aria-hidden="true"></i>
-			<span>{message}</span>
-		</p>
-	{/if}
-
-	<div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center">
-		<div class="max-w-md flex-1">
-			<label for="search-penilaian" class="sr-only">Cari peserta, tugas, atau kursus</label>
-			<div class="relative">
-				<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
-					<i class="fa-solid fa-magnifying-glass text-sm" aria-hidden="true"></i>
-				</div>
-				<input
-					id="search-penilaian"
-					type="search"
-					bind:value={search}
-					placeholder="Cari peserta, tugas, kursus..."
-					autocomplete="off"
-					class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-				/>
+	<div class="mb-4 max-w-md">
+		<label for="search-course-penilaian" class="sr-only">Cari course</label>
+		<div class="relative">
+			<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+				<i class="fa-solid fa-magnifying-glass text-sm" aria-hidden="true"></i>
 			</div>
-		</div>
-		<div class="flex flex-wrap gap-2" role="group" aria-label="Filter status penilaian">
-			{#each [{ value: 'all', label: 'Semua' }, { value: 'Menunggu', label: 'Menunggu' }, { value: 'Dinilai', label: 'Dinilai' }] as f}
-				<button
-					type="button"
-					onclick={() => (activeFilter = f.value as Filter)}
-					aria-pressed={activeFilter === f.value}
-					class={`rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 ease-smooth active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${
-						activeFilter === f.value
-							? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-							: 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-					}`}
-				>
-					{f.label}
-				</button>
-			{/each}
+			<input
+				id="search-course-penilaian"
+				type="search"
+				bind:value={search}
+				placeholder="Cari course..."
+				autocomplete="off"
+				class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-10 text-sm placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+			/>
 		</div>
 	</div>
 
-	{#if loadingDrive}
+	{#if loading}
 		<p role="status" class="mb-4 flex items-center gap-2 text-xs font-semibold text-slate-500">
 			<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Memuat berkas PDF dari Drive…
 		</p>
 	{/if}
 
-	<div class="overflow-hidden rounded-2xl border border-slate-200/60 bg-white">
-		<div class="overflow-x-auto">
-			<table class="w-full min-w-[880px] text-left text-sm">
-				<thead>
-					<tr class="border-b border-slate-100 bg-slate-50/60 text-xs text-slate-500">
-						<th scope="col" class="px-5 py-3 font-bold">Peserta</th>
-						<th scope="col" class="px-5 py-3 font-bold">Tugas / Kuis</th>
-						<th scope="col" class="px-5 py-3 font-bold">Berkas PDF</th>
-						<th scope="col" class="px-5 py-3 font-bold">Status</th>
-						<th scope="col" class="px-5 py-3 font-bold">Nilai</th>
-						<th scope="col" class="px-5 py-3 text-right font-bold">Aksi</th>
-					</tr>
-				</thead>
-				<tbody class="divide-y divide-slate-100">
-					{#each filtered as r (r.id)}
-						<tr class="transition-colors duration-200 ease-smooth hover:bg-slate-50/50">
-							<td class="px-5 py-4">
-								<div class="font-semibold text-slate-900">{r.student}</div>
-								<div class="mt-0.5 text-xs text-slate-500">{r.nim} · {r.date}</div>
-							</td>
-							<td class="px-5 py-4">
-								<div class="font-semibold text-slate-800">{r.task}</div>
-								<div class="mt-0.5 text-xs text-slate-500">{r.course} · {r.type}</div>
-							</td>
-							<td class="px-5 py-4">
-								{#if r.driveLink}
-									<a
-										href={r.driveLink}
-										target="_blank"
-										rel="noopener noreferrer"
-										title={r.fileName ?? 'Buka PDF di Google Drive'}
-										class="inline-flex min-h-10 items-center gap-1.5 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-bold text-violet-700 transition-colors duration-200 ease-smooth hover:bg-violet-100 focus-visible:outline-2 focus-visible:outline-violet-600"
-									>
-										<i class="fa-solid fa-file-pdf text-red-500" aria-hidden="true"></i>
-										<span class="max-w-40 truncate">{r.fileName ?? 'Buka PDF'}</span>
-										<i class="fa-solid fa-arrow-up-right-from-square text-[10px]" aria-hidden="true"></i>
-									</a>
-								{:else}
-									<span class="text-xs font-semibold text-slate-400">—</span>
-								{/if}
-							</td>
-							<td class="px-5 py-4">
-								<span
-									class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold {r.status === 'Dinilai' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-amber-200 bg-amber-50 text-amber-700'}"
-								>
-									{r.status}
-								</span>
-							</td>
-							<td class="px-5 py-4">
-								{#if r.status === 'Dinilai' && r.score !== null}
-									<span class="text-sm font-bold text-emerald-600">{r.score}</span>
-								{:else}
-									<label for={`score-${r.id}`} class="sr-only">Nilai untuk {r.student}</label>
-									<input
-										id={`score-${r.id}`}
-										type="number"
-										min="0"
-										max="100"
-										placeholder="0–100"
-										bind:value={draftScores[String(r.id)]}
-										class="w-24 rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-									/>
-								{/if}
-							</td>
-							<td class="px-5 py-4 text-right">
-								{#if r.status === 'Menunggu'}
-									<button
-										type="button"
-										onclick={() => submitScore(r.id)}
-										class="inline-flex min-h-10 items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-all duration-200 ease-smooth hover:bg-blue-700 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
-									>
-										<i class="fa-solid fa-check" aria-hidden="true"></i> Simpan Nilai
-									</button>
-								{:else}
-									<span class="text-xs font-semibold text-slate-400">Selesai</span>
-								{/if}
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+	{#if cards.length === 0}
+		<div class="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
+			<i class="fa-solid fa-folder-open mb-3 text-3xl text-slate-300" aria-hidden="true"></i>
+			<p class="text-sm font-semibold text-slate-700">Tidak ada course yang cocok.</p>
+			<p class="mt-1 text-xs text-slate-500">Coba kata kunci lain.</p>
 		</div>
-		{#if filtered.length === 0}
-			<p class="p-8 text-center text-sm font-semibold text-slate-500">Tidak ada data pada filter ini.</p>
-		{/if}
-	</div>
+	{:else}
+		<div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+			{#each cards as card (card.id)}
+				<a
+					href={`/instruktur/penilaian/${card.id}`}
+					aria-label={`Buka penilaian ${card.title}: ${card.pending} menunggu dari ${card.total} pengumpulan`}
+					class="group flex flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-all duration-300 ease-smooth hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-blue-600"
+				>
+					<div class="relative overflow-hidden">
+						<img
+							src={card.image}
+							alt=""
+							aria-hidden="true"
+							class="h-36 w-full object-cover transition-transform duration-700 ease-smooth group-hover:scale-105"
+							loading="lazy"
+						/>
+						<span
+							class="absolute top-3 left-3 rounded-md bg-slate-900/80 px-2.5 py-1 text-[10px] font-extrabold text-white uppercase backdrop-blur"
+						>
+							{card.category}
+						</span>
+						{#if card.pending > 0}
+							<span
+								class="absolute top-3 right-3 inline-flex items-center gap-1 rounded-md bg-amber-400 px-2.5 py-1 text-[10px] font-extrabold text-slate-900 uppercase"
+							>
+								<i class="fa-solid fa-hourglass-half text-[9px]" aria-hidden="true"></i>
+								{card.pending} antre
+							</span>
+						{:else}
+							<span
+								class="absolute top-3 right-3 inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1 text-[10px] font-extrabold text-white uppercase"
+							>
+								<i class="fa-solid fa-check text-[9px]" aria-hidden="true"></i> Tuntas
+							</span>
+						{/if}
+					</div>
+					<div class="flex flex-1 flex-col p-5">
+						<h2 class="line-clamp-2 text-base font-bold text-slate-900 transition-colors group-hover:text-blue-700">
+							{card.title}
+						</h2>
+						<p class="mt-1 text-xs text-slate-500">
+							{card.taskCount} materi dinilai · {card.total} pengumpulan · {card.pending} menunggu
+						</p>
+						<span
+							class="mt-4 inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-colors group-hover:bg-blue-700"
+						>
+							<i class="fa-solid fa-clipboard-check" aria-hidden="true"></i>
+							Buka Penugasan
+							<i class="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i>
+						</span>
+					</div>
+				</a>
+			{/each}
+		</div>
+	{/if}
 </div>

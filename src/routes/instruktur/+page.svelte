@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolveGradingHref } from '$lib/data/grading';
+
 	interface StatCard {
 		label: string;
 		value: string;
@@ -29,7 +31,7 @@
 	const stats: StatCard[] = [
 		{ label: 'Kursus Aktif', value: '4', sub: '2 draft menunggu terbit', icon: 'fa-book-open', color: 'text-blue-600', bgColor: 'bg-blue-50' },
 		{ label: 'Total Peserta', value: '5.420', sub: '+312 bulan ini', icon: 'fa-users', color: 'text-emerald-600', bgColor: 'bg-emerald-50' },
-		{ label: 'Menunggu Dinilai', value: '12', sub: '7 tugas · 5 kuis', icon: 'fa-clipboard-check', color: 'text-amber-600', bgColor: 'bg-amber-50' },
+		{ label: 'Menunggu Dinilai', value: '12', sub: 'tugas peserta menunggu nilai', icon: 'fa-clipboard-check', color: 'text-amber-600', bgColor: 'bg-amber-50' },
 		{ label: 'Pendapatan Bulan Ini', value: 'Rp 8,4 jt', sub: 'tersedia Rp 5,1 jt', icon: 'fa-wallet', color: 'text-violet-600', bgColor: 'bg-violet-50' }
 	];
 
@@ -203,7 +205,7 @@
 				<div class="divide-y divide-slate-100">
 					{#each pendingReviews as review (review.id)}
 						<a
-							href="/instruktur/penilaian"
+							href={resolveGradingHref(review.course, review.task)}
 							class="flex items-center gap-3 px-6 py-4 transition-colors duration-200 ease-smooth hover:bg-slate-50/50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600"
 						>
 							<div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-amber-50">

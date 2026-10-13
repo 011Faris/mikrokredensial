@@ -1,5 +1,5 @@
 <script lang="ts">
-	import logoUrl from '$lib/assets/assets/logo/aristotlelogo.png';
+	import { aristotleLogo as logoUrl } from '$lib/assets/logo';
 
 	let {
 		size = 'md',

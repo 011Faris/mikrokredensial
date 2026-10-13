@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { resolve } from '$app/paths';
 	import Logo from '$lib/components/Logo.svelte';
-	import logoUrl from '$lib/assets/assets/logo/aristotlelogo.png';
+	import { aristotleLogo as logoUrl } from '$lib/assets/logo';
 	import { courses } from '$lib/data/courses';
 	import { getCourseMeta } from '$lib/data/course-meta';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import logoUrl from '$lib/assets/assets/logo/aristotlelogo.png';
+	import { aristotleLogo as logoUrl } from '$lib/assets/logo';
 
 	export interface NavItem {
 		label: string;
