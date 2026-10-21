@@ -172,7 +172,7 @@
 		</div>
 	</div>
 
-	<!-- Right Panel: Register Form -->
+	<!-- Right Panel: Register Form (tanpa card, form menempel langsung pada background) -->
 	<div class="flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-slate-50 p-4 sm:p-6 lg:w-1/2 lg:p-8 xl:w-2/5">
 		<div class="flex max-h-full min-h-0 w-full max-w-md flex-col">
 			<!-- Mobile Logo (visible only on small screens) -->
@@ -180,221 +180,200 @@
 				<Logo size="lg" showText={true} textSize="lg" />
 			</div>
 
-			<!-- Register Card -->
-			<div class="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white shadow-xl">
-				<!-- Top Accent Bar -->
-				<div class="h-1.5 shrink-0 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600"></div>
-
-				<div class="min-h-0 shrink p-6 sm:p-7">
-					<!-- Header -->
-					<div class="mb-5">
-						<div class="mb-3 inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-							<i class="fa-solid fa-user-plus" aria-hidden="true"></i> Pendaftaran Mahasiswa
-						</div>
-						<h2 class="mb-1 text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-							Buat Akun Baru
-						</h2>
-						<p class="text-xs text-slate-500 sm:text-sm">
-							Daftarkan diri Anda untuk mulai belajar dan meraih sertifikat kompetensi.
-						</p>
+			<div class="min-h-0 shrink p-6 sm:p-7">
+				<!-- Header -->
+				<div class="mb-5">
+					<div class="mb-3 inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+						<i class="fa-solid fa-user-plus" aria-hidden="true"></i> Pendaftaran Mahasiswa
 					</div>
-
-					<!-- Form -->
-					<form class="space-y-3.5" onsubmit={handleSubmit}>
-						<!-- Full Name -->
-						<div>
-							<label for="full-name" class="mb-1.5 block text-sm font-semibold text-slate-700">
-								Nama Lengkap <span class="text-red-500">*</span>
-							</label>
-							<div class="relative">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-									<i class="fa-solid fa-user" aria-hidden="true"></i>
-								</div>
-								<input
-									id="full-name"
-									name="fullName"
-									type="text"
-									autocomplete="name"
-									placeholder="cth. Rian Pratama"
-									bind:value={fullName}
-									class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-4 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-								/>
-							</div>
-						</div>
-
-						<!-- Email -->
-						<div>
-							<label for="reg-email" class="mb-1.5 block text-sm font-semibold text-slate-700">
-								Email <span class="text-red-500">*</span>
-							</label>
-							<div class="relative">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-									<i class="fa-solid fa-envelope" aria-hidden="true"></i>
-								</div>
-								<input
-									id="reg-email"
-									name="email"
-									type="email"
-									autocomplete="email"
-									placeholder="email@anda.com"
-									bind:value={email}
-									class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-4 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-								/>
-							</div>
-						</div>
-
-						<!-- Password -->
-						<div>
-							<label for="reg-password" class="mb-1.5 block text-sm font-semibold text-slate-700">
-								Kata Sandi <span class="text-red-500">*</span>
-							</label>
-							<div class="relative">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-									<i class="fa-solid fa-lock" aria-hidden="true"></i>
-								</div>
-								<input
-									id="reg-password"
-									name="password"
-									type={showPassword ? 'text' : 'password'}
-									autocomplete="new-password"
-									placeholder="Kombinasi kata sandi kuat"
-									bind:value={password}
-									oninput={handlePasswordInput}
-									class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-12 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-								/>
-								<button
-									type="button"
-									aria-label="Tampilkan atau sembunyikan kata sandi"
-									onclick={togglePassword}
-									class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-2 focus-visible:outline-blue-600"
-								>
-									<i class="fa-solid {showPassword ? 'fa-eye-slash' : 'fa-eye'}" aria-hidden="true"></i>
-								</button>
-							</div>
-
-							<!-- Password Strength Meter (ringkas) -->
-							{#if password.length > 0}
-								<div class="mt-2 rounded-xl border border-slate-100 bg-slate-50 p-2.5" role="status" aria-live="polite">
-									<div class="mb-1.5 flex items-center justify-between">
-										<span class="text-[11px] font-semibold text-slate-500">Kekuatan sandi</span>
-										<span class="text-[11px] font-bold text-blue-600">{passwordStrengthLabel}</span>
-									</div>
-									<div class="h-1.5 overflow-hidden rounded-full bg-slate-200">
-										<div
-											class="h-full {passwordStrengthColor} rounded-full transition-all duration-300"
-											style="width: {passwordStrength === 0 ? '10' : passwordStrength * 33}%"
-										></div>
-									</div>
-								</div>
-							{/if}
-						</div>
-
-						<!-- Confirm Password -->
-						<div>
-							<label for="confirm-password" class="mb-1.5 block text-sm font-semibold text-slate-700">
-								Konfirmasi Kata Sandi <span class="text-red-500">*</span>
-							</label>
-							<div class="relative">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-									<i class="fa-solid fa-lock" aria-hidden="true"></i>
-								</div>
-								<input
-									id="confirm-password"
-									name="confirmPassword"
-									type={showConfirmPassword ? 'text' : 'password'}
-									autocomplete="new-password"
-									placeholder="Ulangi kata sandi Anda"
-									bind:value={confirmPassword}
-									class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-12 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-								/>
-								<button
-									type="button"
-									aria-label="Tampilkan atau sembunyikan kata sandi"
-									onclick={toggleConfirmPassword}
-									class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-2 focus-visible:outline-blue-600"
-								>
-									<i class="fa-solid {showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}" aria-hidden="true"></i>
-								</button>
-							</div>
-							{#if confirmPassword.length > 0 && password !== confirmPassword}
-								<p role="alert" class="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-red-500">
-									<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
-									<span>Kata sandi tidak cocok.</span>
-								</p>
-							{/if}
-						</div>
-
-						<!-- Terms Checkbox -->
-						<div>
-							<label class="flex cursor-pointer items-start gap-2.5 select-none" for="terms-checkbox">
-								<input
-									id="terms-checkbox"
-									name="terms"
-									type="checkbox"
-									bind:checked={agreeTerms}
-									class="mt-0.5 h-4 w-4 cursor-pointer rounded border-slate-300 text-blue-600 focus:ring-blue-500/20"
-								/>
-								<span class="text-xs leading-snug text-slate-600">
-									Saya menyetujui <a href="#" class="font-medium text-blue-600 hover:underline">Syarat &amp; Ketentuan</a> serta <a href="#" class="font-medium text-blue-600 hover:underline">Kebijakan Privasi</a> Aristotle.
-								</span>
-							</label>
-						</div>
-
-						<!-- Submit Button -->
-						<button
-							type="submit"
-							disabled={isLoading}
-							class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:bg-blue-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-blue-400"
-						>
-							{#if isLoading}
-								<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
-								<span>Memproses...</span>
-							{:else}
-								<span>Daftar Akun Sekarang</span>
-								<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-							{/if}
-						</button>
-
-						<!-- Divider -->
-						<div class="relative flex items-center py-1">
-							<div class="grow border-t border-slate-200"></div>
-							<span class="mx-4 shrink text-xs font-semibold tracking-wider text-slate-400 uppercase">atau</span>
-							<div class="grow border-t border-slate-200"></div>
-						</div>
-
-						<!-- SSO Button -->
-						<a
-							href="/with_UNIRA"
-							class="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
-						>
-							<i class="fa-brands fa-google text-red-500" aria-hidden="true"></i>
-							<span>Daftar dengan UNIRA</span>
-						</a>
-					</form>
-
-					<!-- Card Footer -->
-					<p class="mt-4 text-center text-xs text-slate-600">
-						Sudah memiliki akun?
-						<a href="/login" class="ml-1 rounded font-bold text-blue-600 hover:text-blue-700 hover:underline focus-visible:outline-2 focus-visible:outline-blue-600">
-							Masuk di sini
-						</a>
+					<h2 class="mb-1 text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+						Buat Akun Baru
+					</h2>
+					<p class="text-xs text-slate-500 sm:text-sm">
+						Daftarkan diri Anda untuk mulai belajar dan meraih sertifikat kompetensi.
 					</p>
 				</div>
 
-				<!-- Card Footer Bar -->
-				<div class="shrink-0 border-t border-slate-100 bg-slate-50 px-6 py-3 sm:px-7">
-					<div class="flex items-center justify-center gap-4 text-xs text-slate-500">
-						<span class="flex items-center gap-1.5">
-							<i class="fa-solid fa-shield-halved text-green-500" aria-hidden="true"></i>
-							Enkripsi TLS 1.3
-						</span>
-						<span class="text-slate-300" aria-hidden="true">|</span>
-						<span class="flex items-center gap-1.5">
-							<i class="fa-solid fa-certificate text-green-500" aria-hidden="true"></i>
-							ISO 27001
-						</span>
+				<!-- Form -->
+				<form class="space-y-3.5" onsubmit={handleSubmit}>
+					<!-- Full Name -->
+					<div>
+						<label for="full-name" class="mb-1.5 block text-sm font-semibold text-slate-700">
+							Nama Lengkap <span class="text-red-500">*</span>
+						</label>
+						<div class="relative">
+							<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+								<i class="fa-solid fa-user" aria-hidden="true"></i>
+							</div>
+							<input
+								id="full-name"
+								name="fullName"
+								type="text"
+								autocomplete="name"
+								placeholder="cth. Rian Pratama"
+								bind:value={fullName}
+								class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+							/>
+						</div>
 					</div>
-				</div>
+
+					<!-- Email -->
+					<div>
+						<label for="reg-email" class="mb-1.5 block text-sm font-semibold text-slate-700">
+							Email <span class="text-red-500">*</span>
+						</label>
+						<div class="relative">
+							<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+								<i class="fa-solid fa-envelope" aria-hidden="true"></i>
+							</div>
+							<input
+								id="reg-email"
+								name="email"
+								type="email"
+								autocomplete="email"
+								placeholder="email@anda.com"
+								bind:value={email}
+								class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+							/>
+						</div>
+					</div>
+
+					<!-- Password -->
+					<div>
+						<label for="reg-password" class="mb-1.5 block text-sm font-semibold text-slate-700">
+							Kata Sandi <span class="text-red-500">*</span>
+						</label>
+						<div class="relative">
+							<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+								<i class="fa-solid fa-lock" aria-hidden="true"></i>
+							</div>
+							<input
+								id="reg-password"
+								name="password"
+								type={showPassword ? 'text' : 'password'}
+								autocomplete="new-password"
+								placeholder="Kombinasi kata sandi kuat"
+								bind:value={password}
+								oninput={handlePasswordInput}
+								class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-12 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+							/>
+							<button
+								type="button"
+								aria-label="Tampilkan atau sembunyikan kata sandi"
+								onclick={togglePassword}
+								class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-2 focus-visible:outline-blue-600"
+							>
+								<i class="fa-solid {showPassword ? 'fa-eye-slash' : 'fa-eye'}" aria-hidden="true"></i>
+							</button>
+						</div>
+
+						<!-- Password Strength Meter (ringkas) -->
+						{#if password.length > 0}
+							<div class="mt-2 rounded-xl border border-slate-100 bg-slate-50 p-2.5" role="status" aria-live="polite">
+								<div class="mb-1.5 flex items-center justify-between">
+									<span class="text-[11px] font-semibold text-slate-500">Kekuatan sandi</span>
+									<span class="text-[11px] font-bold text-blue-600">{passwordStrengthLabel}</span>
+								</div>
+								<div class="h-1.5 overflow-hidden rounded-full bg-slate-200">
+									<div
+										class="h-full {passwordStrengthColor} rounded-full transition-all duration-300"
+										style="width: {passwordStrength === 0 ? '10' : passwordStrength * 33}%"
+									></div>
+								</div>
+							</div>
+						{/if}
+					</div>
+
+					<!-- Confirm Password -->
+					<div>
+						<label for="confirm-password" class="mb-1.5 block text-sm font-semibold text-slate-700">
+							Konfirmasi Kata Sandi <span class="text-red-500">*</span>
+						</label>
+						<div class="relative">
+							<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+								<i class="fa-solid fa-lock" aria-hidden="true"></i>
+							</div>
+							<input
+								id="confirm-password"
+								name="confirmPassword"
+								type={showConfirmPassword ? 'text' : 'password'}
+								autocomplete="new-password"
+								placeholder="Ulangi kata sandi Anda"
+								bind:value={confirmPassword}
+								class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-12 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+							/>
+							<button
+								type="button"
+								aria-label="Tampilkan atau sembunyikan kata sandi"
+								onclick={toggleConfirmPassword}
+								class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-2 focus-visible:outline-blue-600"
+							>
+								<i class="fa-solid {showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}" aria-hidden="true"></i>
+							</button>
+						</div>
+						{#if confirmPassword.length > 0 && password !== confirmPassword}
+							<p role="alert" class="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-red-500">
+								<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+								<span>Kata sandi tidak cocok.</span>
+							</p>
+						{/if}
+					</div>
+
+					<!-- Terms Checkbox -->
+					<div>
+						<label class="flex cursor-pointer items-start gap-2.5 select-none" for="terms-checkbox">
+							<input
+								id="terms-checkbox"
+								name="terms"
+								type="checkbox"
+								bind:checked={agreeTerms}
+								class="mt-0.5 h-4 w-4 cursor-pointer rounded border-slate-300 text-blue-600 focus:ring-blue-500/20"
+							/>
+							<span class="text-xs leading-snug text-slate-600">
+								Saya menyetujui <a href="#" class="font-medium text-blue-600 hover:underline">Syarat &amp; Ketentuan</a> serta <a href="#" class="font-medium text-blue-600 hover:underline">Kebijakan Privasi</a> Aristotle.
+							</span>
+						</label>
+					</div>
+
+					<!-- Submit Button -->
+					<button
+						type="submit"
+						disabled={isLoading}
+						class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:bg-blue-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-blue-400"
+					>
+						{#if isLoading}
+							<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+							<span>Memproses...</span>
+						{:else}
+							<span>Daftar Akun Sekarang</span>
+							<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+						{/if}
+					</button>
+
+					<!-- Divider -->
+					<div class="relative flex items-center py-1">
+						<div class="grow border-t border-slate-200"></div>
+						<span class="mx-4 shrink text-xs font-semibold tracking-wider text-slate-400 uppercase">atau</span>
+						<div class="grow border-t border-slate-200"></div>
+					</div>
+
+					<!-- SSO Button -->
+					<a
+						href="/with_UNIRA"
+						class="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
+					>
+						<i class="fa-brands fa-google text-red-500" aria-hidden="true"></i>
+						<span>Daftar dengan UNIRA</span>
+					</a>
+				</form>
+
+				<!-- Sudah memiliki akun -->
+				<p class="mt-4 text-center text-xs text-slate-600">
+					Sudah memiliki akun?
+					<a href="/login" class="ml-1 rounded font-bold text-blue-600 hover:text-blue-700 hover:underline focus-visible:outline-2 focus-visible:outline-blue-600">
+						Masuk di sini
+					</a>
+				</p>
 			</div>
 
 			<!-- Back to Home -->

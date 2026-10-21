@@ -145,7 +145,7 @@
 		</div>
 	</div>
 
-	<!-- Right Panel: Login Form -->
+	<!-- Right Panel: Login Form (tanpa card, form menempel langsung pada background) -->
 	<div class="flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-slate-50 p-4 sm:p-6 lg:w-1/2 lg:p-8 xl:w-2/5">
 		<div class="flex max-h-full min-h-0 w-full max-w-md flex-col">
 			<!-- Mobile Logo (visible only on small screens) -->
@@ -153,187 +153,166 @@
 				<Logo size="lg" showText={true} textSize="lg" />
 			</div>
 
-			<!-- Login Card -->
-			<div class="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white shadow-xl">
-				<!-- Top Accent Bar -->
-				<div class="h-1.5 shrink-0 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600"></div>
+			<div class="min-h-0 shrink p-6 sm:p-7">
+				<!-- Header -->
+				<div class="mb-5">
+					<div class="mb-3 inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+						<i class="fa-solid fa-user-graduate" aria-hidden="true"></i> Portal Mahasiswa
+					</div>
+					<h2 class="mb-1 text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+						Selamat Datang Kembali
+					</h2>
+					<p class="text-xs text-slate-500 sm:text-sm">
+						Masuk untuk melanjutkan progres belajar dan sertifikasi Anda.
+					</p>
+				</div>
 
-				<div class="min-h-0 shrink p-6 sm:p-7">
-					<!-- Header -->
-					<div class="mb-5">
-						<div class="mb-3 inline-flex items-center gap-1.5 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-							<i class="fa-solid fa-user-graduate" aria-hidden="true"></i> Portal Mahasiswa
-						</div>
-						<h2 class="mb-1 text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
-							Selamat Datang Kembali
-						</h2>
-						<p class="text-xs text-slate-500 sm:text-sm">
-							Masuk untuk melanjutkan progres belajar dan sertifikasi Anda.
+				<!-- Form -->
+				<form class="space-y-3.5" onsubmit={handleSubmit}>
+					{#if errorMessage}
+						<p
+							role="alert"
+							class="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-semibold text-red-700"
+						>
+							<i class="fa-solid fa-circle-exclamation mt-0.5 shrink-0" aria-hidden="true"></i>
+							<span>{errorMessage}</span>
 						</p>
+					{/if}
+					<!-- Email Input -->
+					<div>
+						<label for="student-email" class="mb-1.5 block text-sm font-semibold text-slate-700">
+							Email / NIM
+						</label>
+						<div class="relative">
+							<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+								<i class="fa-solid fa-envelope" aria-hidden="true"></i>
+							</div>
+							<input
+								id="student-email"
+								name="email"
+								type="email"
+								autocomplete="email"
+								placeholder="nim@student.ac.id atau email@anda.com"
+								bind:value={email}
+								class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-4 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+							/>
+						</div>
 					</div>
 
-					<!-- Form -->
-					<form class="space-y-3.5" onsubmit={handleSubmit}>
-						{#if errorMessage}
-							<p
-								role="alert"
-								class="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-2.5 text-xs font-semibold text-red-700"
-							>
-								<i class="fa-solid fa-circle-exclamation mt-0.5 shrink-0" aria-hidden="true"></i>
-								<span>{errorMessage}</span>
-							</p>
-						{/if}
-						<!-- Email Input -->
-						<div>
-							<label for="student-email" class="mb-1.5 block text-sm font-semibold text-slate-700">
-								Email / NIM
+					<!-- Password Input -->
+					<div>
+						<div class="mb-1.5 flex items-center justify-between">
+							<label for="student-password" class="block text-sm font-semibold text-slate-700">
+								Kata Sandi
 							</label>
-							<div class="relative">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-									<i class="fa-solid fa-envelope" aria-hidden="true"></i>
-								</div>
-								<input
-									id="student-email"
-									name="email"
-									type="email"
-									autocomplete="email"
-									placeholder="nim@student.ac.id atau email@anda.com"
-									bind:value={email}
-									class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-4 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-								/>
-							</div>
-						</div>
-
-						<!-- Password Input -->
-						<div>
-							<div class="mb-1.5 flex items-center justify-between">
-								<label for="student-password" class="block text-sm font-semibold text-slate-700">
-									Kata Sandi
-								</label>
-								<a href="/verify" class="rounded text-xs font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline focus-visible:outline-2 focus-visible:outline-blue-600">
-									Lupa Kata Sandi?
-								</a>
-							</div>
-							<div class="relative">
-								<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-									<i class="fa-solid fa-lock" aria-hidden="true"></i>
-								</div>
-								<input
-									id="student-password"
-									name="password"
-									type={showPassword ? 'text' : 'password'}
-									autocomplete="current-password"
-									placeholder="Masukkan kata sandi"
-									bind:value={password}
-									class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pr-12 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-								/>
-								<button
-									type="button"
-									aria-label="Tampilkan atau sembunyikan kata sandi"
-									onclick={togglePassword}
-									class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-2 focus-visible:outline-blue-600"
-								>
-									<i class="fa-solid {showPassword ? 'fa-eye-slash' : 'fa-eye'}" aria-hidden="true"></i>
-								</button>
-							</div>
-						</div>
-
-						<!-- Remember Me -->
-						<div class="flex items-center justify-between">
-							<div class="flex items-center">
-								<input
-									id="remember-me"
-									name="remember-me"
-									type="checkbox"
-									bind:checked={rememberMe}
-									class="h-4 w-4 cursor-pointer rounded border-slate-300 text-blue-600 focus:ring-blue-500/20"
-								/>
-								<label for="remember-me" class="ml-2 block cursor-pointer text-sm text-slate-600 select-none">
-									Ingat saya
-								</label>
-							</div>
-							<a href="/register" class="rounded text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline focus-visible:outline-2 focus-visible:outline-blue-600">
-								Daftar Akun
+							<a href="/verify" class="rounded text-xs font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline focus-visible:outline-2 focus-visible:outline-blue-600">
+								Lupa Kata Sandi?
 							</a>
 						</div>
-
-						<!-- Submit Button -->
-						<button
-							type="submit"
-							disabled={isLoading}
-							class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:bg-blue-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-blue-400"
-						>
-							{#if isLoading}
-								<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
-								<span>Memproses...</span>
-							{:else}
-								<span>Masuk ke Portal</span>
-								<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-							{/if}
-						</button>
-
-						<!-- Divider -->
-						<div class="relative flex items-center py-1">
-							<div class="grow border-t border-slate-200"></div>
-							<span class="mx-4 shrink text-xs font-semibold tracking-wider text-slate-400 uppercase">atau</span>
-							<div class="grow border-t border-slate-200"></div>
+						<div class="relative">
+							<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+								<i class="fa-solid fa-lock" aria-hidden="true"></i>
+							</div>
+							<input
+								id="student-password"
+								name="password"
+								type={showPassword ? 'text' : 'password'}
+								autocomplete="current-password"
+								placeholder="Masukkan kata sandi"
+								bind:value={password}
+								class="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-12 pl-11 text-sm text-slate-800 transition-all placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+							/>
+							<button
+								type="button"
+								aria-label="Tampilkan atau sembunyikan kata sandi"
+								onclick={togglePassword}
+								class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 transition-colors hover:text-slate-600 focus-visible:outline-2 focus-visible:outline-blue-600"
+							>
+								<i class="fa-solid {showPassword ? 'fa-eye-slash' : 'fa-eye'}" aria-hidden="true"></i>
+							</button>
 						</div>
-
-						<!-- Demo account (ringkas agar muat satu layar) -->
-						<details class="group rounded-xl border border-dashed border-blue-200 bg-blue-50/60 px-4 py-2.5">
-							<summary class="flex cursor-pointer list-none items-center justify-between gap-2 rounded text-xs font-bold text-blue-800 focus-visible:outline-2 focus-visible:outline-blue-600 [&::-webkit-details-marker]:hidden">
-								<span class="flex items-center gap-2">
-									<i class="fa-solid fa-flask" aria-hidden="true"></i> Akun demo — klik untuk isi otomatis
-								</span>
-								<i class="fa-solid fa-chevron-down text-[10px] transition-transform group-open:rotate-180" aria-hidden="true"></i>
-							</summary>
-							<ul class="mt-2 space-y-2 pb-1">
-								{#each DUMMY_ACCOUNTS as account (account.email)}
-									<li class="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-white/70 px-3 py-2">
-										<span>
-											<span class="block text-[11px] font-bold text-slate-800">{account.role} — {account.name}</span>
-											<span class="block font-mono text-[11px] text-blue-700">
-												{account.email} · {account.password}
-											</span>
-										</span>
-										<button
-											type="button"
-											onclick={() => fillDemoAccount(account)}
-											class="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
-										>
-											<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
-											Isi otomatis
-										</button>
-									</li>
-								{/each}
-							</ul>
-						</details>
-
-						<!-- SSO Button -->
-						<a
-							href="/with_UNIRA"
-							class="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
-						>
-							<i class="fa-brands fa-google text-red-500" aria-hidden="true"></i>
-							<span>Masuk dengan UNIRA</span>
-						</a>
-					</form>
-				</div>
-
-				<!-- Card Footer -->
-				<div class="shrink-0 border-t border-slate-100 bg-slate-50 px-6 py-3 sm:px-7">
-					<div class="flex items-center justify-center gap-4 text-xs text-slate-500">
-						<span class="flex items-center gap-1.5">
-							<i class="fa-solid fa-shield-halved text-green-500" aria-hidden="true"></i>
-							Enkripsi TLS 1.3
-						</span>
-						<span class="text-slate-300" aria-hidden="true">|</span>
-						<span class="flex items-center gap-1.5">
-							<i class="fa-solid fa-certificate text-green-500" aria-hidden="true"></i>
-							ISO 27001
-						</span>
 					</div>
-				</div>
+
+					<!-- Remember Me -->
+					<div class="flex items-center justify-between">
+						<div class="flex items-center">
+							<input
+								id="remember-me"
+								name="remember-me"
+								type="checkbox"
+								bind:checked={rememberMe}
+								class="h-4 w-4 cursor-pointer rounded border-slate-300 text-blue-600 focus:ring-blue-500/20"
+							/>
+							<label for="remember-me" class="ml-2 block cursor-pointer text-sm text-slate-600 select-none">
+								Ingat saya
+							</label>
+						</div>
+						<a href="/register" class="rounded text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline focus-visible:outline-2 focus-visible:outline-blue-600">
+							Daftar Akun
+						</a>
+					</div>
+
+					<!-- Submit Button -->
+					<button
+						type="submit"
+						disabled={isLoading}
+						class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition-all duration-200 hover:bg-blue-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-blue-400"
+					>
+						{#if isLoading}
+							<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+							<span>Memproses...</span>
+						{:else}
+							<span>Masuk ke Portal</span>
+							<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+						{/if}
+					</button>
+
+					<!-- Divider -->
+					<div class="relative flex items-center py-1">
+						<div class="grow border-t border-slate-200"></div>
+						<span class="mx-4 shrink text-xs font-semibold tracking-wider text-slate-400 uppercase">atau</span>
+						<div class="grow border-t border-slate-200"></div>
+					</div>
+
+					<!-- Demo account (ringkas agar muat satu layar) -->
+					<details class="group rounded-xl border border-dashed border-blue-200 bg-blue-50/60 px-4 py-2.5">
+						<summary class="flex cursor-pointer list-none items-center justify-between gap-2 rounded text-xs font-bold text-blue-800 focus-visible:outline-2 focus-visible:outline-blue-600 [&::-webkit-details-marker]:hidden">
+							<span class="flex items-center gap-2">
+								<i class="fa-solid fa-flask" aria-hidden="true"></i> Akun demo — klik untuk isi otomatis
+							</span>
+							<i class="fa-solid fa-chevron-down text-[10px] transition-transform group-open:rotate-180" aria-hidden="true"></i>
+						</summary>
+						<ul class="mt-2 space-y-2 pb-1">
+							{#each DUMMY_ACCOUNTS as account (account.email)}
+								<li class="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-white/70 px-3 py-2">
+									<span>
+										<span class="block text-[11px] font-bold text-slate-800">{account.role} — {account.name}</span>
+										<span class="block font-mono text-[11px] text-blue-700">
+											{account.email} · {account.password}
+										</span>
+									</span>
+									<button
+										type="button"
+										onclick={() => fillDemoAccount(account)}
+										class="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
+									>
+										<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+										Isi otomatis
+									</button>
+								</li>
+							{/each}
+						</ul>
+					</details>
+
+					<!-- SSO Button -->
+					<a
+						href="/with_UNIRA"
+						class="flex w-full items-center justify-center gap-2.5 rounded-xl border border-slate-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue-600"
+					>
+						<i class="fa-brands fa-google text-red-500" aria-hidden="true"></i>
+						<span>Masuk dengan UNIRA</span>
+					</a>
+				</form>
 			</div>
 
 			<!-- Back to Home -->
