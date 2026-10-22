@@ -2,7 +2,7 @@
 	import '../app.css';
 	import { resolve } from '$app/paths';
 	import Logo from '$lib/components/Logo.svelte';
-	import { aristotleLogo as logoUrl } from '$lib/assets/logo';
+	import { aristotelesLogo as logoUrl } from '$lib/assets/logo';
 	import { courses } from '$lib/data/courses';
 	import { getCourseMeta } from '$lib/data/course-meta';
 
@@ -18,10 +18,10 @@
 </script>
 
 <svelte:head>
-	<title>Ubah Rasa Ingin Tahu Menjadi Keahlian yang Bermakna — Aristotle</title>
+	<title>Ubah Rasa Ingin Tahu Menjadi Keahlian yang Bermakna — Aristoteles</title>
 	<meta
 		name="description"
-		content="ARISTOTLE — Artificial Intelligence Research, Innovation, Science, Technology, and Engineering Laboratory for Education and Systems. Dari memilih pelatihan hingga memperoleh sertifikat. Terstruktur, terukur, dan berkelanjutan."
+		content="ARISTOTELES — Artificial Intelligence Research, Innovation, Science, Technology, and Engineering Laboratory for Education and Systems. Dari memilih pelatihan hingga memperoleh sertifikat. Terstruktur, terukur, dan berkelanjutan."
 	/>
 </svelte:head>
 
@@ -33,7 +33,7 @@
 			<a
 				href="#beranda"
 				class="flex shrink-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-blue-600"
-				aria-label="Aristotle - Beranda"
+				aria-label="Aristoteles - Beranda"
 			>
 				<Logo size="md" showText={true} textSize="xl" />
 			</a>
@@ -176,7 +176,7 @@
 					</h1>
 
 					<p class="max-w-xl text-xs leading-relaxed text-text-muted sm:text-sm">
-						<strong class="font-bold text-navy">ARISTOTLE</strong> — Artificial Intelligence Research,
+						<strong class="font-bold text-navy">ARISTOTELES</strong> — Artificial Intelligence Research,
 						Innovation, Science, Technology, and Engineering Laboratory for Education and Systems.
 					</p>
 
@@ -209,7 +209,7 @@
 					<!-- Action Buttons -->
 					<div class="flex animate-rise flex-wrap gap-4 pt-4" style="animation-delay:270ms">
 						<a
-							href="#"
+							href="/register"
 							class="group flex items-center gap-3 rounded-xl bg-primary px-8 py-4 font-bold text-white shadow-lg shadow-primary/25 transition-all duration-300 hover:bg-primary-hover active:scale-[0.98]"
 						>
 							DAFTAR SEKARANG <i
@@ -678,7 +678,7 @@
 
 					<div class="pt-4">
 						<a
-							href="#"
+							href="/modules"
 							class="inline-flex items-center gap-3 bg-blue-600 text-white font-bold text-sm px-8 py-4 rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
 						>
 							BACA SELENGKAPNYA <i class="fa-solid fa-arrow-right"></i>
@@ -702,7 +702,7 @@
 							<i class="fa-solid fa-shield-halved"></i> Portal Validasi Perusahaan &amp; Institusi
 						</span>
 						<h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4">
-							Verifikasi Keaslian Sertifikat Aristotle
+							Verifikasi Keaslian Sertifikat Aristoteles
 						</h2>
 						<p class="text-slate-600 text-sm sm:text-base mb-8 max-w-xl">
 							Apakah Anda seorang recruiter atau pimpinan akademik? Masukkan ID Kredensial kandidat
@@ -779,7 +779,7 @@
 							>
 								<span>Signer: 0x4D2A...81E9</span>
 								<a
-									href="#"
+									href="/user/sertifikat"
 									class="text-blue-600 hover:underline flex items-center gap-1 font-sans font-semibold"
 								>
 									Unduh PDF
@@ -812,16 +812,18 @@
 				<li><a href="#tentang" class="hover:text-white transition">Tentang Kami</a></li>
 				<li><a href="#modul" class="hover:text-white transition">Pelatihan</a></li>
 				<li><a href="#peringkat" class="hover:text-white transition">Peringkat Pelatihan</a></li>
-				<li><a href="#" class="hover:text-white transition">Kebijakan Privasi</a></li>
+				<li><a href="/with_UNIRA" class="hover:text-white transition">Kebijakan Privasi</a></li>
 			</ul>
 		</div>
 		<div>
 			<h4 class="text-white font-bold text-base mb-4">Kategori Program</h4>
 			<ul class="space-y-2 text-xs">
-				<li><a href="#" class="hover:text-white transition">Pemasaran Digital</a></li>
-				<li><a href="#" class="hover:text-white transition">Desain UI/UX</a></li>
-				<li><a href="#" class="hover:text-white transition">Sains Data & Analitik</a></li>
-				<li><a href="#" class="hover:text-white transition">Pengembangan Mobile & Web</a></li>
+				<li><a href="/modules" class="hover:text-white transition">Pemasaran Digital</a></li>
+				<li><a href="/modules" class="hover:text-white transition">Desain UI/UX</a></li>
+				<li><a href="/modules" class="hover:text-white transition">Sains Data & Analitik</a></li>
+				<li>
+					<a href="/modules" class="hover:text-white transition">Pengembangan Mobile & Web</a>
+				</li>
 			</ul>
 		</div>
 		<div>
@@ -836,8 +838,9 @@
 					class="bg-slate-800 text-xs px-3 py-2 rounded-l-lg focus:outline-none text-white w-full border border-slate-700"
 				/>
 				<button
+					aria-label="Kirim email buletin"
 					class="bg-blue-600 text-white px-4 rounded-r-lg text-xs font-bold hover:bg-blue-700 transition"
-					><i class="fa-solid fa-paper-plane"></i></button
+					><i class="fa-solid fa-paper-plane" aria-hidden="true"></i></button
 				>
 			</div>
 		</div>
@@ -845,7 +848,7 @@
 	<div
 		class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-slate-800 text-center text-xs text-slate-500"
 	>
-		&copy; 2026 Aristotle Platform Mikrokredensial. Semua hak dilindungi.
+		&copy; 2026 Aristoteles Platform Mikrokredensial. Semua hak dilindungi.
 	</div>
 </footer>
 
