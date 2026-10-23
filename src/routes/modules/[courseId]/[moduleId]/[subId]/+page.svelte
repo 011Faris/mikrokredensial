@@ -28,12 +28,9 @@
 	const subsInModule = $derived(module ? resolveSubModules(module) : []);
 
 	function typeLabel(t: string): string {
-		if (t === 'video') return 'Video';
-		if (t === 'audio') return 'Audio';
-		if (t === 'foto') return 'Foto';
 		if (t === 'kuis') return 'Kuis';
 		if (t === 'tugas') return 'Tugas';
-		return 'Bacaan';
+		return 'Materi';
 	}
 </script>
 

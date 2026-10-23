@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Course } from '$lib/data/courses';
-	import { getModuleMaterials } from '$lib/data/courses';
+	import { getModuleMaterials, normalizeMaterialType } from '$lib/data/courses';
 	import { resolveSubModules } from '$lib/data/training';
 	import { courseCredentialId, moduleCredentialId, moduleHref } from '$lib/data/certificates';
 	import { subModuleHref } from '$lib/data/training';
@@ -8,17 +8,17 @@
 	let { course }: { course: Course } = $props();
 
 	function typeSummary(materials: { type: string }[]): string {
-		const order = ['video', 'bacaan', 'kuis', 'tugas', 'audio', 'foto'] as const;
+		const order = ['materi', 'kuis', 'tugas'] as const;
 		const labels: Record<string, string> = {
-			video: 'Video',
-			bacaan: 'Bacaan',
+			materi: 'Materi',
 			kuis: 'Kuis',
-			tugas: 'Tugas',
-			audio: 'Audio',
-			foto: 'Foto'
+			tugas: 'Tugas'
 		};
 		const counts = new Map<string, number>();
-		for (const m of materials) counts.set(m.type, (counts.get(m.type) ?? 0) + 1);
+		for (const m of materials) {
+			const n = normalizeMaterialType(m.type);
+			counts.set(n, (counts.get(n) ?? 0) + 1);
+		}
 		return order
 			.filter((t) => counts.has(t))
 			.map((t) => `${counts.get(t)} ${labels[t]}`)

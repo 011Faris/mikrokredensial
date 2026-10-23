@@ -1,6 +1,49 @@
 export type CourseStatus = 'in-progress' | 'completed' | 'not-started';
 
-export type MaterialType = 'video' | 'bacaan' | 'audio' | 'foto' | 'kuis' | 'tugas';
+export type MaterialType =
+	| 'materi'
+	| 'tugas'
+	| 'kuis'
+	| 'video'
+	| 'bacaan'
+	| 'audio'
+	| 'foto';
+
+/** Tipe yang ditawarkan ke instruktur saat membuat materi baru. */
+export const INSTRUCTOR_MATERIAL_TYPES = ['materi', 'tugas', 'kuis'] as const;
+export type InstructorMaterialType = (typeof INSTRUCTOR_MATERIAL_TYPES)[number];
+
+/**
+ * Normalisasi tipe lama (video/bacaan/audio/foto) ke model 3-tipe:
+ * - kuis → kuis, tugas → tugas
+ * - selain itu (video/bacaan/audio/foto/materi) → materi
+ */
+export function normalizeMaterialType(t: string): InstructorMaterialType {
+	if (t === 'kuis') return 'kuis';
+	if (t === 'tugas') return 'tugas';
+	return 'materi';
+}
+
+export function materialTypeLabel(t: string): string {
+	const n = normalizeMaterialType(t);
+	if (n === 'kuis') return 'Kuis';
+	if (n === 'tugas') return 'Tugas';
+	return 'Materi';
+}
+
+export function materialTypeIcon(t: string): string {
+	const n = normalizeMaterialType(t);
+	if (n === 'kuis') return 'fa-circle-question text-amber-600';
+	if (n === 'tugas') return 'fa-pen-to-square text-violet-600';
+	return 'fa-book-open text-emerald-600';
+}
+
+export function materialActionLabel(t: string): string {
+	const n = normalizeMaterialType(t);
+	if (n === 'kuis') return 'Kerjakan';
+	if (n === 'tugas') return 'Kumpulkan';
+	return 'Pelajari';
+}
 
 export interface Material {
 	id: string;

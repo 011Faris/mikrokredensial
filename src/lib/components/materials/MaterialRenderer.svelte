@@ -25,7 +25,9 @@
 	const detail = $derived(getMaterialDetail(material, course, moduleTitle));
 </script>
 
-{#if material.type === 'video' && detail.mediaUrl}
+{#if material.type === 'materi'}
+	<TextMaterial intro={detail.intro} paragraphs={detail.paragraphs ?? []} points={detail.points ?? []} />
+{:else if material.type === 'video' && detail.mediaUrl}
 	<VideoMaterial
 		src={detail.mediaUrl}
 		title={material.title}

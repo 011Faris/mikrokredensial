@@ -8,6 +8,7 @@
 		isMaterialLocked,
 		isModuleLocked,
 		isSubModuleLocked,
+		normalizeMaterialType,
 		type MaterialType
 	} from '$lib/data/courses';
 	import {
@@ -23,6 +24,19 @@
 	import { moduleCredentialId } from '$lib/data/certificates';
 	import { canAccessCourse, isPeriodLocked } from '$lib/stores/enrollment.svelte';
 	import { resolve } from '$app/paths';
+	import CourseRoadmap from '$lib/components/training/organisms/CourseRoadmap.svelte';
+
+	/** Warna pastel badge nomor — sama seperti halaman instruktur. */
+	const MODULE_BADGES = [
+		'bg-blue-100 text-blue-700',
+		'bg-violet-100 text-violet-700',
+		'bg-emerald-100 text-emerald-700',
+		'bg-amber-100 text-amber-700'
+	] as const;
+
+	function badgeClass(mi: number): string {
+		return MODULE_BADGES[((mi % MODULE_BADGES.length) + MODULE_BADGES.length) % MODULE_BADGES.length];
+	}
 
 	const courseId = $derived(Number(page.params.courseId));
 	const course = $derived(getCourseById(courseId));
@@ -92,7 +106,7 @@
 							);
 						}
 						if (typeFilter !== 'all') {
-							mats = mats.filter((m) => m.type === typeFilter);
+							mats = mats.filter((m) => normalizeMaterialType(String(m.type)) === typeFilter);
 						}
 						if (hideDone) {
 							mats = mats.filter((m) => !doneMaterials.has(m.id));
@@ -150,30 +164,21 @@
 	}
 
 	function typeIcon(type: string) {
-		if (type === 'video') return 'fa-circle-play text-blue-600';
-		if (type === 'audio') return 'fa-headphones text-cyan-600';
-		if (type === 'foto') return 'fa-image text-slate-500';
 		if (type === 'kuis') return 'fa-circle-question text-amber-600';
 		if (type === 'tugas') return 'fa-pen-to-square text-violet-600';
 		return 'fa-book-open text-emerald-600';
 	}
 
 	function typeLabel(type: string) {
-		if (type === 'video') return 'Video';
-		if (type === 'audio') return 'Audio';
-		if (type === 'foto') return 'Foto';
 		if (type === 'kuis') return 'Kuis';
 		if (type === 'tugas') return 'Tugas';
-		return 'Bacaan';
+		return 'Materi';
 	}
 
 	function actionLabel(type: string) {
-		if (type === 'video') return 'Putar';
-		if (type === 'audio') return 'Dengar';
-		if (type === 'foto') return 'Lihat';
 		if (type === 'kuis') return 'Kerjakan';
 		if (type === 'tugas') return 'Kumpulkan';
-		return 'Baca';
+		return 'Pelajari';
 	}
 </script>
 
@@ -320,7 +325,7 @@
 			<span aria-current="page" class="truncate font-medium text-slate-700">{course.title}</span>
 		</nav>
 
-		<!-- Header kursus: Pelatihan → Modul → Sub-modul → Materi -->
+		<!-- Header kursus: sama seperti halaman instruktur, aksi = mengikuti pelatihan -->
 		<header class="mb-6 overflow-hidden rounded-2xl border border-slate-200/70 bg-white">
 			<div class="relative flex min-h-48 flex-col justify-end overflow-hidden sm:min-h-56">
 				<img
@@ -333,44 +338,20 @@
 					class="absolute inset-0 bg-gradient-to-t from-slate-900/85 via-slate-900/40 to-slate-900/10"
 					aria-hidden="true"
 				></div>
-				<div class="relative p-4 pt-14 sm:p-6 sm:pt-16">
-					<p
-						class="flex flex-wrap items-center gap-2 text-[11px] font-bold tracking-widest text-blue-300 uppercase"
-					>
-						<span>{course.category} · {course.level}</span>
-						<span class="rounded-md bg-white/15 px-2 py-0.5 text-white normal-case tracking-normal">
-							Pelatihan → {stats.moduleCount} modul → {stats.subModuleCount} sub-modul → {stats.materialCount}
-							materi
-						</span>
+				<div class="relative flex flex-wrap gap-2 p-4 pb-2 sm:px-6">
+					<span class="rounded-full bg-blue-600 px-3 py-1 text-[11px] font-bold text-white uppercase">{course.category}</span>
+					<span class="rounded-full bg-white/20 px-3 py-1 text-[11px] font-bold text-white uppercase backdrop-blur">{course.level}</span>
+					<span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold text-white uppercase backdrop-blur">
+						<i class="fa-solid fa-circle-play" aria-hidden="true"></i>
+						{prog.percent}% selesai
+					</span>
+				</div>
+				<div class="relative p-4 pt-1 sm:px-6 sm:pb-5">
+					<h1 class="text-xl leading-snug font-extrabold text-white sm:text-2xl">{course.title}</h1>
+					<p class="mt-1 text-xs text-slate-200 sm:text-sm">Oleh {course.instructor} · {course.duration}</p>
+					<p class="mt-1 text-[11px] font-semibold tracking-wide text-blue-200 uppercase">
+						Ikuti · {stats.moduleCount} modul · {stats.subModuleCount} sub-modul · {stats.materialCount} materi
 					</p>
-					<h1 class="mt-1.5 text-xl leading-snug font-extrabold text-white sm:text-2xl">
-						{course.title}
-					</h1>
-					<p
-						class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-200 sm:text-sm"
-					>
-						<span>Oleh {course.instructor}</span>
-						<span aria-hidden="true" class="text-slate-400">·</span>
-						<span>{course.duration}</span>
-						<span aria-hidden="true" class="text-slate-400">·</span>
-						<span>{stats.moduleCount} modul</span>
-						<span aria-hidden="true" class="text-slate-400">·</span>
-						<span>{stats.subModuleCount} sub-modul</span>
-						<span aria-hidden="true" class="text-slate-400">·</span>
-						<span>{stats.materialCount} materi</span>
-					</p>
-					<div class="mt-3 flex flex-wrap gap-1.5" aria-label="Distribusi tipe materi">
-						{#each Object.entries(stats.byType) as [t, n] (t)}
-							{#if n > 0}
-								<span
-									class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-bold text-white"
-								>
-									<i class={`fa-solid ${typeIcon(t)} !text-white`} aria-hidden="true"></i>
-									{typeLabel(t)} · {n}
-								</span>
-							{/if}
-						{/each}
-					</div>
 				</div>
 			</div>
 			<div class="flex flex-col gap-4 p-4 sm:p-6 lg:flex-row lg:items-center">
@@ -448,10 +429,7 @@
 						class="min-h-11 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
 					>
 						<option value="all">Semua tipe</option>
-						<option value="video">Video</option>
-						<option value="bacaan">Bacaan</option>
-						<option value="audio">Audio</option>
-						<option value="foto">Foto</option>
+						<option value="materi">Materi</option>
 						<option value="kuis">Kuis</option>
 						<option value="tugas">Tugas</option>
 					</select>
@@ -491,11 +469,11 @@
 		</div>
 
 		<!-- Daftar hierarki -->
-		<div class="mb-4 flex items-center justify-between">
+		<div class="mb-4">
 			<h2 class="text-lg font-bold text-slate-900">
-				Kurikulum Lengkap ({stats.moduleCount} Modul · {stats.subModuleCount} Sub-modul)
+				Kurikulum ({stats.moduleCount} Modul · {stats.subModuleCount} Sub-modul)
 			</h2>
-			<p class="text-xs text-slate-500">{prog.done}/{prog.total} materi selesai</p>
+			<p class="text-xs text-slate-500">Ikuti modul berurutan — {prog.done}/{prog.total} materi selesai ({prog.percent}%).</p>
 		</div>
 
 		{#if view.length === 0}
@@ -566,7 +544,7 @@
 								class="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-600 sm:p-5"
 							>
 								<span
-									class={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-extrabold ${modComplete ? 'bg-emerald-600 text-white' : 'bg-blue-600 text-white'}`}
+									class={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-sm font-extrabold ring-4 ring-white ${modComplete ? 'bg-emerald-100 text-emerald-700' : badgeClass(moduleIndex)}`}
 									aria-hidden="true"
 								>
 									{#if modComplete}
@@ -667,7 +645,7 @@
 											(id) => doneMaterials.has(id)
 										)}
 										{@const flat = getModuleMaterials(mod)}
-										<div class="overflow-hidden rounded-xl border border-violet-100 bg-white">
+										<div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
 											{#if subLocked && !searching}
 												<div
 													class="flex w-full cursor-not-allowed items-center gap-3 p-3 opacity-70 sm:px-4"
@@ -871,9 +849,21 @@
 			</div>
 		{/if}
 
+		<!-- Pratinjau alur belajar dengan progresmu -->
+		<section aria-labelledby="roadmap-preview-heading" class="mt-6">
+			<div class="mb-3">
+				<h2 id="roadmap-preview-heading" class="text-lg font-bold text-slate-900">Pratinjau Alur Belajar</h2>
+				<p class="text-xs text-slate-500">
+					Jalur Modul → Sub-modul dengan progresmu. Klik node untuk info.
+					{#if stats} ({stats.estimatedLabel}){/if}
+				</p>
+			</div>
+			<CourseRoadmap modules={course.modules} courseId={course.id} />
+		</section>
+
 		<!-- CTA bawah -->
 		<div
-			class="mt-6 flex flex-col gap-3 rounded-2xl border border-blue-100 bg-blue-50/60 p-5 sm:flex-row sm:items-center sm:justify-between"
+			class="mt-6 flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-5 sm:flex-row sm:items-center sm:justify-between"
 		>
 			<div>
 				<p class="text-sm font-bold text-slate-900">

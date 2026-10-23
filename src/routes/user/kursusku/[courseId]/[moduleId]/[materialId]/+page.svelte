@@ -181,30 +181,21 @@
 	);
 
 	function typeBadge(type: string): string {
-		if (type === 'video') return 'bg-blue-600 text-white';
-		if (type === 'audio') return 'bg-cyan-600 text-white';
-		if (type === 'foto') return 'bg-slate-700 text-white';
 		if (type === 'kuis') return 'bg-amber-500 text-white';
 		if (type === 'tugas') return 'bg-violet-600 text-white';
 		return 'bg-emerald-600 text-white';
 	}
 
 	function typeIcon(type: string): string {
-		if (type === 'video') return 'fa-circle-play';
-		if (type === 'audio') return 'fa-headphones';
-		if (type === 'foto') return 'fa-image';
 		if (type === 'kuis') return 'fa-circle-question';
 		if (type === 'tugas') return 'fa-pen-to-square';
 		return 'fa-book-open';
 	}
 
 	function typeLabel(type: string): string {
-		if (type === 'video') return 'Video';
-		if (type === 'audio') return 'Audio';
-		if (type === 'foto') return 'Foto';
 		if (type === 'kuis') return 'Kuis';
 		if (type === 'tugas') return 'Penugasan';
-		return 'Bacaan';
+		return 'Materi';
 	}
 </script>
 
