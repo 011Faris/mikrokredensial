@@ -232,6 +232,13 @@
 					{pendingHere} menunggu dinilai
 				</p>
 			</div>
+			<p class="mb-4 flex items-start gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] leading-relaxed font-semibold text-slate-600">
+				<i class="fa-solid fa-circle-info mt-0.5 shrink-0 text-slate-400" aria-hidden="true"></i>
+				<span>
+					Sumber data: contoh berlabel Contoh + kiriman lokal (simulasi).
+					Nilai lokal belum sinkron ke riwayat peserta lintas sesi atau browser.
+				</span>
+			</p>
 
 			{#if message}
 				<p role="status" class="mb-4 flex items-start gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-700">
@@ -277,7 +284,7 @@
 
 			{#if loading}
 				<p role="status" class="mb-4 flex items-center gap-2 text-xs font-semibold text-slate-500">
-					<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Memuat berkas PDF dari Drive…
+					<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Memuat daftar penilaian (contoh + lokal)…
 				</p>
 			{/if}
 
@@ -304,7 +311,14 @@
 								{#each items as r (r.id)}
 									<tr class="transition-colors duration-200 ease-smooth hover:bg-slate-50/50">
 										<td class="px-5 py-4">
-											<div class="font-semibold text-slate-900">{r.student}</div>
+											<div class="flex flex-wrap items-center gap-2 font-semibold text-slate-900">
+												<span>{r.student}</span>
+												{#if !r.submissionId}
+													<span class="rounded-full border border-slate-200 bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500 uppercase">Contoh</span>
+												{:else}
+													<span class="rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 uppercase">Lokal (simulasi)</span>
+												{/if}
+											</div>
 											<div class="mt-0.5 text-xs text-slate-500">{r.nim} · {r.date}</div>
 										</td>
 										<td class="px-5 py-4">

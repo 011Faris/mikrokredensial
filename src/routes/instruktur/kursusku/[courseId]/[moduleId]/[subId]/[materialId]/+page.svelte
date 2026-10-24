@@ -18,7 +18,9 @@
 	import { createEditorExtensions } from '$lib/tiptap/extensions';
 	import {
 		blankQuizDraft,
+		DEFAULT_PASS_SCORE,
 		loadQuizDraft,
+		normalizePassScore,
 		saveQuizDraft,
 		validateQuizDraft,
 		type QuizDraft
@@ -149,9 +151,12 @@
 
 	const quizInitial = $derived(storedQuiz ?? blankQuizDraft(material?.title ?? ''));
 	const quizPreview = $derived(latestQuiz ?? storedQuiz ?? null);
+	const quizPassScore = $derived(
+		normalizePassScore(quizPreview?.passScore ?? DEFAULT_PASS_SCORE)
+	);
 	const quizStatus = $derived(
 		latestQuiz ?? storedQuiz
-			? `${quizCount || storedQuiz?.questions.length || 0} soal`
+			? `${quizCount || storedQuiz?.questions.length || 0} soal · minimal ${quizPassScore}`
 			: ''
 	);
 
@@ -243,6 +248,9 @@
 			const draft: QuizDraft = {
 				title,
 				intro: latestQuiz?.intro ?? storedQuiz?.intro ?? '',
+				passScore: normalizePassScore(
+					latestQuiz?.passScore ?? storedQuiz?.passScore ?? DEFAULT_PASS_SCORE
+				),
 				questions: latestQuiz?.questions ?? storedQuiz?.questions ?? [],
 				updatedAt
 			};
@@ -267,7 +275,7 @@
 				hour: '2-digit',
 				minute: '2-digit'
 			});
-			savedMessage = `Draf kuis tersimpan ${lastSavedLabel} (${draft.questions.length} soal).`;
+			savedMessage = `Draf kuis tersimpan ${lastSavedLabel} (${draft.questions.length} soal, minimal ${draft.passScore}).`;
 			goto(backHref);
 			return;
 		}
@@ -585,9 +593,14 @@
 					class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white"
 				>
 					<div class="border-b border-slate-100 bg-slate-50/70 px-5 py-4 sm:px-7">
-						<p class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-[10px] font-extrabold tracking-widest text-amber-700 uppercase ring-1 ring-amber-200">
-							<i class="fa-solid fa-eye" aria-hidden="true"></i> Tampilan peserta
-						</p>
+						<div class="flex flex-wrap items-center gap-2">
+							<p class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-[10px] font-extrabold tracking-widest text-amber-700 uppercase ring-1 ring-amber-200">
+								<i class="fa-solid fa-eye" aria-hidden="true"></i> Tampilan peserta
+							</p>
+							<p class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1 text-[10px] font-extrabold tracking-widest text-white uppercase">
+								<i class="fa-solid fa-award text-amber-300" aria-hidden="true"></i> Minimal {quizPassScore} untuk lolos
+							</p>
+						</div>
 						<h2 class="mt-2 text-lg leading-snug font-extrabold text-slate-900 sm:text-xl">
 							{previewTitle || '(belum berjudul)'}
 						</h2>

@@ -339,12 +339,15 @@
 				</h1>
 				<p class="mt-1 max-w-xl text-sm text-slate-500">
 					{#if stage === 'success'}
-						Akses penuh {course.title} sudah aktif. Simpan kwitansi di bawah.
+						Akses penuh {course.title} sudah aktif (simulasi lokal). Kwitansi di bawah hanya tersimpan di browser.
 					{:else if stage === 'instruction'}
 						Ikuti instruksi {methodLabel(method, channel)} sebelum batas waktu habis.
 					{:else}
 						Satu langkah lagi menuju akses penuh: pilih metode, cek rincian, bayar.
 					{/if}
+				</p>
+				<p class="mt-2 max-w-xl text-[11px] font-semibold text-amber-700">
+					Simulasi lokal — belum terhubung ke bank/gateway, belum verifikasi server.
 				</p>
 			</div>
 			<ol aria-label="Langkah pembayaran" class="flex items-center gap-1.5 text-[11px] font-bold">
@@ -419,7 +422,7 @@
 							onclick={() => window.print()}
 							class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-slate-200 px-5 text-sm font-bold text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-blue-600"
 						>
-							<i class="fa-solid fa-receipt" aria-hidden="true"></i> Unduh Kwitansi
+							<i class="fa-solid fa-receipt" aria-hidden="true"></i> Cetak Kwitansi Lokal
 						</button>
 					</div>
 				</section>
@@ -509,7 +512,7 @@
 					{#if stage === 'verifying'}
 						<p role="status" class="mt-5 flex items-center justify-center gap-2.5 rounded-xl bg-amber-50 px-4 py-4 text-sm font-bold text-amber-800">
 							<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
-							Memverifikasi pembayaran ke bank… jangan tutup halaman.
+							Simulasi verifikasi lokal… belum cek ke bank/server.
 						</p>
 					{:else}
 						<div class="mt-5 flex flex-col gap-2.5 sm:flex-row">
@@ -908,7 +911,7 @@
 						</dl>
 						<p class="flex items-center justify-center gap-2 text-[11px] font-semibold text-slate-500">
 							<i class="fa-solid fa-shield-halved text-emerald-600" aria-hidden="true"></i>
-							Pembayaran terenkripsi · Didukung Midtrans-style gateway
+							Simulasi — tanpa transaksi bank sungguhan.
 						</p>
 					</div>
 				</aside>

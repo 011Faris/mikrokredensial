@@ -1801,20 +1801,21 @@ export function isMaterialLocked(
 }
 
 /**
- * Modul index ke-i terkunci bila ada materi di modul-modul sebelumnya
- * yang belum selesai. Modul pertama selalu terbuka.
+ * K-07: modul bersifat independen. Peserta yang memiliki akses kursus boleh
+ * membuka modul mana pun tanpa menyelesaikan modul sebelumnya.
+ * Fungsi dipertahankan agar pemanggil lama tidak rusak, selalu false.
+ * Penguncian berurutan tetap berlaku di dalam modul via
+ * `isSubModuleLocked` / `isMaterialLocked`. Akses bayar/periode tetap
+ * ditangani `paidLocked` / `periodLocked`, bukan di sini.
  */
 export function isModuleLocked(
 	modules: CourseModule[],
 	index: number,
 	isDone: (id: string) => boolean
 ): boolean {
-	if (index <= 0) return false;
-	for (let i = 0; i < index; i++) {
-		for (const mat of modules[i].materials) {
-			if (!isDone(mat.id)) return true;
-		}
-	}
+	void modules;
+	void index;
+	void isDone;
 	return false;
 }
 
@@ -1824,14 +1825,13 @@ export function getModuleMaterials(module: CourseModule): Material[] {
 	return module.materials;
 }
 
-/** Sub-modul index ke-i terkunci bila sub-modul/modul sebelumnya belum tuntas. */
+/** Sub-modul index ke-i terkunci bila sub-modul sebelumnya dalam modul yang sama belum tuntas. */
 export function isSubModuleLocked(
 	modules: CourseModule[],
 	moduleIndex: number,
 	subIndex: number,
 	isDone: (id: string) => boolean
 ): boolean {
-	if (isModuleLocked(modules, moduleIndex, isDone)) return true;
 	if (subIndex <= 0) return false;
 	const subs = modules[moduleIndex]?.subModules ?? [];
 	for (let i = 0; i < subIndex; i++) {

@@ -6,9 +6,9 @@
 		getCourseById,
 		getModuleMaterials,
 		isMaterialLocked,
-		isModuleLocked,
 		isSubModuleLocked,
 		normalizeMaterialType,
+		type CourseModule,
 		type MaterialType
 	} from '$lib/data/courses';
 	import {
@@ -20,6 +20,8 @@
 		subModuleProgress
 	} from '$lib/data/training';
 	import { doneMaterials, ensureSeeded } from '$lib/stores/progress.svelte';
+	import { getQuizResult } from '$lib/stores/quiz-results.svelte';
+	import { latestFor } from '$lib/stores/submissions.svelte';
 	import { getCourseMeta } from '$lib/data/course-meta';
 	import { moduleCredentialId } from '$lib/data/certificates';
 	import { canAccessCourse, isPeriodLocked } from '$lib/stores/enrollment.svelte';
@@ -36,6 +38,40 @@
 
 	function badgeClass(mi: number): string {
 		return MODULE_BADGES[((mi % MODULE_BADGES.length) + MODULE_BADGES.length) % MODULE_BADGES.length];
+	}
+
+	/**
+	 * Tahap 2a — baca-saja. Status kuis per modul dari hasil tersimpan di browser.
+	 * Hanya percobaan terakhir yang tersedia, bukan nilai terbaik (K-02).
+	 */
+	function quizStatsFor(mod: CourseModule): { total: number; passed: number } {
+		const qs = getModuleMaterials(mod).filter((m) => normalizeMaterialType(m.type) === 'kuis');
+		let passed = 0;
+		for (const q of qs) if (getQuizResult(q.id)?.passed) passed++;
+		return { total: qs.length, passed };
+	}
+
+	/**
+	 * Tahap 2a — baca-saja. Status tugas per modul dari riwayat lokal peserta.
+	 * Nilai instruktur tersimpan di antrean terpisah dan belum tentu tersinkron ke sini,
+	 * jadi `graded` hanya yang benar-benar terbaca di sisi peserta.
+	 */
+	function taskStatsFor(mod: CourseModule): {
+		total: number;
+		submitted: number;
+		graded: number;
+	} {
+		const ts = getModuleMaterials(mod).filter((m) => normalizeMaterialType(m.type) === 'tugas');
+		let submitted = 0;
+		let graded = 0;
+		for (const t of ts) {
+			const s = latestFor(t.id);
+			if (s) {
+				submitted++;
+				if (s.score !== null && s.score !== undefined) graded++;
+			}
+		}
+		return { total: ts.length, submitted, graded };
 	}
 
 	const courseId = $derived(Number(page.params.courseId));
@@ -501,42 +537,19 @@
 					{@const mProg = moduleProgress(mod, (id) => doneMaterials.has(id))}
 					{@const modOpen = searching ? true : openModules.has(mod.id)}
 					{@const modComplete = mProg.done === mProg.total && mProg.total > 0}
-					{@const modLocked = isModuleLocked(course.modules, moduleIndex, (id) =>
-						doneMaterials.has(id)
-					)}
+					{@const qStat = quizStatsFor(mod)}
+					{@const tStat = taskStatsFor(mod)}
+					{@const missingMateri = mProg.total - mProg.done}
+					{@const missingKuis = qStat.total - qStat.passed}
+					{@const missingTugas = tStat.total - tStat.submitted}
+					{@const ungradedTugas = tStat.submitted - tStat.graded}
+					{@const knownUnmet =
+						missingMateri > 0 || missingKuis > 0 || missingTugas > 0 || ungradedTugas > 0}
 					<section
 						aria-labelledby={`mod-title-${mod.id}`}
-						class={`overflow-hidden rounded-2xl border bg-white transition-shadow ${modComplete ? 'border-emerald-200' : modLocked ? 'border-slate-200 bg-slate-50/50' : 'border-slate-200/70'} ${modOpen && !modLocked ? 'shadow-lg' : ''}`}
+						class={`overflow-hidden rounded-2xl border bg-white transition-shadow ${modComplete ? 'border-emerald-200' : 'border-slate-200/70'} ${modOpen ? 'shadow-lg' : ''}`}
 					>
-						{#if modLocked && !searching}
-							<div
-								class="flex w-full cursor-not-allowed items-center gap-4 p-4 opacity-70 sm:p-5"
-								title={`Selesaikan Modul ${moduleIndex} terlebih dahulu untuk membuka modul ini`}
-								aria-label={`Terkunci: Modul ${moduleIndex + 1}: ${mod.title}. Selesaikan modul sebelumnya terlebih dahulu.`}
-							>
-								<span
-									class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-200 text-sm font-extrabold text-slate-400"
-									aria-hidden="true"
-								>
-									<i class="fa-solid fa-lock"></i>
-								</span>
-								<span class="min-w-0 flex-1">
-									<span
-										id={`mod-title-${mod.id}`}
-										class="block truncate text-sm font-bold text-slate-400 sm:text-base"
-									>
-										Modul {moduleIndex + 1}: {mod.title}
-									</span>
-									<span class="mt-0.5 block truncate text-xs text-slate-400">{mod.description}</span
-									>
-									<span class="mt-1.5 block text-[11px] font-semibold text-slate-400">
-										Terkunci · {mProg.done}/{mProg.total} materi · {subs.length} sub-modul · Selesaikan
-										Modul {moduleIndex} dulu
-									</span>
-								</span>
-							</div>
-						{:else}
-							<button
+						<button
 								type="button"
 								onclick={() => toggleModule(mod.id)}
 								aria-expanded={modOpen}
@@ -592,9 +605,8 @@
 									aria-hidden="true"
 								></i>
 							</button>
-						{/if}
 
-						{#if modOpen && (!modLocked || searching)}
+						{#if modOpen}
 							<div
 								id={`mod-panel-${mod.id}`}
 								class="border-t border-slate-100 bg-slate-50/50 p-3 sm:p-4"
@@ -631,6 +643,54 @@
 										<span class="text-[11px] font-bold text-amber-700">
 											Tuntaskan {mProg.total - mProg.done} materi lagi
 										</span>
+									{/if}
+								</div>
+								<div
+									class="mb-2.5 rounded-xl border border-slate-200 bg-white px-3.5 py-3"
+									aria-label={`Status persyaratan sertifikat Modul ${moduleIndex + 1}`}
+								>
+									<p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] font-extrabold text-slate-900">
+										Status persyaratan
+										<span class="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">
+											data lokal, bukan bukti resmi
+										</span>
+									</p>
+									<ul class="mt-1.5 space-y-1 text-[12px] text-slate-600">
+										<li>
+											Materi: {mProg.done}/{mProg.total} ditandai selesai (progres lokal di browser ini).
+										</li>
+										{#if qStat.total > 0}
+											<li>
+												Kuis: {qStat.passed}/{qStat.total} lulus (acuan percobaan terakhir, bukan
+												nilai terbaik).
+											</li>
+										{:else}
+											<li>Tidak ada kuis di modul ini.</li>
+										{/if}
+										{#if tStat.total > 0}
+											<li>
+												Tugas: {tStat.submitted}/{tStat.total} terkumpul · {tStat.graded} ada nilai
+												yang terbaca di sisi peserta. Terkumpul ≠ lulus; nilai instruktur belum
+												tentu tersinkron ke perangkat ini.
+											</li>
+										{:else}
+											<li>Tidak ada tugas di modul ini.</li>
+										{/if}
+									</ul>
+									{#if knownUnmet}
+										<p class="mt-1.5 text-[12px] font-bold text-amber-700">
+											Belum memenuhi berdasarkan data tersedia:
+											{#if missingMateri > 0}<span>{missingMateri} materi belum selesai.</span>{/if}
+											{#if missingKuis > 0}<span>{missingKuis} kuis belum lulus.</span>{/if}
+											{#if missingTugas > 0}<span>{missingTugas} tugas belum terkumpul.</span>{/if}
+											{#if ungradedTugas > 0}<span>{ungradedTugas} tugas menunggu nilai.</span>{/if}
+										</p>
+									{:else}
+										<p class="mt-1.5 text-[12px] font-bold text-slate-600">
+											Belum dapat diverifikasi. Data lokal tampak lengkap, tetapi penerbitan resmi
+											membutuhkan validasi server, nilai terbaik kuis, dan status kelulusan tugas
+											yang belum tersedia di sini.
+										</p>
 									{/if}
 								</div>
 								<div class="space-y-2.5">
@@ -742,7 +802,6 @@
 																{@const locked =
 																	!searching &&
 																	(subLocked ||
-																		modLocked ||
 																		(flatIndex >= 0 &&
 																			isMaterialLocked(flat, flatIndex, (id) =>
 																				doneMaterials.has(id)
