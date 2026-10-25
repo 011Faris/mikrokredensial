@@ -148,7 +148,7 @@
 		'flex min-h-10 min-w-10 items-center justify-center rounded-lg px-2 text-sm transition-all focus-visible:outline-2 focus-visible:outline-blue-600 disabled:cursor-not-allowed disabled:opacity-35';
 	const btnTone = (on: boolean) =>
 		on
-			? 'bg-slate-900 text-white shadow-md'
+			? 'bg-violet-700 text-white shadow-md shadow-violet-700/25'
 			: 'text-slate-600 hover:bg-slate-100 hover:text-slate-900';
 
 	function openDialog(kind: DialogKind) {

@@ -455,7 +455,7 @@
 						<h2 id="instruksi-judul" class="text-lg font-extrabold text-slate-900">
 							Bayar via {methodLabel(method, channel)}
 						</h2>
-						<p role="timer" aria-label={`Batas pembayaran ${countdown}`} title={`Batas pembayaran ${countdown}`} class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1.5 font-mono text-xs font-bold text-white">
+						<p role="timer" aria-label={`Batas pembayaran ${countdown}`} title={`Batas pembayaran ${countdown}`} class="inline-flex items-center gap-1.5 rounded-full bg-blue-800 px-3 py-1.5 font-mono text-xs font-bold text-white">
 							<i class="fa-regular fa-clock" aria-hidden="true"></i> {countdown}
 						</p>
 					</div>
@@ -658,7 +658,7 @@
 											type="button"
 											onclick={() => (channel = ch.id)}
 											aria-pressed={channel === ch.id}
-											class="inline-flex min-h-[44px] items-center gap-2 rounded-xl px-4 text-xs font-bold transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-blue-600 {channel === ch.id ? 'bg-slate-900 text-white shadow' : 'border border-slate-200 bg-white text-slate-600 hover:bg-white'}"
+											class="inline-flex min-h-[44px] items-center gap-2 rounded-xl px-4 text-xs font-bold transition-all active:scale-95 focus-visible:outline-2 focus-visible:outline-blue-600 {channel === ch.id ? 'bg-blue-700 text-white shadow shadow-blue-700/25' : 'border border-slate-200 bg-white text-slate-600 hover:bg-white'}"
 										>
 											<i class="fa-solid {ch.icon} text-[11px]" aria-hidden="true"></i>
 											{ch.label}
@@ -792,7 +792,7 @@
 								/>
 								<button
 									type="submit"
-									class="inline-flex min-h-[44px] shrink-0 items-center rounded-xl bg-slate-900 px-5 text-xs font-bold text-white hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-slate-900"
+									class="inline-flex min-h-[44px] shrink-0 items-center rounded-xl bg-blue-600 px-5 text-xs font-bold text-white hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 								>
 									Pakai
 								</button>

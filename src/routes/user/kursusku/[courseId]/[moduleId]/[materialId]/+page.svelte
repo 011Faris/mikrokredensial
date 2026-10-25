@@ -227,7 +227,7 @@
 			<div
 				class="overflow-hidden rounded-2xl border border-slate-200 bg-white text-center shadow-xl"
 			>
-				<div class="bg-slate-900 px-6 py-8 text-white">
+				<div class="bg-blue-800 px-6 py-8 text-white">
 					<span
 						class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10"
 						aria-hidden="true"
@@ -263,7 +263,7 @@
 			<div
 				class="overflow-hidden rounded-2xl border border-slate-200 bg-white text-center shadow-xl"
 			>
-				<div class="bg-slate-900 px-6 py-8 text-white">
+				<div class="bg-blue-800 px-6 py-8 text-white">
 					<span
 						class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10"
 						aria-hidden="true"

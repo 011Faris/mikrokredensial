@@ -82,7 +82,7 @@
 				class="flex flex-col overflow-hidden rounded-2xl border border-slate-200/70 bg-white transition-shadow hover:shadow-xl"
 			>
 				<!-- Certificate preview -->
-				<div class="relative bg-slate-900 p-6 text-center">
+				<div class="relative bg-blue-900 p-6 text-center">
 					<div
 						class="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-600/30 via-transparent to-amber-500/20"
 						aria-hidden="true"
@@ -156,7 +156,7 @@
 			</div>
 			<a
 				href="/user/kursusku"
-				class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-slate-900"
+				class="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-blue-600"
 			>
 				Kembali ke Kursusku <i class="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i>
 			</a>

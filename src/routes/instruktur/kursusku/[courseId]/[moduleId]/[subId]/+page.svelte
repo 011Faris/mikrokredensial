@@ -399,7 +399,7 @@
 						{/if}
 					</div>
 					<div class="flex shrink-0 flex-wrap items-center gap-2 self-end">
-						<span class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-bold text-white">
+						<span class="inline-flex items-center gap-1.5 rounded-full bg-violet-700 px-3 py-1.5 text-[11px] font-bold text-white">
 							{materials.length} materi
 						</span>
 					</div>
@@ -427,7 +427,7 @@
 		{#if materials.length === 0}
 			<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center">
 				<p
-					class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg"
+					class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-lg"
 				>
 					<i class="fa-solid fa-book-open" aria-hidden="true"></i>
 				</p>

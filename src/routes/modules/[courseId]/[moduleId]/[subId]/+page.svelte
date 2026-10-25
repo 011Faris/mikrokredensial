@@ -163,7 +163,7 @@
 							</span>
 							<a
 								href="/login"
-								class="hidden shrink-0 items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1.5 text-[11px] font-bold text-white hover:bg-slate-700 sm:inline-flex"
+								class="hidden shrink-0 items-center gap-1.5 rounded-full bg-blue-700 px-3.5 py-1.5 text-[11px] font-bold text-white hover:bg-blue-600 sm:inline-flex"
 								aria-label={`Masuk untuk membuka materi ${typeLabel(m.type)}: ${m.title}`}
 							>
 								<i class="fa-solid fa-lock text-[10px]" aria-hidden="true"></i> Buka

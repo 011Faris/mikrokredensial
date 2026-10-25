@@ -221,7 +221,7 @@
 	<div class="p-4 sm:p-6">
 		{#if modules.length === 0}
 			<div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center">
-				<p class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg">
+				<p class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-lg">
 					<i class="fa-solid fa-map" aria-hidden="true"></i>
 				</p>
 				<p class="mt-3 text-sm font-bold text-slate-900">Jalur masih kosong</p>

@@ -107,7 +107,7 @@
 			</div>
 			<span
 				aria-live="polite"
-				class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1.5 text-xs font-extrabold text-white"
+				class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-violet-700 px-3 py-1.5 text-xs font-extrabold text-white"
 			>
 				<i class="fa-solid fa-star text-[10px] text-amber-300" aria-hidden="true"></i>
 				{Number.isFinite(passScore) ? Math.min(100, Math.max(0, Math.round(passScore))) : '—'}
@@ -197,7 +197,7 @@
 			<li class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white">
 				<div class="flex items-center gap-2 border-b border-slate-100 bg-slate-50/70 px-4 py-3">
 					<span
-						class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-xs font-extrabold text-white"
+						class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-violet-600 text-xs font-extrabold text-white"
 						aria-hidden="true"
 					>
 						{qi + 1}

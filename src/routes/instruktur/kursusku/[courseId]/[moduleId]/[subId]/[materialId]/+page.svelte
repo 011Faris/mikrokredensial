@@ -410,7 +410,7 @@
 
 		<!-- Kepala editor -->
 		<section aria-labelledby="editor-heading" class="mb-5 overflow-hidden rounded-3xl border border-slate-200/70 bg-white shadow-lg shadow-slate-900/5">
-			<div class="relative overflow-hidden bg-slate-900 p-5 sm:px-7 sm:py-6">
+			<div class="relative overflow-hidden bg-violet-900 p-5 sm:px-7 sm:py-6">
 				<div
 					class="pointer-events-none absolute -top-16 -right-10 h-48 w-48 rounded-full bg-blue-500/20 blur-2xl"
 					aria-hidden="true"
@@ -484,7 +484,7 @@
 							aria-selected={mode === 'tulis'}
 							aria-controls="panel-tulis"
 							onclick={() => (mode = 'tulis')}
-							class="inline-flex min-h-10 items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-blue-600 {mode === 'tulis' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'}"
+							class="inline-flex min-h-10 items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-blue-600 {mode === 'tulis' ? 'bg-violet-700 text-white shadow-lg shadow-violet-700/25' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'}"
 						>
 							<i class="fa-solid fa-pen" aria-hidden="true"></i> {kind === 'kuis'
 							? 'Buat soal'
@@ -499,7 +499,7 @@
 							aria-selected={mode === 'pratinjau'}
 							aria-controls="panel-pratinjau"
 							onclick={() => (mode = 'pratinjau')}
-							class="inline-flex min-h-10 items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-blue-600 {mode === 'pratinjau' ? 'bg-slate-900 text-white shadow-lg' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'}"
+							class="inline-flex min-h-10 items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all focus-visible:outline-2 focus-visible:outline-blue-600 {mode === 'pratinjau' ? 'bg-violet-700 text-white shadow-lg shadow-violet-700/25' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'}"
 						>
 							<i class="fa-solid fa-eye" aria-hidden="true"></i> Pratinjau
 						</button>
@@ -597,7 +597,7 @@
 							<p class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-[10px] font-extrabold tracking-widest text-amber-700 uppercase ring-1 ring-amber-200">
 								<i class="fa-solid fa-eye" aria-hidden="true"></i> Tampilan peserta
 							</p>
-							<p class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1 text-[10px] font-extrabold tracking-widest text-white uppercase">
+							<p class="inline-flex items-center gap-1.5 rounded-full bg-violet-700 px-3 py-1 text-[10px] font-extrabold tracking-widest text-white uppercase">
 								<i class="fa-solid fa-award text-amber-300" aria-hidden="true"></i> Minimal {quizPassScore} untuk lolos
 							</p>
 						</div>
@@ -622,7 +622,7 @@
 								{#each quizPreview.questions as q, qi (qi)}
 									<li class="rounded-xl border border-slate-200 p-4">
 										<p class="text-sm font-bold text-slate-900">
-											<span class="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-slate-900 text-[11px] font-extrabold text-white">{qi + 1}</span>
+											<span class="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-violet-600 text-[11px] font-extrabold text-white">{qi + 1}</span>
 											{q.question || '(pertanyaan kosong)'}
 										</p>
 										<ul class="mt-2 space-y-1.5">

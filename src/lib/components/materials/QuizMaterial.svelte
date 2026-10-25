@@ -86,7 +86,7 @@
 				<fieldset>
 					<legend class="contents">
 						<span class="mb-3 block text-sm font-bold text-slate-900">
-							<span class="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-slate-900 text-[11px] font-extrabold text-white" aria-hidden="true">
+							<span class="mr-2 inline-flex h-6 w-6 items-center justify-center rounded-lg bg-blue-600 text-[11px] font-extrabold text-white" aria-hidden="true">
 								{qi + 1}
 							</span>
 							{q.question}

@@ -342,7 +342,7 @@
 						{/if}
 					</div>
 					<div class="flex shrink-0 flex-wrap items-center gap-2 self-end">
-						<span class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1.5 text-[11px] font-bold text-white">
+						<span class="inline-flex items-center gap-1.5 rounded-full bg-violet-700 px-3 py-1.5 text-[11px] font-bold text-white">
 							{subs.length} sub-modul · {matCount} materi
 						</span>
 					</div>
