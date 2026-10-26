@@ -463,6 +463,7 @@
 					{#if method === 'qris'}
 						<div class="mt-5 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6">
 							<div role="img" aria-label={`Kode QRIS sebesar ${formatIDR(total)} untuk ${course.title}`} class="grid h-44 w-44 grid-cols-11 gap-[2px] rounded-xl bg-white p-3 shadow-inner">
+								<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 								{#each Array(121) as _, i (i)}
 									<span class="aspect-square rounded-[1px] {(i * 7919 + courseId * 131) % 3 === 0 ? 'bg-slate-900' : 'bg-slate-200'}" aria-hidden="true"></span>
 								{/each}

@@ -22,7 +22,7 @@
 		docKey,
 		initialContent = null,
 		variant = 'full',
-		onupdate = (_info: { json: JSONContent; words: number }) => {}
+		onupdate = () => {}
 	}: {
 		docKey: string;
 		initialContent?: JSONContent | null;

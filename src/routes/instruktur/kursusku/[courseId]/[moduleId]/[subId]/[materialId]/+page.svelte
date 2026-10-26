@@ -58,12 +58,10 @@
 	let showLeave = $state(false);
 	/** Draf kuis (tipe kuis): disunting via QuizBuilder. */
 	let latestQuiz = $state<QuizDraft | null>(null);
-	let quizValid = $state(false);
 	let quizCount = $state(0);
 	let storedQuiz = $state<QuizDraft | null>(null);
 	/** Draf tugas (tipe tugas): disunting via TaskBriefBuilder (3 bagian). */
 	let latestTask = $state<TaskDraft | null>(null);
-	let taskValid = $state(false);
 	let taskCount = $state(0);
 	let storedTask = $state<TaskDraft | null>(null);
 
@@ -81,11 +79,9 @@
 		latestJson = null;
 		latestWords = 0;
 		latestQuiz = null;
-		quizValid = false;
 		quizCount = 0;
 		storedQuiz = loadQuizDraft(courseId, moduleId, subId, materialId);
 		latestTask = null;
-		taskValid = false;
 		taskCount = 0;
 		storedTask = loadTaskDraft(courseId, moduleId, subId, materialId);
 		dirty = false;
@@ -137,14 +133,12 @@
 
 	function handleQuizUpdate(info: { draft: QuizDraft; valid: boolean; count: number }) {
 		latestQuiz = info.draft;
-		quizValid = info.valid;
 		quizCount = info.count;
 		dirty = true;
 	}
 
 	function handleTaskUpdate(info: { draft: TaskDraft; valid: boolean; count: number }) {
 		latestTask = info.draft;
-		taskValid = info.valid;
 		taskCount = info.count;
 		dirty = true;
 	}

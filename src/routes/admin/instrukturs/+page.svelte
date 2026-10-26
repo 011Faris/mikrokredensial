@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { allInstructors, type Instructor } from '$lib/stores/instructors';
+	import { allInstructors } from '$lib/stores/instructors';
 
 	let query = $state('');
 

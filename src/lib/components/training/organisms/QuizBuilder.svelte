@@ -16,7 +16,7 @@
 	let {
 		draftKey,
 		initial = null,
-		onupdate = (_info: { draft: QuizDraft; valid: boolean; count: number }) => {}
+		onupdate = () => {}
 	}: {
 		draftKey: string;
 		initial?: QuizDraft | null;

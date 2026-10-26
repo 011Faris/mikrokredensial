@@ -20,7 +20,7 @@
 		errors = {},
 		blankMaterial = { title: 'Materi baru', duration: '10 mnt' },
 		minMaterialsPerModule = 0,
-		onnotice = (_msg: string) => {}
+		onnotice = () => {}
 	}: {
 		modules: CourseModule[];
 		/** Pesan validasi per id: `mod-*`, `sub-*`, `mat-*`, `matdur-*`. */

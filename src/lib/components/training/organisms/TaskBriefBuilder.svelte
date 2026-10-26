@@ -12,7 +12,7 @@
 	let {
 		draftKey,
 		initial = null,
-		onupdate = (_info: { draft: TaskDraft; valid: boolean; count: number }) => {}
+		onupdate = () => {}
 	}: {
 		draftKey: string;
 		initial?: TaskDraft | null;

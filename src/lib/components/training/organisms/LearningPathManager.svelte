@@ -11,7 +11,7 @@
 	 */
 	let {
 		modules = $bindable([]),
-		onnotice = (_msg: string) => {},
+		onnotice = () => {},
 		moduleHref
 	}: {
 		modules: CourseModule[];
